@@ -5,8 +5,8 @@ import { BarChart3, ExternalLink } from "lucide-react";
 const navbar = () => {
   return (
     <div>
-      <div className="flex px-10 fixed bg-amber-700 border-b w-full flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div className="md:ml-60">
+      <div className="flex px-10 bg-white py-1.5 fixed border-b border-gray-200 w-[88%] flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="">
           <h1 className="text-3xl font-bold text-slate-900">
             Welcome back, John! 👋
           </h1>
