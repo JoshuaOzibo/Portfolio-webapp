@@ -69,12 +69,10 @@ const overview = () => {
   return (
     <div>
 
-<div className="space-y-8">
-      {/* Header */}
+<div className="space-y-8 w-[80%] mt-20 ml-60">
       
-
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => (
           <Card key={stat.name} className="border-0 shadow-sm hover:shadow-md transition-shadow">
             <CardContent className="p-6">
