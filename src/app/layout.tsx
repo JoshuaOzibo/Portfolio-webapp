@@ -33,7 +33,7 @@ export default function RootLayout({
           <div className="flex-1 ml-64">
             <Navbar />
           </div>
-            <main className="mt-20 p-5">
+            <main className="mt-20 p-5 w-full">
             {children}
             </main>
         </div>
