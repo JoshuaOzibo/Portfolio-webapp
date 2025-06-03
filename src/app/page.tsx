@@ -1,4 +1,4 @@
-import Overview from "@/components/overview";
+import Overview from "@/app/home/overview";
 
 export default function DashboardOverview() {
   return (
