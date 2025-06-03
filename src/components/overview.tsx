@@ -31,15 +31,7 @@ const overview = () => {
           icon: Briefcase,
           color: "text-purple-600",
           bgColor: "bg-purple-50",
-        },
-        {
-          name: "Messages",
-          value: "12",
-          change: "3 unread",
-          icon: MessageSquare,
-          color: "text-orange-600",
-          bgColor: "bg-orange-50",
-        },
+        }
       ]
     
       const recentProjects = [
@@ -70,7 +62,7 @@ const overview = () => {
     <div className=''>
       <div className="space-y-8">
         {/* Stats Grid */}
-        <div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {stats.map((stat) => (
             <Card key={stat.name} className="border-0 shadow-sm hover:shadow-md transition-shadow">
               <CardContent className="p-6">
