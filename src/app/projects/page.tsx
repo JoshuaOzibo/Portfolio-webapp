@@ -260,7 +260,7 @@ export default function ProjectsPage() {
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {projects.map((project) => (
-          <Card key={project.id} className="border-0 bg-red-500 shadow-sm hover:shadow-lg transition-all duration-300 group">
+          <Card key={project.id} className="border-0 shadow-sm hover:shadow-lg transition-all duration-300 group">
             <div className="relative">
               <img
                 src={project.image || "/placeholder.svg"}
