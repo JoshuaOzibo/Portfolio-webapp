@@ -73,9 +73,9 @@ export default function ProjectsPage() {
 
   const [isAddingProject, setIsAddingProject] = useState(false)
   const [editingProject, setEditingProject] = useState(null)
-  const [viewMode, setViewMode] = useState("grid") // grid or list
+  const [viewMode, setViewMode] = useState("grid")
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case "Live":
         return "bg-green-100 text-green-700 border-green-200"
@@ -86,10 +86,10 @@ export default function ProjectsPage() {
       default:
         return "bg-gray-100 text-gray-700 border-gray-200"
     }
-  }
+  };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 mt-10">
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
@@ -117,6 +117,8 @@ export default function ProjectsPage() {
                 <DialogTitle>Add New Project</DialogTitle>
               </DialogHeader>
               <div className="space-y-6">
+
+
                 {/* Project Image Upload */}
                 <div>
                   <Label>Project Image</Label>
@@ -258,7 +260,7 @@ export default function ProjectsPage() {
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {projects.map((project) => (
-          <Card key={project.id} className="border-0 shadow-sm hover:shadow-lg transition-all duration-300 group">
+          <Card key={project.id} className="border-0 bg-red-500 shadow-sm hover:shadow-lg transition-all duration-300 group">
             <div className="relative">
               <img
                 src={project.image || "/placeholder.svg"}
@@ -286,6 +288,7 @@ export default function ProjectsPage() {
               </div>
             </div>
 
+                {/* grid details */}
             <CardContent className="p-6">
               <div className="space-y-4">
                 <div>
