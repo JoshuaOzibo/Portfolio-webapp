@@ -23,8 +23,8 @@ const Sidebar = () => {
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
             <div>
-              <h2 className="font-medium">John Doe</h2>
-              <p className="text-sm text-gray-600">john@example.com</p>
+              <h2 className="font-medium">Ozibo Joshua</h2>
+              <p className="text-xs text-gray-600">joshuamichaelozibo@gmail.com</p>
             </div>
           </div>
         </div>
@@ -49,7 +49,7 @@ const Sidebar = () => {
 
         <Link
           href="/projects"
-          className="flex items-center gap-3 p-2 text-blue-600 bg-blue-50 rounded-lg"
+          className="flex items-center gap-3 p-2 text-gray-700 hover:bg-gray-50 rounded-lg"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

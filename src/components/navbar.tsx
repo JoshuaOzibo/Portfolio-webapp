@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "./ui/button";
-import { BarChart3, ExternalLink } from "lucide-react";
+import {  ExternalLink } from "lucide-react";
 
 const navbar = () => {
     
@@ -9,7 +9,7 @@ const navbar = () => {
       <div className="flex px-10 bg-white py-1.5 fixed border-b border-gray-200 xl:w-[85%] lg:w-[78%] flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="">
           <h1 className="text-3xl font-bold text-slate-900">
-            Welcome back, John! 👋
+            Welcome back, Joshua! 👋
           </h1>
           <p className="text-slate-600 mt-2">
             Here's what's happening with your portfolio today.

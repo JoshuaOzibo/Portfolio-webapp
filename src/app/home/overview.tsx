@@ -3,9 +3,12 @@ import { CardContent } from "../../components/ui/card";
 import { Card } from "../../components/ui/card";
 import { FolderOpen } from "lucide-react";
 import { Code2, Briefcase } from "lucide-react";
-
 import RecentProjectWidget from "@/components/widget/RecentProjectWidget";
 import QuickActionWidget from "@/components/widget/QuickActionWidget";
+
+import ImageOne from '../../components/assets/BorookUi.png'
+import ImageTwo from '../../components/assets/MentlyImage.png'
+import ImageThree from '../../components/assets/extention images_Stay Organized – Track all your job applications, interviews, and follow-ups in one place.(purple).webp'
 
 const overview = () => {
   const stats = [
@@ -39,21 +42,21 @@ const overview = () => {
     {
       name: "E-commerce Platform",
       status: "Live",
-      image: "/placeholder.svg?height=60&width=60",
+      image: ImageOne.src,
       tech: ["React", "Node.js"],
       views: "1.2k",
     },
     {
       name: "Task Manager",
       status: "In Progress",
-      image: "/placeholder.svg?height=60&width=60",
+      image: ImageTwo.src,
       tech: ["Vue.js", "Firebase"],
       views: "856",
     },
     {
       name: "Weather App",
       status: "Live",
-      image: "/placeholder.svg?height=60&width=60",
+      image: ImageThree.src,
       tech: ["React", "API"],
       views: "2.1k",
     },

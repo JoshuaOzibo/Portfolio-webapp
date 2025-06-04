@@ -5,6 +5,7 @@ import React from 'react'
 import { CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
+import Image from 'next/image'
 
 interface RecentProject {
   name: string;
@@ -31,8 +32,8 @@ const RecentProjectWidget = ({ recentProjects }: { recentProjects: RecentProject
                     key={index}
                     className="flex items-center gap-4 p-4 rounded-lg border border-slate-100 hover:border-slate-200 transition-colors"
                   >
-                    <img
-                      src={project.image || "/placeholder.svg"}
+                    <Image
+                      src={project.image}
                       alt={project.name}
                       className="w-12 h-12 rounded-lg object-cover bg-slate-100"
                     />
