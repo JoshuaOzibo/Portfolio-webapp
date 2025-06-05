@@ -1,8 +1,7 @@
 import React from "react";
 import { CardContent } from "../../components/ui/card";
 import { Card } from "../../components/ui/card";
-import { FolderOpen } from "lucide-react";
-import { Code2, Briefcase } from "lucide-react";
+import { Code2, Briefcase, FolderOpen } from "lucide-react";
 import RecentProjectWidget from "@/components/widget/RecentProjectWidget";
 import QuickActionWidget from "@/components/widget/QuickActionWidget";
 

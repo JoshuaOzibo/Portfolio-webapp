@@ -1,16 +1,18 @@
 import React from "react";
 import Link from "next/link";
+import { Code2, Briefcase, FolderOpen, LayoutDashboard } from "lucide-react";
 
 const Sidebar = () => {
+  
   return (
-    <div className="w-64 h-screen fixed bg-white border-r border-gray-200 flex flex-col">
+    <div className="w-28 md:w-64 h-screen fixed bg-white border-r border-gray-200 flex flex-col">
       {/* Portfolio Header */}
       <div className="p-4 border-b border-gray-200">
-        <div className="flex items-center gap-2">
+        <div className="flex w-full md:justify-start justify-center items-center gap-2">
           <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
             <span className="text-white text-xl font-bold">P</span>
           </div>
-          <div>
+          <div className="hidden md:block">
             <h1 className="text-lg font-semibold">Portfolio</h1>
             <p className="text-sm text-gray-600">Content Manager</p>
           </div>
@@ -19,10 +21,10 @@ const Sidebar = () => {
 
       {/* Profile Section */}
       <div className="p-4 border-b border-gray-200">
-        <div className="flex items-center justify-between">
+        <div className="flex justify-center items-center md:justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
-            <div>
+            <div className="w-8 md:w-10 h-8 md:h-10 bg-gray-200 rounded-full"></div>
+            <div className="hidden md:block">
               <h2 className="font-medium">Ozibo Joshua</h2>
               <p className="text-xs text-gray-600">joshuamichaelozibo@gmail.com</p>
             </div>
@@ -31,84 +33,54 @@ const Sidebar = () => {
       </div>
 
       {/* Navigation Menu */}
-      <nav className="flex-1 p-4 space-y-2">
+      <nav className="flex-1 p-4 md:space-y-2 md:mx-0 mx-auto space-y-10">
         <Link
           href="/"
-          className="flex items-center gap-3 p-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+          className="group border border-gray-200 flex items-center gap-3 md:p-4 p-3  text-gray-700 hover:bg-gray-50 rounded-lg relative"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-          </svg>
-          Dashboard
+          <div className="p-3 rounded-xl bg-yellow-50">
+            <LayoutDashboard className="h-6 w-6 text-yellow-600"/>
+          </div>
+          <span className="hidden md:block">Dashboard</span>
+          <span className="md:hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Dashboard</span>
         </Link>
 
         <Link
           href="/projects"
-          className="flex items-center gap-3 p-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+          className="group border border-gray-200  flex items-center gap-3 md:p-4 p-3 text-gray-700 hover:bg-gray-50 rounded-lg relative"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-              clipRule="evenodd"
-            />
-          </svg>
-          Projects
+          <div className="p-3 rounded-xl bg-blue-50">
+            <FolderOpen className="h-6 w-6 text-blue-600"/>
+          </div>
+          <span className="hidden md:block">Projects</span>
+          <span className="md:hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Projects</span>
         </Link>
 
         <Link
           href="/skills"
-          className="flex items-center gap-3 p-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+          className="group border border-gray-200  flex items-center gap-3 md:p-4 p-3 text-gray-700 hover:bg-gray-50 rounded-lg relative"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            />
-          </svg>
-          Skills
+          <div className="p-3 rounded-xl bg-green-50">
+            <Code2 className="h-6 w-6 text-green-600"/>
+          </div>
+          <span className="hidden md:block">Skills</span>
+          <span className="md:hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Skills</span>
         </Link>
 
         <Link
           href="/experience"
-          className="flex items-center gap-3 p-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+          className="group border border-gray-200  flex items-center gap-3 md:p-4 p-3 text-gray-700 hover:bg-gray-50 rounded-lg relative"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
-              clipRule="evenodd"
-            />
-            <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
-          </svg>
-          Experience
+          <div className="p-3 rounded-xl bg-purple-50">
+            <Briefcase className="h-6 w-6 text-purple-600"/>
+          </div>
+          <span className="hidden md:block">Experience</span>
+          <span className="md:hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Experience</span>
         </Link>
-
       </nav>
 
       {/* Portfolio Status */}
-      <div className="p-4 m-4 bg-blue-50 rounded-lg">
+      <div className="hidden md:block p-4 m-4 bg-blue-50 rounded-lg">
         <h3 className="font-medium">Portfolio Status</h3>
         <p className="text-sm text-gray-600">
           Your portfolio is live and looking great!

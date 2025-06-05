@@ -6,7 +6,7 @@ const navbar = () => {
     
   return (
     <div>
-      <div className="flex px-10 bg-white py-1.5 fixed border-b border-gray-200 xl:w-[85%] lg:w-[78%] w-full flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div className="flex px-10 bg-red-500 py-1.5 fixed border-b border-gray-200 xl:w-[85%] lg:w-[78%] w-full flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="">
           <h1 className="lg:text-3xl md:text-2xl text-sm font-bold text-slate-900">
             Welcome back, Joshua! 👋
