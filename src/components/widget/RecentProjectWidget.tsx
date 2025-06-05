@@ -33,6 +33,8 @@ const RecentProjectWidget = ({ recentProjects }: { recentProjects: RecentProject
                     className="flex items-center gap-4 p-4 rounded-lg border border-slate-100 hover:border-slate-200 transition-colors"
                   >
                     <Image
+                      width={100}
+                      height={100}
                       src={project.image}
                       alt={project.name}
                       className="w-12 h-12 rounded-lg object-cover bg-slate-100"

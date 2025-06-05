@@ -1,10 +1,11 @@
 
-import { Code2, MessageSquare, Plus } from 'lucide-react'
+import { Code2, Plus, Briefcase } from 'lucide-react'
 import { Card } from '../ui/card'
 import { CardHeader , CardTitle} from '../ui/card'
 import { CardContent } from '../ui/card'
 import React from 'react'
 import { Button } from '../ui/button'
+
 
 const QuickActionWidget = () => {
   return (
@@ -21,6 +22,7 @@ const QuickActionWidget = () => {
                   </div>
                   Add New Project
                 </Button>
+        
                 <Button variant="outline" className="w-full justify-start gap-3 h-12">
                   <div className="p-2 bg-green-50 rounded-lg">
                     <Code2 className="h-4 w-4 text-green-600" />
@@ -28,10 +30,10 @@ const QuickActionWidget = () => {
                   Update Skills
                 </Button>
                 <Button variant="outline" className="w-full justify-start gap-3 h-12">
-                  <div className="p-2 bg-purple-50 rounded-lg">
-                    <MessageSquare className="h-4 w-4 text-purple-600" />
+                  <div className="p-2 bg-green-50 rounded-lg">
+                    <Briefcase className="h-4 w-4 text-purple-600" />
                   </div>
-                  Check Messages
+                  Update Experience
                 </Button>
               </CardContent>
             </Card>
