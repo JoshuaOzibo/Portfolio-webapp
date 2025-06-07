@@ -89,7 +89,7 @@ export default function ProjectsPage() {
   };
 
   return (
-    <div className="space-y-8 mt-10">
+    <div className="space-y-8 mt-28">
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>

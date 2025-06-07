@@ -4,7 +4,6 @@ import { Card } from "../../components/ui/card";
 import { Code2, Briefcase, FolderOpen } from "lucide-react";
 import RecentProjectWidget from "@/components/widget/RecentProjectWidget";
 import QuickActionWidget from "@/components/widget/QuickActionWidget";
-
 import ImageOne from '../../components/assets/BorookUi.png'
 import ImageTwo from '../../components/assets/MentlyImage.png'
 import ImageThree from '../../components/assets/extention images_Stay Organized – Track all your job applications, interviews, and follow-ups in one place.(purple).webp'

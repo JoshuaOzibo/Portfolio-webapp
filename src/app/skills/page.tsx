@@ -52,7 +52,7 @@ const page = () => {
     },
   ]);
   return (
-    <Card className="border-0 w-full mt-16 shadow-sm">
+    <Card className="border-0 w-full mt-28 shadow-sm">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-lg font-semibold">Social Links</CardTitle>
           <Dialog open={isAddingLink} onOpenChange={setIsAddingLink}>
