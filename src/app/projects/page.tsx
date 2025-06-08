@@ -10,9 +10,24 @@ import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Plus, Edit, Trash2, ExternalLink, Github, Eye, Upload, Star, Calendar, Code2 } from "lucide-react"
+import DialogModal from "@/components/re-usable_ui/dialog_modal"
+
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  technologies: string[];
+  liveUrl: string;
+  githubUrl: string;
+  status: "Live" | "In Progress" | "Draft";
+  featured: boolean;
+  views: string;
+  createdAt: string;
+}
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState([
+  const [projects, setProjects] = useState<Project[]>([
     {
       id: 1,
       title: "E-commerce Platform",
@@ -72,8 +87,8 @@ export default function ProjectsPage() {
   ])
 
   const [isAddingProject, setIsAddingProject] = useState(false)
-  const [editingProject, setEditingProject] = useState(null)
-  const [viewMode, setViewMode] = useState("grid")
+  const [editingProject, setEditingProject] = useState<Project | null>(null)
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -105,97 +120,83 @@ export default function ProjectsPage() {
               List
             </Button>
           </div>
-          <Dialog open={isAddingProject} onOpenChange={setIsAddingProject}>
-            <DialogTrigger asChild>
-              <Button className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600">
-                <Plus className="h-4 w-4" />
-                Add Project
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>Add New Project</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-6">
 
-
-                {/* Project Image Upload */}
-                <div>
-                  <Label>Project Image</Label>
-                  <div className="mt-2 border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-slate-400 transition-colors">
-                    <Upload className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                    <p className="text-sm text-slate-600 mb-2">Click to upload or drag and drop</p>
-                    <p className="text-xs text-slate-500">PNG, JPG, GIF up to 10MB</p>
-                    <Button variant="outline" size="sm" className="mt-4">
-                      Choose File
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="title">Project Title</Label>
-                    <Input id="title" placeholder="Enter project title" className="mt-2" />
-                  </div>
-                  <div>
-                    <Label htmlFor="status">Status</Label>
-                    <Select>
-                      <SelectTrigger className="mt-2">
-                        <SelectValue placeholder="Select status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="live">Live</SelectItem>
-                        <SelectItem value="progress">In Progress</SelectItem>
-                        <SelectItem value="draft">Draft</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    placeholder="Describe your project, its features, and what makes it special"
-                    rows={4}
-                    className="mt-2"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="technologies">Technologies Used</Label>
-                  <Input
-                    id="technologies"
-                    placeholder="React, Node.js, PostgreSQL, etc. (comma-separated)"
-                    className="mt-2"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="liveUrl">Live Demo URL</Label>
-                    <Input id="liveUrl" placeholder="https://your-project.com" className="mt-2" />
-                  </div>
-                  <div>
-                    <Label htmlFor="githubUrl">GitHub Repository</Label>
-                    <Input id="githubUrl" placeholder="https://github.com/username/repo" className="mt-2" />
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <input type="checkbox" id="featured" className="rounded" />
-                  <Label htmlFor="featured">Feature this project on homepage</Label>
-                </div>
-
-                <div className="flex justify-end space-x-3 pt-4">
-                  <Button variant="outline" onClick={() => setIsAddingProject(false)}>
-                    Cancel
+          <DialogModal
+            isAddingProject={isAddingProject}
+            setIsAddingProject={setIsAddingProject}
+            contentHeader_Title="Add New Project"
+            Title_button="Add Project"
+          >
+            <div className="space-y-6">
+              {/* Project Image Upload */}
+              <div>
+                <Label>Project Image</Label>
+                <div className="mt-2 border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-slate-400 transition-colors">
+                  <Upload className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                  <p className="text-sm text-slate-600 mb-2">Click to upload or drag and drop</p>
+                  <p className="text-xs text-slate-500">PNG, JPG, GIF up to 10MB</p>
+                  <Button variant="outline" size="sm" className="mt-4">
+                    Choose File
                   </Button>
-                  <Button onClick={() => setIsAddingProject(false)}>Create Project</Button>
                 </div>
               </div>
-            </DialogContent>
-          </Dialog>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="title">Project Title</Label>
+                  <Input id="title" placeholder="Enter project title" className="mt-2" />
+                </div>
+                <div>
+                  <Label htmlFor="status">Status</Label>
+                  <Select>
+                    <SelectTrigger className="mt-2">
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="live">Live</SelectItem>
+                      <SelectItem value="progress">In Progress</SelectItem>
+                      <SelectItem value="draft">Draft</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  placeholder="Describe your project, its features, and what makes it special"
+                  rows={4}
+                  className="mt-2"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="technologies">Technologies Used</Label>
+                <Input
+                  id="technologies"
+                  placeholder="React, Node.js, PostgreSQL, etc. (comma-separated)"
+                  className="mt-2"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="liveUrl">Live Demo URL</Label>
+                  <Input id="liveUrl" placeholder="https://your-project.com" className="mt-2" />
+                </div>
+                <div>
+                  <Label htmlFor="githubUrl">GitHub Repository</Label>
+                  <Input id="githubUrl" placeholder="https://github.com/username/repo" className="mt-2" />
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <input type="checkbox" id="featured" className="rounded" />
+                <Label htmlFor="featured">Feature this project on homepage</Label>
+              </div>
+            </div>
+          </DialogModal>
         </div>
       </div>
 
@@ -288,7 +289,6 @@ export default function ProjectsPage() {
               </div>
             </div>
 
-                {/* grid details */}
             <CardContent className="p-6">
               <div className="space-y-4">
                 <div>
