@@ -3,9 +3,8 @@ import Link from "next/link";
 import { Code2, Briefcase, FolderOpen, LayoutDashboard } from "lucide-react";
 
 const Sidebar = () => {
-  
   return (
-    <div className="w-28 md:w-64 h-screen fixed bg-white border-r border-gray-200 flex flex-col">
+    <div className="w-28 md:w-64 z-20 h-screen fixed bg-white border-r border-gray-200 flex flex-col">
       {/* Portfolio Header */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex w-full md:justify-start justify-center items-center gap-2">
@@ -26,7 +25,9 @@ const Sidebar = () => {
             <div className="w-8 md:w-10 h-8 md:h-10 bg-gray-200 rounded-full"></div>
             <div className="hidden md:block">
               <h2 className="font-medium">Ozibo Joshua</h2>
-              <p className="text-xs text-gray-600">joshuamichaelozibo@gmail.com</p>
+              <p className="text-xs text-gray-600">
+                joshuamichaelozibo@gmail.com
+              </p>
             </div>
           </div>
         </div>
@@ -36,46 +37,42 @@ const Sidebar = () => {
       <nav className="flex-1 p-4 md:space-y-2 md:mx-0 mx-auto space-y-10">
         <Link
           href="/"
-          className="group border border-gray-200 flex items-center gap-3 md:p-4 p-3  text-gray-700 hover:bg-gray-50 rounded-lg relative"
+          className=" border border-gray-200 flex items-center gap-3 md:p-4 p-3  text-gray-700 hover:bg-gray-50 rounded-lg relative"
         >
           <div className="p-3 rounded-xl bg-yellow-50">
-            <LayoutDashboard className="h-6 w-6 text-yellow-600"/>
+            <LayoutDashboard className="h-6 w-6 text-yellow-600" />
           </div>
           <span className="hidden md:block">Dashboard</span>
-          <span className="md:hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Dashboard</span>
         </Link>
 
         <Link
           href="/projects"
-          className="group border border-gray-200  flex items-center gap-3 md:p-4 p-3 text-gray-700 hover:bg-gray-50 rounded-lg relative"
+          className=" border border-gray-200  flex items-center gap-3 md:p-4 p-3 text-gray-700 hover:bg-gray-50 rounded-lg relative"
         >
           <div className="p-3 rounded-xl bg-blue-50">
-            <FolderOpen className="h-6 w-6 text-blue-600"/>
+            <FolderOpen className="h-6 w-6 text-blue-600" />
           </div>
           <span className="hidden md:block">Projects</span>
-          <span className="md:hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Projects</span>
         </Link>
 
         <Link
           href="/skills"
-          className="group border border-gray-200  flex items-center gap-3 md:p-4 p-3 text-gray-700 hover:bg-gray-50 rounded-lg relative"
+          className=" border border-gray-200  flex items-center gap-3 md:p-4 p-3 text-gray-700 hover:bg-gray-50 rounded-lg relative"
         >
           <div className="p-3 rounded-xl bg-green-50">
-            <Code2 className="h-6 w-6 text-green-600"/>
+            <Code2 className="h-6 w-6 text-green-600" />
           </div>
           <span className="hidden md:block">Skills</span>
-          <span className="md:hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Skills</span>
         </Link>
 
         <Link
           href="/experience"
-          className="group border border-gray-200  flex items-center gap-3 md:p-4 p-3 text-gray-700 hover:bg-gray-50 rounded-lg relative"
+          className=" border border-gray-200  flex items-center gap-3 md:p-4 p-3 text-gray-700 hover:bg-gray-50 rounded-lg relative"
         >
           <div className="p-3 rounded-xl bg-purple-50">
-            <Briefcase className="h-6 w-6 text-purple-600"/>
+            <Briefcase className="h-6 w-6 text-purple-600" />
           </div>
           <span className="hidden md:block">Experience</span>
-          <span className="md:hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Experience</span>
         </Link>
       </nav>
 
