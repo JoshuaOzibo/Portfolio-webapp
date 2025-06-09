@@ -10,7 +10,8 @@ import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Plus, Edit, Trash2, ExternalLink, Github, Eye, Upload, Star, Calendar, Code2 } from "lucide-react"
-import DialogModal from "@/components/re-usable_ui/dialog_modal"
+import DialogModal from "@/components/re-usable_ui/dialog_modal";
+import { usePost } from "@/hooks/use-fetch"
 
 interface Project {
   id: number;
@@ -103,9 +104,30 @@ export default function ProjectsPage() {
     }
   };
 
-  const handleSubmitProject = (e: Event) => {
-      e.preventDefault();
-  }
+
+  const { 
+    mutate: postData,
+    isPending: isPosting,
+    error: postError,
+    data: postResponse
+  } = usePost();
+
+
+  const handleSubmit = (e: Event) => {
+    e.preventDefault();
+
+    postData({
+      endpoint: '/api/your-post-endpoint',
+      data: {
+        name: 'John Doe',
+        email: 'john.doe@example.com',
+      }
+    });
+  };
+
+  console.log(postError)
+  console.log(postResponse)
+  console.log(isPosting)
 
   return (
     <div className="space-y-8">
@@ -131,7 +153,7 @@ export default function ProjectsPage() {
             contentHeader_Title="Add New Project"
             Title_button="Add Project"
           >
-            <form onSubmit={() => handleSubmitProject}>
+            <form onSubmit={() => handleSubmit}>
             <div className="space-y-6">
               {/* Project Image Upload */}
               <div>
