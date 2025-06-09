@@ -103,6 +103,10 @@ export default function ProjectsPage() {
     }
   };
 
+  const handleSubmitProject = (e: Event) => {
+      e.preventDefault();
+  }
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -127,6 +131,7 @@ export default function ProjectsPage() {
             contentHeader_Title="Add New Project"
             Title_button="Add Project"
           >
+            <form onSubmit={() => handleSubmitProject}>
             <div className="space-y-6">
               {/* Project Image Upload */}
               <div>
@@ -196,6 +201,7 @@ export default function ProjectsPage() {
                 <Label htmlFor="featured">Feature this project on homepage</Label>
               </div>
             </div>
+            </form>
           </DialogModal>
         </div>
       </div>

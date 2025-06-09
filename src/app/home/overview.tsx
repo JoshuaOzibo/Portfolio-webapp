@@ -7,8 +7,29 @@ import QuickActionWidget from "@/components/widget/QuickActionWidget";
 import ImageOne from '../../components/assets/BorookUi.png'
 import ImageTwo from '../../components/assets/MentlyImage.png'
 import ImageThree from '../../components/assets/extention images_Stay Organized – Track all your job applications, interviews, and follow-ups in one place.(purple).webp'
+import { useGet, usePost } from "@/hooks/use-fetch";
 
 const overview = () => {
+  const { data, isLoading, error } = useGet('/api/your-endpoint');
+  
+  const { 
+    mutate: postData,
+    isPending: isPosting,
+    error: postError,
+    data: postResponse
+  } = usePost();
+
+  // Example of how to use the postData mutation
+  const handleSubmit = () => {
+    postData({
+      endpoint: '/api/your-post-endpoint',
+      data: {
+        name: 'John Doe',
+        email: 'john.doe@example.com',
+      }
+    });
+  };
+
   const stats = [
     {
       name: "Projects",
