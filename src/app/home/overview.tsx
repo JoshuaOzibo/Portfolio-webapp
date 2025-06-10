@@ -20,7 +20,7 @@ const overview = () => {
     }
   }, [projectsData]);
 
-  if (isLoading) {
+  if (!isLoading) {
     return <OverviewSkeleton />;
   }
 

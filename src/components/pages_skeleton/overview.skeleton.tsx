@@ -1,7 +1,7 @@
-import { Card, CardContent } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
-import RecentProjectWidgetSkeleton from '@/components/pages_skeleton/RecentProjectWidgetSkeleton'
-import QuickActionWidgetSkeleton from '@/components/pages_skeleton/QuickActionWidgetSkeleton'
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import RecentProjectWidgetSkeleton from "./RecentProjectWidgetSkeleton";
+import QuickActionWidgetSkeleton from "./QuickActionWidgetSkeleton";
 
 const OverviewSkeleton = () => {
   return (
@@ -9,23 +9,53 @@ const OverviewSkeleton = () => {
       <div className="space-y-8">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3].map((index) => (
-            <Card
-              key={index}
-              className="border-0 shadow-sm hover:shadow-md transition-shadow"
-            >
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-2">
-                    <Skeleton className="h-5 w-[100px]" />
-                    <Skeleton className="h-8 w-[80px]" />
-                    <Skeleton className="h-4 w-[120px]" />
-                  </div>
-                  <Skeleton className="h-12 w-12 rounded-xl" />
+          {/* Projects Card */}
+          <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div className="space-y-2">
+                  <Skeleton className="h-5 w-[80px] shadow-sm border border-gray-200 rounded-md" />
+                  <Skeleton className="h-8 w-[50px] shadow-sm border border-gray-200 rounded-md" />
+                  <Skeleton className="h-4 w-[100px] shadow-sm border border-gray-200 rounded-md" />
                 </div>
-              </CardContent>
-            </Card>
-          ))}
+                <div className="p-3 bg-blue-50 shadow-sm border border-gray-200 rounded-xl">
+                  <Skeleton className="h-6 w-6" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Skills Card */}
+          <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div className="space-y-2">
+                  <Skeleton className="h-5 w-[60px] shadow-sm border border-gray-200 rounded-md" />
+                  <Skeleton className="h-8 w-[30px] shadow-sm border border-gray-200 rounded-md" />
+                  <Skeleton className="h-4 w-[100px] shadow-sm border border-gray-200 rounded-md" />
+                </div>
+                <div className="p-3 bg-green-50 shadow-sm border border-gray-200 rounded-xl">
+                  <Skeleton className="h-6 w-6" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Experience Card */}
+          <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div className="space-y-2">
+                  <Skeleton className="h-5 w-[100px] shadow-sm border border-gray-200 rounded-md" />
+                  <Skeleton className="h-8 w-[80px] shadow-sm border border-gray-200 rounded-md" />
+                  <Skeleton className="h-4 w-[70px] shadow-sm border border-gray-200 rounded-md" />
+                </div>
+                <div className="p-3 bg-purple-50 shadow-sm border border-gray-200 rounded-xl">
+                  <Skeleton className="h-6 w-6" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Main Content Grid */}
@@ -35,7 +65,7 @@ const OverviewSkeleton = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default OverviewSkeleton 
+export default OverviewSkeleton;
