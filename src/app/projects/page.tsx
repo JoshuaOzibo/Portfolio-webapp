@@ -130,6 +130,15 @@ export default function ProjectsPage() {
   const [project_image, setProjectImage] = useState<File | null>(null);
   const [featured, setFeatured] = useState(false);
 
+  const convertImageToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Live":
@@ -150,24 +159,31 @@ export default function ProjectsPage() {
     data: postResponse,
   } = usePost();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log("handleSubmit", e);
+    try {
+      let imageBase64 = null;
+      if (project_image) {
+        imageBase64 = await convertImageToBase64(project_image);
+      }
 
-    postData({
-      endpoint: `${process.env.API_BASE_URL}/api/v1/projects/create`,
-      data: {
-        title: title,
-        description: description,
-        image: project_image,
-        technologies: technologies,
-        liveUrl: liveUrl,
-        githubUrl: githubUrl,
-        status: status,
-        featured: featured,
-      },
-    });
+      postData({
+        endpoint: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/create`,
+        data: {
+          title: title,
+          description: description,
+          image: imageBase64,
+          skills: technologies,
+          liveLink: liveUrl,
+          githubLink: githubUrl,
+          status: status,
+          featured: featured,
+        },
+      });
+    } catch (error) {
+      console.error("Error converting image:", error);
+    }
   };
 
   console.log(postError);
@@ -347,7 +363,7 @@ export default function ProjectsPage() {
                     type="checkbox"
                     id="featured"
                     className="rounded"
-                    onChange={() => setFeatured(!featured)}
+                    onChange={(e) => setFeatured(e.target.checked ? true : false)}
                   />
                   <Label htmlFor="featured">
                     Feature this project on homepage
