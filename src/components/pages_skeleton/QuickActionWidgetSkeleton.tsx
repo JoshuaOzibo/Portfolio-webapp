@@ -14,25 +14,25 @@ const QuickActionWidgetSkeleton = () => {
           {/* Add New Project Button */}
           <div className="flex items-center px-2 shadow-sm border border-gray-200 rounded-md gap-3 h-12">
             <div className="p-2 bg-blue-50 shadow-sm border border-gray-200 rounded-lg">
-              <Skeleton className="h-4 w-4" /> {/* Plus icon */}
+              <Skeleton className="h-4 w-4" /> 
             </div>
-            <Skeleton className="h-4 flex-1" /> {/* Add New Project text */}
+            <Skeleton className="h-4 flex-1" /> 
           </div>
 
           {/* Update Skills Button */}
           <div className="flex items-center px-2 shadow-sm border border-gray-200 rounded-md gap-3 h-12">
             <div className="p-2 bg-green-50 shadow-sm border border-gray-200 rounded-lg">
-              <Skeleton className="h-4 w-4" /> {/* Code2 icon */}
+              <Skeleton className="h-4 w-4" /> 
             </div>
-            <Skeleton className="h-4 flex-1" /> {/* Update Skills text */}
+            <Skeleton className="h-4 flex-1" /> 
           </div>
 
           {/* Update Experience Button */}
           <div className="flex items-center px-2 shadow-sm border border-gray-200 rounded-md gap-3 h-12">
             <div className="p-2 bg-purple-50 shadow-sm border border-gray-200 rounded-lg">
-              <Skeleton className="h-4 w-4" /> {/* Briefcase icon */}
+              <Skeleton className="h-4 w-4" /> 
             </div>
-            <Skeleton className="h-4 flex-1" /> {/* Update Experience text */}
+            <Skeleton className="h-4 flex-1" /> 
           </div>
         </CardContent>
       </Card>
