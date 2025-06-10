@@ -1,17 +1,40 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Plus, Edit, Trash2, ExternalLink, Github, Eye, Upload, Star, Calendar, Code2 } from "lucide-react"
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Plus,
+  Edit,
+  Trash2,
+  ExternalLink,
+  Github,
+  Eye,
+  Upload,
+  Star,
+  Calendar,
+  Code2,
+} from "lucide-react";
 import DialogModal from "@/components/re-usable_ui/dialog_modal";
-import { usePost } from "@/hooks/use-fetch"
+import { usePost } from "@/hooks/use-fetch";
 
 interface Project {
   id: number;
@@ -35,7 +58,13 @@ export default function ProjectsPage() {
       description:
         "A full-stack e-commerce solution with React, Node.js, and PostgreSQL. Features include user authentication, payment processing, and admin dashboard.",
       image: "/placeholder.svg?height=300&width=400",
-      technologies: ["React", "Node.js", "PostgreSQL", "Stripe", "Tailwind CSS"],
+      technologies: [
+        "React",
+        "Node.js",
+        "PostgreSQL",
+        "Stripe",
+        "Tailwind CSS",
+      ],
       liveUrl: "https://ecommerce-demo.com",
       githubUrl: "https://github.com/johndoe/ecommerce",
       status: "Live",
@@ -85,49 +114,65 @@ export default function ProjectsPage() {
       views: "4.8k",
       createdAt: "2023-12-20",
     },
-  ])
+  ]);
 
-  const [isAddingProject, setIsAddingProject] = useState(false)
-  const [editingProject, setEditingProject] = useState<Project | null>(null)
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
+  const [isAddingProject, setIsAddingProject] = useState(false);
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [technologies, setTechnologies] = useState<string[]>([]);
+  const [liveUrl, setLiveUrl] = useState("");
+  const [githubUrl, setGithubUrl] = useState("");
+  const [status, setStatus] = useState<"Live" | "In Progress" | "Draft">(
+    "In Progress"
+  );
+  const [project_image, setProjectImage] = useState<File | null>(null);
+  const [featured, setFeatured] = useState(false);
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Live":
-        return "bg-green-100 text-green-700 border-green-200"
+        return "bg-green-100 text-green-700 border-green-200";
       case "In Progress":
-        return "bg-blue-100 text-blue-700 border-blue-200"
+        return "bg-blue-100 text-blue-700 border-blue-200";
       case "Draft":
-        return "bg-gray-100 text-gray-700 border-gray-200"
+        return "bg-gray-100 text-gray-700 border-gray-200";
       default:
-        return "bg-gray-100 text-gray-700 border-gray-200"
+        return "bg-gray-100 text-gray-700 border-gray-200";
     }
   };
 
-
-  const { 
+  const {
     mutate: postData,
     isPending: isPosting,
     error: postError,
-    data: postResponse
+    data: postResponse,
   } = usePost();
-
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    console.log("handleSubmit", e);
+
     postData({
-      endpoint: '/api/your-post-endpoint',
+      endpoint: `${process.env.API_BASE_URL}/api/v1/projects/create`,
       data: {
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-      }
+        title: title,
+        description: description,
+        image: project_image,
+        technologies: technologies,
+        liveUrl: liveUrl,
+        githubUrl: githubUrl,
+        status: status,
+        featured: featured,
+      },
     });
   };
 
-  console.log(postError)
-  console.log(postResponse)
-  console.log(isPosting)
+  console.log(postError);
+  console.log(postResponse);
+  console.log(isPosting);
 
   return (
     <div className="space-y-8">
@@ -135,14 +180,24 @@ export default function ProjectsPage() {
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-900">Projects</h1>
-          <p className="text-slate-600 mt-2">Manage your portfolio projects and showcase your work</p>
+          <p className="text-slate-600 mt-2">
+            Manage your portfolio projects and showcase your work
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <Button variant={viewMode === "grid" ? "default" : "outline"} size="sm" onClick={() => setViewMode("grid")}>
+            <Button
+              variant={viewMode === "grid" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setViewMode("grid")}
+            >
               Grid
             </Button>
-            <Button variant={viewMode === "list" ? "default" : "outline"} size="sm" onClick={() => setViewMode("list")}>
+            <Button
+              variant={viewMode === "list" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setViewMode("list")}
+            >
               List
             </Button>
           </div>
@@ -152,78 +207,162 @@ export default function ProjectsPage() {
             setIsAddingProject={setIsAddingProject}
             contentHeader_Title="Add New Project"
             Title_button="Add Project"
-            create_repo="Create Project"
           >
             <form onSubmit={handleSubmit}>
-            <div className="space-y-6">
-              {/* Project Image Upload */}
-              <div>
-                <Label>Project Image</Label>
-                <div className="mt-2 border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-slate-400 transition-colors">
-                  <Upload className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                  <p className="text-sm text-slate-600 mb-2">Click to upload or drag and drop</p>
-                  <p className="text-xs text-slate-500">PNG, JPG, GIF up to 10MB</p>
-                  <Button variant="outline" size="sm" className="mt-4">
-                    Choose File
+              <div className="space-y-6">
+                {/* Project Image Upload */}
+                <div>
+                  <Label>Project Image</Label>
+                  <div
+                    className="mt-2 border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-slate-400 transition-colors"
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      const file = e.dataTransfer.files?.[0];
+                      if (file && file.type.startsWith("image/")) {
+                        setProjectImage(file);
+                      }
+                    }}
+                  >
+                    <input
+                      type="file"
+                      id="project-image"
+                      className="hidden"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) setProjectImage(file);
+                      }}
+                    />
+                    <Upload className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                    <p className="text-sm text-slate-600 mb-2">
+                      Click to upload or drag and drop
+                    </p>
+                    <p className="text-xs text-slate-500">
+                      PNG, JPG, GIF up to 10MB
+                    </p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="mt-4"
+                      type="button"
+                      onClick={() =>
+                        document.getElementById("project-image")?.click()
+                      }
+                    >
+                      Choose File
+                    </Button>
+                    {project_image && (
+                      <p className="mt-2 text-sm text-green-600">
+                        Selected: {project_image.name}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="title">Project Title</Label>
+                    <Input
+                      name="title"
+                      onChange={(e) => setTitle(e.target.value)}
+                      id="title"
+                      placeholder="Enter project title"
+                      className="mt-2"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="status">Status</Label>
+                    <Select
+                      onValueChange={(value) =>
+                        setStatus(value as "Live" | "In Progress" | "Draft")
+                      }
+                    >
+                      <SelectTrigger className="mt-2">
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="live">Live</SelectItem>
+                        <SelectItem value="progress">In Progress</SelectItem>
+                        <SelectItem value="draft">Draft</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="description">Description</Label>
+                  <Textarea
+                    name="description"
+                    onChange={(e) => setDescription(e.target.value)}
+                    id="description"
+                    placeholder="Describe your project, its features, and what makes it special"
+                    rows={4}
+                    className="mt-2"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="technologies">Technologies Used</Label>
+                  <Input
+                    name="technologies"
+                    onChange={(e) =>
+                      setTechnologies([...technologies, e.target.value])
+                    }
+                    id="technologies"
+                    placeholder="React, Node.js, PostgreSQL, etc. (comma-separated)"
+                    className="mt-2"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="liveUrl">Live Demo URL</Label>
+                    <Input
+                      name="liveUrl"
+                      onChange={(e) => setLiveUrl(e.target.value)}
+                      id="liveUrl"
+                      placeholder="https://your-project.com"
+                      className="mt-2"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="githubUrl">GitHub Repository</Label>
+                    <Input
+                      name="githubUrl"
+                      onChange={(e) => setGithubUrl(e.target.value)}
+                      id="githubUrl"
+                      placeholder="https://github.com/username/repo"
+                      className="mt-2"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="featured"
+                    className="rounded"
+                    onChange={() => setFeatured(!featured)}
+                  />
+                  <Label htmlFor="featured">
+                    Feature this project on homepage
+                  </Label>
+                </div>
+
+                <div className="flex justify-end space-x-3 pt-4">
+                  <Button variant="outline" type="button" onClick={() => setIsAddingProject(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit">
+                    Create Project
                   </Button>
                 </div>
               </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="title">Project Title</Label>
-                  <Input id="title" placeholder="Enter project title" className="mt-2" />
-                </div>
-                <div>
-                  <Label htmlFor="status">Status</Label>
-                  <Select>
-                    <SelectTrigger className="mt-2">
-                      <SelectValue placeholder="Select status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="live">Live</SelectItem>
-                      <SelectItem value="progress">In Progress</SelectItem>
-                      <SelectItem value="draft">Draft</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div>
-                <Label htmlFor="description">Description</Label>
-                <Textarea
-                  id="description"
-                  placeholder="Describe your project, its features, and what makes it special"
-                  rows={4}
-                  className="mt-2"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="technologies">Technologies Used</Label>
-                <Input
-                  id="technologies"
-                  placeholder="React, Node.js, PostgreSQL, etc. (comma-separated)"
-                  className="mt-2"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="liveUrl">Live Demo URL</Label>
-                  <Input id="liveUrl" placeholder="https://your-project.com" className="mt-2" />
-                </div>
-                <div>
-                  <Label htmlFor="githubUrl">GitHub Repository</Label>
-                  <Input id="githubUrl" placeholder="https://github.com/username/repo" className="mt-2" />
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <input type="checkbox" id="featured" className="rounded" />
-                <Label htmlFor="featured">Feature this project on homepage</Label>
-              </div>
-            </div>
             </form>
           </DialogModal>
         </div>
@@ -236,7 +375,9 @@ export default function ProjectsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Total Projects</p>
-                <p className="text-2xl font-bold text-slate-900">{projects.length}</p>
+                <p className="text-2xl font-bold text-slate-900">
+                  {projects.length}
+                </p>
               </div>
               <div className="p-3 bg-blue-50 rounded-xl">
                 <Code2 className="h-6 w-6 text-blue-600" />
@@ -264,7 +405,9 @@ export default function ProjectsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Featured</p>
-                <p className="text-2xl font-bold text-slate-900">{projects.filter((p) => p.featured).length}</p>
+                <p className="text-2xl font-bold text-slate-900">
+                  {projects.filter((p) => p.featured).length}
+                </p>
               </div>
               <div className="p-3 bg-yellow-50 rounded-xl">
                 <Star className="h-6 w-6 text-yellow-600" />
@@ -290,7 +433,10 @@ export default function ProjectsPage() {
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {projects.map((project) => (
-          <Card key={project.id} className="border-0 shadow-sm hover:shadow-lg transition-all duration-300 group">
+          <Card
+            key={project.id}
+            className="border-0 shadow-sm hover:shadow-lg transition-all duration-300 group"
+          >
             <div className="relative">
               <img
                 src={project.image || "/placeholder.svg"}
@@ -298,7 +444,9 @@ export default function ProjectsPage() {
                 className="w-full h-48 object-cover rounded-t-lg bg-slate-100"
               />
               <div className="absolute top-4 left-4 flex gap-2">
-                <Badge className={`${getStatusColor(project.status)} border`}>{project.status}</Badge>
+                <Badge className={`${getStatusColor(project.status)} border`}>
+                  {project.status}
+                </Badge>
                 {project.featured && (
                   <Badge className="bg-yellow-100 text-yellow-700 border-yellow-200">
                     <Star className="h-3 w-3 mr-1" />
@@ -311,7 +459,11 @@ export default function ProjectsPage() {
                   <Button size="sm" variant="secondary" className="h-8 w-8 p-0">
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" variant="secondary" className="h-8 w-8 p-0 text-red-600 hover:text-red-700">
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -321,13 +473,20 @@ export default function ProjectsPage() {
             <CardContent className="p-6">
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">{project.title}</h3>
-                  <p className="text-sm text-slate-600 line-clamp-3">{project.description}</p>
+                  <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                    {project.title}
+                  </h3>
+                  <p className="text-sm text-slate-600 line-clamp-3">
+                    {project.description}
+                  </p>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
                   {project.technologies.slice(0, 3).map((tech, index) => (
-                    <span key={index} className="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded-md">
+                    <span
+                      key={index}
+                      className="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded-md"
+                    >
                       {tech}
                     </span>
                   ))}
@@ -351,15 +510,33 @@ export default function ProjectsPage() {
                   </div>
                   <div className="flex gap-2">
                     {project.liveUrl && (
-                      <Button size="sm" variant="outline" className="h-8 w-8 p-0" asChild>
-                        <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 w-8 p-0"
+                        asChild
+                      >
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           <ExternalLink className="h-4 w-4" />
                         </a>
                       </Button>
                     )}
                     {project.githubUrl && (
-                      <Button size="sm" variant="outline" className="h-8 w-8 p-0" asChild>
-                        <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 w-8 p-0"
+                        asChild
+                      >
+                        <a
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           <Github className="h-4 w-4" />
                         </a>
                       </Button>
@@ -372,5 +549,5 @@ export default function ProjectsPage() {
         ))}
       </div>
     </div>
-  )
+  );
 }
