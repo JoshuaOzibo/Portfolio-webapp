@@ -26,6 +26,7 @@ interface DialogModalProps {
   contentHeader_Title: string;
   children: React.ReactNode;
   Title_button: string;
+  create_repo: string;
 }
 
 const DialogModal: React.FC<DialogModalProps> = ({
@@ -34,6 +35,7 @@ const DialogModal: React.FC<DialogModalProps> = ({
   contentHeader_Title,
   children,
   Title_button,
+  create_repo
 }) => {
   return (
     <Dialog open={isAddingProject} onOpenChange={setIsAddingProject}>
@@ -57,8 +59,8 @@ const DialogModal: React.FC<DialogModalProps> = ({
             <Button variant="outline" onClick={() => setIsAddingProject(false)}>
               Cancel
             </Button>
-            <Button onClick={() => setIsAddingProject(false)}>
-              Create Project
+            <Button type="submit">
+              {create_repo}
             </Button>
           </div>
         </div>

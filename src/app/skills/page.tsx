@@ -52,7 +52,15 @@ const page = () => {
     },
   ]);
 
-  const submitSkillsData = () => {
+  const submitSkillsData = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); 
+    console.log("submitSkillsData");
+
+    const formData = new FormData(e.target as HTMLFormElement);
+    const platform = formData.get("platform");
+    const url = formData.get("url");
+
+    console.log(platform, url);
 
   }
   return (
@@ -70,7 +78,7 @@ const page = () => {
               <DialogHeader>
                 <DialogTitle>Add Social Link</DialogTitle>
               </DialogHeader>
-              <form onSubmit={() => submitSkillsData}>
+              <form onSubmit={submitSkillsData}>
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="platform">Platform</Label>

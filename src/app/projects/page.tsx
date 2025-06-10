@@ -113,7 +113,7 @@ export default function ProjectsPage() {
   } = usePost();
 
 
-  const handleSubmit = (e: Event) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     postData({
@@ -152,8 +152,9 @@ export default function ProjectsPage() {
             setIsAddingProject={setIsAddingProject}
             contentHeader_Title="Add New Project"
             Title_button="Add Project"
+            create_repo="Create Project"
           >
-            <form onSubmit={() => handleSubmit}>
+            <form onSubmit={handleSubmit}>
             <div className="space-y-6">
               {/* Project Image Upload */}
               <div>
