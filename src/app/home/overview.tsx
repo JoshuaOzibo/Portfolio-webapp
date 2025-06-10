@@ -11,16 +11,9 @@ import ImageThree from '../../components/assets/extention images_Stay Organized 
 import { useGet } from "@/hooks/use-fetch";
 
 const overview = () => {
-  const { data, isLoading, error } = useGet(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/`);
+  const { data, isLoading, error } = useGet(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects`);
   
-  useEffect(() => {
-    const fetchData = async () => {
-      console.log(data);
-    };
-
-    fetchData();
-  }, []);
-  
+  console.log(data);
 
   const stats = [
     {
