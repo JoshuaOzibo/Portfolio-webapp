@@ -51,6 +51,10 @@ const page = () => {
       color: "text-green-600",
     },
   ]);
+
+  const submitSkillsData = () => {
+
+  }
   return (
     <Card className="border-0 w-full shadow-sm">
         <CardHeader className="flex flex-row items-center justify-between">
@@ -66,6 +70,7 @@ const page = () => {
               <DialogHeader>
                 <DialogTitle>Add Social Link</DialogTitle>
               </DialogHeader>
+              <form onSubmit={() => submitSkillsData}>
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="platform">Platform</Label>
@@ -86,11 +91,12 @@ const page = () => {
                   >
                     Cancel
                   </Button>
-                  <Button onClick={() => setIsAddingLink(false)}>
+                  <button type="submit">
                     Add Link
-                  </Button>
+                  </button>
                 </div>
               </div>
+              </form>
             </DialogContent>
           </Dialog>
         </CardHeader>
