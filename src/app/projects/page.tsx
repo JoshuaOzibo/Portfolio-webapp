@@ -8,13 +8,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -22,7 +15,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Plus,
   Edit,
   Trash2,
   ExternalLink,
@@ -35,6 +27,7 @@ import {
 } from "lucide-react";
 import DialogModal from "@/components/re-usable_ui/dialog_modal";
 import { usePost } from "@/hooks/use-fetch";
+import { toast } from "@/components/ui/use-toast";
 
 interface Project {
   id: number;
@@ -181,14 +174,32 @@ export default function ProjectsPage() {
           featured: featured,
         },
       });
+
+      if (postResponse) {
+        toast({
+          title: "Project created successfully",
+          description: "Project created successfully",
+        });
+      } else {
+        toast({
+          title: "Failed to create project",
+          description: "Failed to create project",
+        });
+      }
+
+      setIsAddingProject(false);
+      setTitle("");
+      setDescription("");
+      setTechnologies([]);
+      setLiveUrl("");
+      setGithubUrl("");
+      setStatus("In Progress");
+      setProjectImage(null);
+      setFeatured(false);
     } catch (error) {
       console.error("Error converting image:", error);
     }
   };
-
-  console.log(postError);
-  console.log(postResponse);
-  console.log(isPosting);
 
   return (
     <div className="space-y-8">

@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import { CardContent } from "../../components/ui/card";
 import { Card } from "../../components/ui/card";
 import { Code2, Briefcase, FolderOpen } from "lucide-react";
@@ -10,7 +11,15 @@ import ImageThree from '../../components/assets/extention images_Stay Organized 
 import { useGet } from "@/hooks/use-fetch";
 
 const overview = () => {
-  const { data, isLoading, error } = useGet('/api/your-endpoint');
+  const { data, isLoading, error } = useGet(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/`);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log(data);
+    };
+
+    fetchData();
+  }, []);
   
 
   const stats = [
