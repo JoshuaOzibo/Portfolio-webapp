@@ -9,7 +9,7 @@ const RecentProjectWidgetSkeleton = () => {
           <CardTitle className="text-lg shadow-sm border border-gray-200 rounded-md font-semibold">
             <Skeleton className="h-6  w-[140px]" />
           </CardTitle>
-          <Skeleton className="h-9 w-[110px]" /> 
+          <Skeleton className="h-9 w-[110px] shadow-sm border border-gray-200 rounded-md" /> 
         </CardHeader>
         <CardContent className="space-y-4">
           {[1, 2, 3].map((index) => (
