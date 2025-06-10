@@ -9,18 +9,20 @@ import ImageOne from '../../components/assets/BorookUi.png'
 import ImageTwo from '../../components/assets/MentlyImage.png'
 import ImageThree from '../../components/assets/extention images_Stay Organized – Track all your job applications, interviews, and follow-ups in one place.(purple).webp'
 import { useGet } from "@/hooks/use-fetch";
+import OverviewSkeleton from "../../components/pages_skeleton/overview.skeleton";
 
 const overview = () => {
   const { data: projectsData, isLoading, error } = useGet(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`);
-
-  console.log(isLoading);
-  console.log(error)
 
   useEffect(() => {
     if (projectsData) {
       console.log(projectsData);
     }
   }, [projectsData]);
+
+  if (isLoading) {
+    return <OverviewSkeleton />;
+  }
 
   const stats = [
     {
