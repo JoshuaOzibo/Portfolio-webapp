@@ -5,9 +5,6 @@ import { Card } from "../../components/ui/card";
 import { Code2, Briefcase, FolderOpen } from "lucide-react";
 import RecentProjectWidget from "@/components/widget/RecentProjectWidget";
 import QuickActionWidget from "@/components/widget/QuickActionWidget";
-import ImageOne from "../../components/assets/BorookUi.png";
-import ImageTwo from "../../components/assets/MentlyImage.png";
-import ImageThree from "../../components/assets/extention images_Stay Organized – Track all your job applications, interviews, and follow-ups in one place.(purple).webp";
 import { useGet } from "@/hooks/use-fetch";
 import OverviewSkeleton from "../../components/pages_skeleton/overview.skeleton";
 import { ApiResponse, MappedData } from "@/types/types";
@@ -68,30 +65,6 @@ const overview = () => {
       icon: Briefcase,
       color: "text-purple-600",
       bgColor: "bg-purple-50",
-    },
-  ];
-
-  const recentProjects = [
-    {
-      name: "E-commerce Platform",
-      status: "Live",
-      image: ImageOne.src,
-      tech: ["React", "Node.js"],
-      views: "1.2k",
-    },
-    {
-      name: "Task Manager",
-      status: "In Progress",
-      image: ImageTwo.src,
-      tech: ["Vue.js", "Firebase"],
-      views: "856",
-    },
-    {
-      name: "Weather App",
-      status: "Live",
-      image: ImageThree.src,
-      tech: ["React", "API"],
-      views: "2.1k",
     },
   ];
 
