@@ -6,6 +6,7 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { Project } from "@/types/types";
+import EmptyState from "../re-usable_ui/empty_component";
 
 const RecentProjectWidget = ({
   recentProjects,
@@ -25,7 +26,7 @@ const RecentProjectWidget = ({
           </Button>
         </CardHeader>
         <CardContent className="space-y-4">
-          {recentProjects.map((project, index) => (
+          {recentProjects.length > 0 ? recentProjects.map((project, index) => (
             <div
               key={index}
               className="flex items-center gap-4 p-4 rounded-lg border border-slate-100 hover:border-slate-200 transition-colors"
@@ -72,7 +73,7 @@ const RecentProjectWidget = ({
                 </div>
               </div>
             </div>
-          ))}
+            )) : <EmptyState title="No projects found" description="You've processed all your projects" />}
         </CardContent>
       </Card>
     </div>

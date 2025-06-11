@@ -1,12 +1,10 @@
 import React from 'react';
 import Image from 'next/image';
+import outOfStock from '../../assets/out-of-stock.webp';
 
 interface EmptyStateProps {
   title: string;
   description?: string;
-  icon?: React.ReactNode;
-  imageSrc?: string;
-  imageAlt?: string;
   actionButton?: {
     label: string;
     onClick: () => void;
@@ -17,27 +15,13 @@ interface EmptyStateProps {
 const EmptyState: React.FC<EmptyStateProps> = ({
   title,
   description,
-  icon,
-  imageSrc,
-  imageAlt,
   actionButton,
   className = '',
 }) => {
   return (
     <div className={`flex flex-col items-center justify-center p-8 text-center ${className}`}>
       {/* Icon or Image */}
-      {icon ? (
-        <div className="text-gray-400 mb-4 text-6xl">{icon}</div>
-      ) : imageSrc ? (
-        <div className="mb-4 relative w-48 h-48">
-          <Image
-            src={imageSrc}
-            alt={imageAlt || 'Empty state illustration'}
-            fill
-            className="object-contain"
-          />
-        </div>
-      ) : null}
+      <Image src='/out-of-stock.webp' alt='Empty state illustration' width={100} height={100} />
 
       {/* Title */}
       <h3 className="text-xl font-semibold text-gray-900 mb-2">
