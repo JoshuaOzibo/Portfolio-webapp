@@ -10,25 +10,11 @@ import ImageTwo from "../../components/assets/MentlyImage.png";
 import ImageThree from "../../components/assets/extention images_Stay Organized – Track all your job applications, interviews, and follow-ups in one place.(purple).webp";
 import { useGet } from "@/hooks/use-fetch";
 import OverviewSkeleton from "../../components/pages_skeleton/overview.skeleton";
-
-// Define the shape of our API response
-interface ApiResponse {
-  projects: Array<any>;
-  skills: Array<any>;
-  experiences: Array<any>;
-  users: Array<any>;
-  socials: Array<any>;
-}
-
-// Define the shape of our mapped data
-interface MappedData {
-  projects: { name: string; value: string; change: string };
-  skills: { name: string; value: string; change: string };
-  experience: { name: string; value: string; change: string };
-}
+import { ApiResponse, MappedData } from "@/types/types";
 
 const overview = () => {
   const [mappedData, setMappedData] = useState<MappedData | null>(null);
+  
   const {
     data: projectsData,
     isLoading,
@@ -37,7 +23,7 @@ const overview = () => {
 
   useEffect(() => {
     if (projectsData) {
-      console.log(`projectsData: ${projectsData}`);
+      console.log(`projectsData:`, projectsData);
 
       const mapped: MappedData = {
         projects: {
@@ -142,7 +128,7 @@ const overview = () => {
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Recent Projects */}
-          <RecentProjectWidget recentProjects={recentProjects} />
+          <RecentProjectWidget recentProjects={projectsData?.projects || []} />
 
           {/* Quick Actions & Activity */}
           <QuickActionWidget />
