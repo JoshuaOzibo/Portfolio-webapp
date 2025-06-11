@@ -8,6 +8,7 @@ import QuickActionWidget from "@/components/widget/QuickActionWidget";
 import { useGet } from "@/hooks/use-fetch";
 import OverviewSkeleton from "../../components/pages_skeleton/overview.skeleton";
 import { ApiResponse, MappedData } from "@/types/types";
+import EmptyState from "@/components/re-usable_ui/empty_component";
 
 const overview = () => {
   const [mappedData, setMappedData] = useState<MappedData | null>(null);
@@ -101,9 +102,16 @@ const overview = () => {
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Recent Projects */}
-          <RecentProjectWidget recentProjects={projectsData?.projects || []} />
+            {projectsData?.projects && projectsData?.projects.length > 0 ? (
+              <RecentProjectWidget recentProjects={projectsData?.projects || []} />
+            ) : (
+              <EmptyState imageSrc="/empty-state.svg"
+              imageAlt="Empty inbox illustration"
+              title="No projects found"
+              description="You've processed all your projects." />
+            )}
 
-          {/* Quick Actions & Activity */}
+            {/* Quick Actions & Activity */}
           <QuickActionWidget />
         </div>
       </div>
