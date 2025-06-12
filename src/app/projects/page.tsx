@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import {ApiResponse} from '../../types/types'
+
 import {
   Select,
   SelectContent,
@@ -19,14 +20,13 @@ import {
   Trash2,
   ExternalLink,
   Github,
-  Eye,
   Upload,
   Star,
   Calendar,
   Code2,
 } from "lucide-react";
 import DialogModal from "@/components/re-usable_ui/dialog_modal";
-import { usePost } from "@/hooks/use-fetch";
+import { useGet, usePost } from "@/hooks/use-fetch";
 import { toast } from "@/components/ui/use-toast";
 
 interface Project {
@@ -122,6 +122,14 @@ export default function ProjectsPage() {
   );
   const [project_image, setProjectImage] = useState<File | null>(null);
   const [featured, setFeatured] = useState(false);
+
+  const {
+    data: projectsData,
+    isLoading,
+    error,
+  } = useGet<ApiResponse>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`);
+
+  console.log(`project page: ${projectsData}`)
 
   const convertImageToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
