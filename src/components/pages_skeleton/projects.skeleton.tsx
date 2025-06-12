@@ -11,15 +11,15 @@ export default function ProjectsPageSkeleton() {
       {/* Header Skeleton */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-          <Skeleton className="h-9 w-48 mb-2" /> {/* Title */}
-          <Skeleton className="h-5 w-96" /> {/* Description */}
+          <Skeleton className="h-9 w-48 mb-2 shadow-sm border border-gray-200 rounded-md" />
+          <Skeleton className="h-5 w-96 shadow-sm border border-gray-200 rounded-md" />
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <Skeleton className="h-9 w-16" /> {/* Grid button */}
-            <Skeleton className="h-9 w-16" /> {/* List button */}
+            <Skeleton className="h-9 w-16 shadow-sm border border-gray-200 rounded-md" />
+            <Skeleton className="h-9 w-16 shadow-sm border border-gray-200 rounded-md" />
           </div>
-          <Skeleton className="h-9 w-[120px]" /> {/* Add Project button */}
+          <Skeleton className="h-9 w-[120px] shadow-sm border border-gray-200 rounded-md" />
         </div>
       </div>
 
@@ -29,11 +29,11 @@ export default function ProjectsPageSkeleton() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <Skeleton className="h-4 w-24 mb-2" /> {/* Total Projects label */}
-                <Skeleton className="h-8 w-16" /> {/* Projects count */}
+                <Skeleton className="h-4 w-24 mb-2 shadow-sm border border-gray-200 rounded-md" />
+                <Skeleton className="h-8 w-16 shadow-sm border border-gray-200 rounded-md" />
               </div>
-              <div className="p-3 bg-blue-50 rounded-xl">
-                <Code2 className="h-6 w-6 text-blue-600" />
+              <div className="p-3 bg-gray-100 shadow-sm border border-gray-200 rounded-xl">
+                <Skeleton className="h-6 w-6" />
               </div>
             </div>
           </CardContent>
@@ -42,11 +42,11 @@ export default function ProjectsPageSkeleton() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <Skeleton className="h-4 w-24 mb-2" /> {/* Live Projects label */}
-                <Skeleton className="h-8 w-16" /> {/* Live count */}
+                <Skeleton className="h-4 w-24 mb-2 shadow-sm border border-gray-200 rounded-md" />
+                <Skeleton className="h-8 w-16 shadow-sm border border-gray-200 rounded-md" />
               </div>
-              <div className="p-3 bg-green-50 rounded-xl">
-                <ExternalLink className="h-6 w-6 text-green-600" />
+              <div className="p-3 bg-gray-100 shadow-sm border border-gray-200 rounded-xl">
+                <Skeleton className="h-6 w-6" />
               </div>
             </div>
           </CardContent>
@@ -57,26 +57,26 @@ export default function ProjectsPageSkeleton() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {skeletonProjects.map((_, index) => (
           <Card key={index} className="border-0 shadow-sm">
-            <Skeleton className="w-full h-48 rounded-t-lg" /> {/* Project image */}
+            <Skeleton className="w-full h-48 rounded-t-lg shadow-sm border border-gray-200 rounded-md" />
             <CardContent className="p-6">
               <div className="space-y-4">
                 <div>
-                  <Skeleton className="h-6 w-3/4 mb-2" /> {/* Project title */}
-                  <Skeleton className="h-4 w-full mb-1" /> {/* Description line 1 */}
-                  <Skeleton className="h-4 w-5/6" /> {/* Description line 2 */}
+                  <Skeleton className="h-6 w-3/4 mb-2 shadow-sm border border-gray-200 rounded-md" />
+                  <Skeleton className="h-4 w-full mb-1 shadow-sm border border-gray-200 rounded-md" />
+                  <Skeleton className="h-4 w-5/6 shadow-sm border border-gray-200 rounded-md" />
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  <Skeleton className="h-6 w-16" /> {/* Tech badge 1 */}
-                  <Skeleton className="h-6 w-16" /> {/* Tech badge 2 */}
-                  <Skeleton className="h-6 w-16" /> {/* Tech badge 3 */}
+                  <Skeleton className="h-6 w-16 shadow-sm border border-gray-200 rounded-md" />
+                  <Skeleton className="h-6 w-16 shadow-sm border border-gray-200 rounded-md" />
+                  <Skeleton className="h-6 w-16 shadow-sm border border-gray-200 rounded-md" />
                 </div>
 
                 <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                  <Skeleton className="h-5 w-24" /> {/* Date */}
+                  <Skeleton className="h-5 w-24 shadow-sm border border-gray-200 rounded-md" />
                   <div className="flex gap-2">
-                    <Skeleton className="h-8 w-8" /> {/* Live link button */}
-                    <Skeleton className="h-8 w-8" /> {/* GitHub button */}
+                    <Skeleton className="h-8 w-8 shadow-sm border border-gray-200 rounded-md" />
+                    <Skeleton className="h-8 w-8 shadow-sm border border-gray-200 rounded-md" />
                   </div>
                 </div>
               </div>
@@ -86,4 +86,4 @@ export default function ProjectsPageSkeleton() {
       </div>
     </div>
   );
-} 
+}

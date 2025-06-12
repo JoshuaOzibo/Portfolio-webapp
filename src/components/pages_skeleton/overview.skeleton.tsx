@@ -18,7 +18,7 @@ const OverviewSkeleton = () => {
                   <Skeleton className="h-8 w-[50px] shadow-sm border border-gray-200 rounded-md" />
                   <Skeleton className="h-4 w-[100px] shadow-sm border border-gray-200 rounded-md" />
                 </div>
-                <div className="p-3 bg-blue-50 shadow-sm border border-gray-200 rounded-xl">
+                <div className="p-3 bg-gray-100 shadow-sm border border-gray-200 rounded-xl">
                   <Skeleton className="h-6 w-6" />
                 </div>
               </div>
@@ -34,7 +34,7 @@ const OverviewSkeleton = () => {
                   <Skeleton className="h-8 w-[30px] shadow-sm border border-gray-200 rounded-md" />
                   <Skeleton className="h-4 w-[100px] shadow-sm border border-gray-200 rounded-md" />
                 </div>
-                <div className="p-3 bg-green-50 shadow-sm border border-gray-200 rounded-xl">
+                <div className="p-3 bg-gray-100 shadow-sm border border-gray-200 rounded-xl">
                   <Skeleton className="h-6 w-6" />
                 </div>
               </div>
@@ -50,7 +50,7 @@ const OverviewSkeleton = () => {
                   <Skeleton className="h-8 w-[80px] shadow-sm border border-gray-200 rounded-md" />
                   <Skeleton className="h-4 w-[70px] shadow-sm border border-gray-200 rounded-md" />
                 </div>
-                <div className="p-3 bg-purple-50 shadow-sm border border-gray-200 rounded-xl">
+                <div className="p-3 bg-gray-100 shadow-sm border border-gray-200 rounded-xl">
                   <Skeleton className="h-6 w-6" />
                 </div>
               </div>
