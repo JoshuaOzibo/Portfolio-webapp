@@ -396,7 +396,7 @@ export default function ProjectsPage() {
       </div>
 
       {/* Projects Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card className="border-0 shadow-sm">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -423,34 +423,6 @@ export default function ProjectsPage() {
               </div>
               <div className="p-3 bg-green-50 rounded-xl">
                 <ExternalLink className="h-6 w-6 text-green-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-0 shadow-sm">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-slate-600">Featured</p>
-                <p className="text-2xl font-bold text-slate-900">
-                  {projects.filter((p) => p.featured).length}
-                </p>
-              </div>
-              <div className="p-3 bg-yellow-50 rounded-xl">
-                <Star className="h-6 w-6 text-yellow-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-0 shadow-sm">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-slate-600">Total Views</p>
-                <p className="text-2xl font-bold text-slate-900">12.6k</p>
-              </div>
-              <div className="p-3 bg-purple-50 rounded-xl">
-                <Eye className="h-6 w-6 text-purple-600" />
               </div>
             </div>
           </CardContent>
@@ -526,10 +498,7 @@ export default function ProjectsPage() {
 
                 <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                   <div className="flex items-center gap-4 text-sm text-slate-500">
-                    <div className="flex items-center gap-1">
-                      <Eye className="h-4 w-4" />
-                      {project.views}
-                    </div>
+                    
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
                       {new Date(project.createdAt).toLocaleDateString()}
