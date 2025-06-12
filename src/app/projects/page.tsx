@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import {ApiResponse} from '../../types/types'
+import ProjectSkeleton from "@/components/pages_skeleton/projects.skeleton"
 
 import {
   Select,
@@ -210,348 +211,352 @@ export default function ProjectsPage() {
   };
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900">Projects</h1>
-          <p className="text-slate-600 mt-2">
-            Manage your portfolio projects and showcase your work
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <Button
-              variant={viewMode === "grid" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setViewMode("grid")}
-            >
-              Grid
-            </Button>
-            <Button
-              variant={viewMode === "list" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setViewMode("list")}
-            >
-              List
-            </Button>
+    <>
+      {!isLoading ? (<ProjectSkeleton />) : (
+        <div className="space-y-8">
+        {/* Header */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900">Projects</h1>
+            <p className="text-slate-600 mt-2">
+              Manage your portfolio projects and showcase your work
+            </p>
           </div>
-
-          <DialogModal
-            isAddingProject={isAddingProject}
-            setIsAddingProject={setIsAddingProject}
-            contentHeader_Title="Add New Project"
-            Title_button="Add Project"
-          >
-            <form onSubmit={handleSubmit}>
-              <div className="space-y-6">
-                {/* Project Image Upload */}
-                <div>
-                  <Label>Project Image</Label>
-                  <div
-                    className="mt-2 border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-slate-400 transition-colors"
-                    onDragOver={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                    onDrop={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      const file = e.dataTransfer.files?.[0];
-                      if (file && file.type.startsWith("image/")) {
-                        setProjectImage(file);
-                      }
-                    }}
-                  >
-                    <input
-                      type="file"
-                      id="project-image"
-                      className="hidden"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) setProjectImage(file);
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <Button
+                variant={viewMode === "grid" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setViewMode("grid")}
+              >
+                Grid
+              </Button>
+              <Button
+                variant={viewMode === "list" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setViewMode("list")}
+              >
+                List
+              </Button>
+            </div>
+  
+            <DialogModal
+              isAddingProject={isAddingProject}
+              setIsAddingProject={setIsAddingProject}
+              contentHeader_Title="Add New Project"
+              Title_button="Add Project"
+            >
+              <form onSubmit={handleSubmit}>
+                <div className="space-y-6">
+                  {/* Project Image Upload */}
+                  <div>
+                    <Label>Project Image</Label>
+                    <div
+                      className="mt-2 border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-slate-400 transition-colors"
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
                       }}
-                    />
-                    <Upload className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                    <p className="text-sm text-slate-600 mb-2">
-                      Click to upload or drag and drop
-                    </p>
-                    <p className="text-xs text-slate-500">
-                      PNG, JPG, GIF up to 10MB
-                    </p>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="mt-4"
-                      type="button"
-                      onClick={() =>
-                        document.getElementById("project-image")?.click()
-                      }
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const file = e.dataTransfer.files?.[0];
+                        if (file && file.type.startsWith("image/")) {
+                          setProjectImage(file);
+                        }
+                      }}
                     >
-                      Choose File
-                    </Button>
-                    {project_image && (
-                      <p className="mt-2 text-sm text-green-600">
-                        Selected: {project_image.name}
+                      <input
+                        type="file"
+                        id="project-image"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) setProjectImage(file);
+                        }}
+                      />
+                      <Upload className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                      <p className="text-sm text-slate-600 mb-2">
+                        Click to upload or drag and drop
                       </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="title">Project Title</Label>
-                    <Input
-                      name="title"
-                      onChange={(e) => setTitle(e.target.value)}
-                      id="title"
-                      placeholder="Enter project title"
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="status">Status</Label>
-                    <Select
-                      onValueChange={(value) =>
-                        setStatus(value as "Live" | "In Progress" | "Draft")
-                      }
-                    >
-                      <SelectTrigger className="mt-2">
-                        <SelectValue placeholder="Select status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="live">Live</SelectItem>
-                        <SelectItem value="progress">In Progress</SelectItem>
-                        <SelectItem value="draft">Draft</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    name="description"
-                    onChange={(e) => setDescription(e.target.value)}
-                    id="description"
-                    placeholder="Describe your project, its features, and what makes it special"
-                    rows={4}
-                    className="mt-2"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="technologies">Technologies Used</Label>
-                  <Input
-                    name="technologies"
-                    onChange={(e) =>
-                      setTechnologies([...technologies, e.target.value])
-                    }
-                    id="technologies"
-                    placeholder="React, Node.js, PostgreSQL, etc. (comma-separated)"
-                    className="mt-2"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="liveUrl">Live Demo URL</Label>
-                    <Input
-                      name="liveUrl"
-                      onChange={(e) => setLiveUrl(e.target.value)}
-                      id="liveUrl"
-                      placeholder="https://your-project.com"
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="githubUrl">GitHub Repository</Label>
-                    <Input
-                      name="githubUrl"
-                      onChange={(e) => setGithubUrl(e.target.value)}
-                      id="githubUrl"
-                      placeholder="https://github.com/username/repo"
-                      className="mt-2"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="featured"
-                    className="rounded"
-                    onChange={(e) => setFeatured(e.target.checked ? true : false)}
-                  />
-                  <Label htmlFor="featured">
-                    Feature this project on homepage
-                  </Label>
-                </div>
-
-                <div className="flex justify-end space-x-3 pt-4">
-                  <Button variant="outline" type="button" onClick={() => setIsAddingProject(false)}>
-                    Cancel
-                  </Button>
-                  <Button type="submit">
-                    Create Project
-                  </Button>
-                </div>
-              </div>
-            </form>
-          </DialogModal>
-        </div>
-      </div>
-
-      {/* Projects Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="border-0 shadow-sm">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-slate-600">Total Projects</p>
-                <p className="text-2xl font-bold text-slate-900">
-                  {projects.length}
-                </p>
-              </div>
-              <div className="p-3 bg-blue-50 rounded-xl">
-                <Code2 className="h-6 w-6 text-blue-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-0 shadow-sm">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-slate-600">Live Projects</p>
-                <p className="text-2xl font-bold text-slate-900">
-                  {projects.filter((p) => p.status === "Live").length}
-                </p>
-              </div>
-              <div className="p-3 bg-green-50 rounded-xl">
-                <ExternalLink className="h-6 w-6 text-green-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Projects Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {projects.map((project) => (
-          <Card
-            key={project.id}
-            className="border-0 shadow-sm hover:shadow-lg transition-all duration-300 group"
-          >
-            <div className="relative">
-              <img
-                src={project.image || "/placeholder.svg"}
-                alt={project.title}
-                className="w-full h-48 object-cover rounded-t-lg bg-slate-100"
-              />
-              <div className="absolute top-4 left-4 flex gap-2">
-                <Badge className={`${getStatusColor(project.status)} border`}>
-                  {project.status}
-                </Badge>
-                {project.featured && (
-                  <Badge className="bg-yellow-100 text-yellow-700 border-yellow-200">
-                    <Star className="h-3 w-3 mr-1" />
-                    Featured
-                  </Badge>
-                )}
-              </div>
-              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="flex gap-2">
-                  <Button size="sm" variant="secondary" className="h-8 w-8 p-0">
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            <CardContent className="p-6">
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-slate-600 line-clamp-3">
-                    {project.description}
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  {project.technologies.slice(0, 3).map((tech, index) => (
-                    <span
-                      key={index}
-                      className="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded-md"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                  {project.technologies.length > 3 && (
-                    <span className="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded-md">
-                      +{project.technologies.length - 3} more
-                    </span>
-                  )}
-                </div>
-
-                <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                  <div className="flex items-center gap-4 text-sm text-slate-500">
-                    
-                    <div className="flex items-center gap-1">
-                      <Calendar className="h-4 w-4" />
-                      {new Date(project.createdAt).toLocaleDateString()}
+                      <p className="text-xs text-slate-500">
+                        PNG, JPG, GIF up to 10MB
+                      </p>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mt-4"
+                        type="button"
+                        onClick={() =>
+                          document.getElementById("project-image")?.click()
+                        }
+                      >
+                        Choose File
+                      </Button>
+                      {project_image && (
+                        <p className="mt-2 text-sm text-green-600">
+                          Selected: {project_image.name}
+                        </p>
+                      )}
                     </div>
                   </div>
-                  <div className="flex gap-2">
-                    {project.liveUrl && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="h-8 w-8 p-0"
-                        asChild
+  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="title">Project Title</Label>
+                      <Input
+                        name="title"
+                        onChange={(e) => setTitle(e.target.value)}
+                        id="title"
+                        placeholder="Enter project title"
+                        className="mt-2"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="status">Status</Label>
+                      <Select
+                        onValueChange={(value) =>
+                          setStatus(value as "Live" | "In Progress" | "Draft")
+                        }
                       >
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                        </a>
-                      </Button>
-                    )}
-                    {project.githubUrl && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="h-8 w-8 p-0"
-                        asChild
-                      >
-                        <a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <Github className="h-4 w-4" />
-                        </a>
-                      </Button>
-                    )}
+                        <SelectTrigger className="mt-2">
+                          <SelectValue placeholder="Select status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="live">Live</SelectItem>
+                          <SelectItem value="progress">In Progress</SelectItem>
+                          <SelectItem value="draft">Draft</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
+  
+                  <div>
+                    <Label htmlFor="description">Description</Label>
+                    <Textarea
+                      name="description"
+                      onChange={(e) => setDescription(e.target.value)}
+                      id="description"
+                      placeholder="Describe your project, its features, and what makes it special"
+                      rows={4}
+                      className="mt-2"
+                    />
+                  </div>
+  
+                  <div>
+                    <Label htmlFor="technologies">Technologies Used</Label>
+                    <Input
+                      name="technologies"
+                      onChange={(e) =>
+                        setTechnologies([...technologies, e.target.value])
+                      }
+                      id="technologies"
+                      placeholder="React, Node.js, PostgreSQL, etc. (comma-separated)"
+                      className="mt-2"
+                    />
+                  </div>
+  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="liveUrl">Live Demo URL</Label>
+                      <Input
+                        name="liveUrl"
+                        onChange={(e) => setLiveUrl(e.target.value)}
+                        id="liveUrl"
+                        placeholder="https://your-project.com"
+                        className="mt-2"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="githubUrl">GitHub Repository</Label>
+                      <Input
+                        name="githubUrl"
+                        onChange={(e) => setGithubUrl(e.target.value)}
+                        id="githubUrl"
+                        placeholder="https://github.com/username/repo"
+                        className="mt-2"
+                      />
+                    </div>
+                  </div>
+  
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="featured"
+                      className="rounded"
+                      onChange={(e) => setFeatured(e.target.checked ? true : false)}
+                    />
+                    <Label htmlFor="featured">
+                      Feature this project on homepage
+                    </Label>
+                  </div>
+  
+                  <div className="flex justify-end space-x-3 pt-4">
+                    <Button variant="outline" type="button" onClick={() => setIsAddingProject(false)}>
+                      Cancel
+                    </Button>
+                    <Button type="submit">
+                      Create Project
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            </DialogModal>
+          </div>
+        </div>
+  
+        {/* Projects Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card className="border-0 shadow-sm">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-slate-600">Total Projects</p>
+                  <p className="text-2xl font-bold text-slate-900">
+                    {projects.length}
+                  </p>
+                </div>
+                <div className="p-3 bg-blue-50 rounded-xl">
+                  <Code2 className="h-6 w-6 text-blue-600" />
                 </div>
               </div>
             </CardContent>
           </Card>
-        ))}
+          <Card className="border-0 shadow-sm">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-slate-600">Live Projects</p>
+                  <p className="text-2xl font-bold text-slate-900">
+                    {projects.filter((p) => p.status === "Live").length}
+                  </p>
+                </div>
+                <div className="p-3 bg-green-50 rounded-xl">
+                  <ExternalLink className="h-6 w-6 text-green-600" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+  
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projects.map((project) => (
+            <Card
+              key={project.id}
+              className="border-0 shadow-sm hover:shadow-lg transition-all duration-300 group"
+            >
+              <div className="relative">
+                <img
+                  src={project.image || "/placeholder.svg"}
+                  alt={project.title}
+                  className="w-full h-48 object-cover rounded-t-lg bg-slate-100"
+                />
+                <div className="absolute top-4 left-4 flex gap-2">
+                  <Badge className={`${getStatusColor(project.status)} border`}>
+                    {project.status}
+                  </Badge>
+                  {project.featured && (
+                    <Badge className="bg-yellow-100 text-yellow-700 border-yellow-200">
+                      <Star className="h-3 w-3 mr-1" />
+                      Featured
+                    </Badge>
+                  )}
+                </div>
+                <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="secondary" className="h-8 w-8 p-0">
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+  
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                      {project.title}
+                    </h3>
+                    <p className="text-sm text-slate-600 line-clamp-3">
+                      {project.description}
+                    </p>
+                  </div>
+  
+                  <div className="flex flex-wrap gap-2">
+                    {project.technologies.slice(0, 3).map((tech, index) => (
+                      <span
+                        key={index}
+                        className="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded-md"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                    {project.technologies.length > 3 && (
+                      <span className="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded-md">
+                        +{project.technologies.length - 3} more
+                      </span>
+                    )}
+                  </div>
+  
+                  <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                    <div className="flex items-center gap-4 text-sm text-slate-500">
+                      
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-4 w-4" />
+                        {new Date(project.createdAt).toLocaleDateString()}
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      {project.liveUrl && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 w-8 p-0"
+                          asChild
+                        >
+                          <a
+                            href={project.liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                          </a>
+                        </Button>
+                      )}
+                      {project.githubUrl && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 w-8 p-0"
+                          asChild
+                        >
+                          <a
+                            href={project.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Github className="h-4 w-4" />
+                          </a>
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
-    </div>
+      )}
+    </>
   );
 }
