@@ -30,6 +30,8 @@ import DialogModal from "@/components/re-usable_ui/dialog_modal";
 import { useGet, usePost } from "@/hooks/use-fetch";
 import { toast } from "@/components/ui/use-toast";
 
+
+
 interface Project {
   id: number;
   title: string;
@@ -45,6 +47,9 @@ interface Project {
 }
 
 export default function ProjectsPage() {
+
+
+
   const [projects, setProjects] = useState<Project[]>([
     {
       id: 1,

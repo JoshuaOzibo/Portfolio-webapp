@@ -4,7 +4,7 @@ import { Code2, ExternalLink } from "lucide-react";
 
 export default function ProjectsPageSkeleton() {
   // Create an array of 6 items for the project grid
-  const skeletonProjects = Array(6).fill(null);
+  const skeletonProjects = Array(3).fill(null);
 
   return (
     <div className="space-y-8">
