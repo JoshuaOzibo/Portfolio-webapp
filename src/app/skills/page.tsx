@@ -17,6 +17,7 @@ import { Card } from "@/components/ui/card";
 import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Trash2 } from "lucide-react";
+import SkillSkeleton from "@/components/pages_skeleton/skill.skeleton";
 
 const page = () => {
   const [isAddingLink, setIsAddingLink] = useState(false);
@@ -64,7 +65,10 @@ const page = () => {
 
   }
   return (
-    <Card className="border-0 w-full shadow-sm">
+    <>
+    false ? (
+
+      <Card className="border-0 w-full shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-lg font-semibold">Social Links</CardTitle>
         <Dialog open={isAddingLink} onOpenChange={setIsAddingLink}>
@@ -160,6 +164,11 @@ const page = () => {
         </div>
       </CardContent>
     </Card>
+      
+    ) : (
+      <SkillSkeleton />
+    )
+    </>
   );
 };
 
