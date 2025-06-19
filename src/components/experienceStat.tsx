@@ -51,11 +51,11 @@ export default function ExperienceStat({ experiences }: { experiences: Experienc
                         <div className="flex items-start justify-between mb-6">
                             <div className="flex-1">
                                 <div className="flex items-center gap-3 mb-2">
-                                    <div className="p-2 bg-blue-50 rounded-lg">
+                                    <div className="p-2 md:block hidden bg-blue-50 rounded-lg">
                                         <Building className="h-5 w-5 text-blue-600" />
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-semibold text-slate-900">{exp.position}</h3>
+                                        <h3 className="md:text-xl text-sm font-semibold text-slate-900">{exp.position}</h3>
                                         <p className="text-blue-600 font-medium">{exp.company}</p>
                                     </div>
                                     {exp.current && (
@@ -63,7 +63,7 @@ export default function ExperienceStat({ experiences }: { experiences: Experienc
                                     )}
                                 </div>
 
-                                <div className="flex items-center gap-6 text-sm text-slate-600 mb-4">
+                                <div className="flex items-center gap-6 text-sm text-slate-600 mb-4 md:flex-row flex-col">
                                     <div className="flex items-center gap-1">
                                         <Calendar className="h-4 w-4" />
                                         <span>
@@ -82,9 +82,10 @@ export default function ExperienceStat({ experiences }: { experiences: Experienc
                                         {exp.type}
                                     </Badge>
                                 </div>
-                            </div>
 
-                            <div className="flex gap-2">
+
+                            </div>
+                            <div className="flex lg:block hidden gap-2">
                                 <Button variant="outline" size="sm" className="gap-2">
                                     <Edit className="h-4 w-4" />
                                     Edit
@@ -94,6 +95,7 @@ export default function ExperienceStat({ experiences }: { experiences: Experienc
                                     Delete
                                 </Button>
                             </div>
+
                         </div>
 
                         <div className="space-y-6">
@@ -123,6 +125,17 @@ export default function ExperienceStat({ experiences }: { experiences: Experienc
                                         </Badge>
                                     ))}
                                 </div>
+                            </div>
+
+                            <div className="flex gap-2 lg:hidden block">
+                                <Button variant="outline" size="sm" className="gap-2">
+                                    <Edit className="h-4 w-4" />
+                                    Edit
+                                </Button>
+                                <Button variant="outline" size="sm" className="gap-2 text-red-600 hover:text-red-700">
+                                    <Trash2 className="h-4 w-4" />
+                                    Delete
+                                </Button>
                             </div>
                         </div>
                     </CardContent>
