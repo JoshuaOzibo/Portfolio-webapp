@@ -53,7 +53,7 @@ const page = () => {
   ]);
 
   const submitSkillsData = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); 
+    e.preventDefault();
     console.log("submitSkillsData");
 
     const formData = new FormData(e.target as HTMLFormElement);
@@ -65,20 +65,20 @@ const page = () => {
   }
   return (
     <Card className="border-0 w-full shadow-sm">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-lg font-semibold">Social Links</CardTitle>
-          <Dialog open={isAddingLink} onOpenChange={setIsAddingLink}>
-            <DialogTrigger asChild>
-              <Button size="sm" className="gap-2">
-                <Plus className="h-4 w-4" />
-                Add Link
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md">
-              <DialogHeader>
-                <DialogTitle>Add Social Link</DialogTitle>
-              </DialogHeader>
-              <form onSubmit={submitSkillsData}>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle className="text-lg font-semibold">Social Links</CardTitle>
+        <Dialog open={isAddingLink} onOpenChange={setIsAddingLink}>
+          <DialogTrigger asChild>
+            <Button size="sm" className="gap-2">
+              <Plus className="h-4 w-4" />
+              Add Link
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Add Social Link</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={submitSkillsData}>
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="platform">Platform</Label>
@@ -104,16 +104,16 @@ const page = () => {
                   </button>
                 </div>
               </div>
-              </form>
-            </DialogContent>
-          </Dialog>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {socialLinks.map((link) => (
+            </form>
+          </DialogContent>
+        </Dialog>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {socialLinks.map((link) => (
+            <main key={link.id} className="p-4 w-full border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
               <div
-                key={link.id}
-                className="flex items-center justify-between p-4 border border-slate-200 rounded-lg hover:border-slate-300 transition-colors"
+                className="flex items-center justify-between"
               >
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-slate-50 rounded-lg">
@@ -128,7 +128,7 @@ const page = () => {
                     </p>
                   </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex md:block hidden gap-2">
                   <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                     <Edit className="h-4 w-4" />
                   </Button>
@@ -141,10 +141,25 @@ const page = () => {
                   </Button>
                 </div>
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+
+              <div className="flex justify-end gap-2 md:hidden block">
+                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                  <Edit className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </main>
+
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
