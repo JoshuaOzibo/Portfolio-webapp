@@ -70,13 +70,13 @@ export default function ExperiencePage() {
 
   const [isAddingExperience, setIsAddingExperience] = useState(false)
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     if (dateString === "Present") return "Present"
     const date = new Date(dateString)
     return date.toLocaleDateString("en-US", { year: "numeric", month: "short" })
   }
 
-  const calculateDuration = (startDate, endDate) => {
+  const calculateDuration = (startDate: string, endDate: string) => {
     const start = new Date(startDate)
     const end = endDate === "Present" ? new Date() : new Date(endDate)
     const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth())
@@ -103,7 +103,7 @@ export default function ExperiencePage() {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Work Experience</h1>
+          <h1 className="md:text-3xl text-xl font-bold text-slate-900">Work Experience</h1>
           <p className="text-slate-600 mt-2">Manage your professional work history and achievements</p>
         </div>
         <Dialog open={isAddingExperience} onOpenChange={setIsAddingExperience}>
@@ -113,7 +113,7 @@ export default function ExperiencePage() {
               Add Experience
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="bg-yellow-500">
             <DialogHeader>
               <DialogTitle>Add Work Experience</DialogTitle>
             </DialogHeader>
@@ -192,9 +192,9 @@ export default function ExperiencePage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Total Experience</p>
-                <p className="text-2xl font-bold text-slate-900">{totalYears}+ years</p>
+                <p className="md:text-2xl text-xl font-bold text-slate-900">{totalYears}+ years</p>
               </div>
-              <div className="p-3 bg-blue-50 rounded-xl">
+              <div className="p-3 hidden lg:block md:hidden sm:block bg-blue-50 rounded-xl">
                 <Clock className="h-6 w-6 text-blue-600" />
               </div>
             </div>
@@ -206,9 +206,9 @@ export default function ExperiencePage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Positions</p>
-                <p className="text-2xl font-bold text-slate-900">{experiences.length}</p>
+                <p className="md:text-2xl text-xl font-bold text-slate-900">{experiences.length}</p>
               </div>
-              <div className="p-3 bg-green-50 rounded-xl">
+              <div className="p-3 hidden lg:block md:hidden sm:block bg-green-50 rounded-xl">
                 <Building className="h-6 w-6 text-green-600" />
               </div>
             </div>
@@ -220,11 +220,11 @@ export default function ExperiencePage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Companies</p>
-                <p className="text-2xl font-bold text-slate-900">
+                <p className="md:text-2xl text-xl font-bold text-slate-900">
                   {new Set(experiences.map((exp) => exp.company)).size}
                 </p>
               </div>
-              <div className="p-3 bg-purple-50 rounded-xl">
+              <div className="p-3 hidden lg:block md:hidden sm:block bg-purple-50 rounded-xl">
                 <MapPin className="h-6 w-6 text-purple-600" />
               </div>
             </div>
@@ -236,9 +236,9 @@ export default function ExperiencePage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Current Role</p>
-                <p className="text-2xl font-bold text-slate-900">{experiences.filter((exp) => exp.current).length}</p>
+                <p className="md:text-2xl text-xl font-bold text-slate-900">{experiences.filter((exp) => exp.current).length}</p>
               </div>
-              <div className="p-3 bg-orange-50 rounded-xl">
+              <div className="p-3 hidden lg:block md:hidden sm:block bg-orange-50 rounded-xl">
                 <Calendar className="h-6 w-6 text-orange-600" />
               </div>
             </div>
@@ -247,7 +247,7 @@ export default function ExperiencePage() {
       </div>
 
       {/* Experience Timeline */}
-      <div className="space-y-6">
+      {/* <div className="space-y-6">
         {experiences.map((exp, index) => (
           <Card key={exp.id} className="border-0 shadow-sm hover:shadow-md transition-shadow">
             <CardContent className="p-8">
@@ -331,7 +331,7 @@ export default function ExperiencePage() {
             </CardContent>
           </Card>
         ))}
-      </div>
+      </div> */}
     </div>
   )
 }
