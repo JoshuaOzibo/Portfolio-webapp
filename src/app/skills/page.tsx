@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
-
-import { Edit, Github, Linkedin, Globe, Twitter } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Edit, Github, Linkedin, Globe, Twitter, CloudCog } from "lucide-react";
 import { CardContent } from "@/components/ui/card";
 import { DialogHeader } from "@/components/ui/dialog";
 import { DialogTitle } from "@/components/ui/dialog";
@@ -18,40 +17,107 @@ import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Trash2 } from "lucide-react";
 import SkillSkeleton from "@/components/pages_skeleton/skill.skeleton";
+import { useGet } from "@/hooks/use-fetch";
+import { ApiResponse, Social, SocialMapedData, SocialsData } from "@/types/types";
 
 const page = () => {
   const [isAddingLink, setIsAddingLink] = useState(false);
+  const [socialLinks, setSocialLinks] = useState<Social[] | null>(null);
 
-  const [socialLinks, setSocialLinks] = useState([
-    {
-      id: 1,
-      platform: "GitHub",
-      url: "https://github.com/johndoe",
-      icon: Github,
-      color: "text-gray-700",
-    },
-    {
-      id: 2,
-      platform: "LinkedIn",
-      url: "https://linkedin.com/in/johndoe",
-      icon: Linkedin,
-      color: "text-blue-600",
-    },
-    {
-      id: 3,
-      platform: "Twitter",
-      url: "https://twitter.com/johndoe",
-      icon: Twitter,
-      color: "text-blue-400",
-    },
-    {
-      id: 4,
-      platform: "Website",
-      url: "https://johndoe.dev",
-      icon: Globe,
-      color: "text-green-600",
-    },
-  ]);
+  const {
+    data: socialsData,
+    isLoading,
+    error,
+  } = useGet<ApiResponse>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/socials`);
+
+
+  const socialMapedData: SocialMapedData = {
+    githubIcon: Github,
+    linkedinIcon: Linkedin,
+    twitterIcon: Twitter,
+    githubColor: "text-gray-700",
+    linkedinColor: "text-blue-600",
+    twitterColor: "text-blue-400",
+    websiteIcon: Globe,
+    websiteColor: "text-green-600",
+  }
+
+  const socialMapping = {
+    Github: { icon: socialMapedData.githubIcon, color: socialMapedData.githubColor },
+    Linkedin: { icon: socialMapedData.linkedinIcon, color: socialMapedData.linkedinColor },
+    Twitter: { icon: socialMapedData.twitterIcon, color: socialMapedData.twitterColor },
+    Website: { icon: socialMapedData.websiteIcon, color: socialMapedData.websiteColor }
+  };
+
+  useEffect(() => {
+
+    if(socialsData) {
+      console.log(`socialsData:`, socialsData);
+
+      console.log(`socialMapping:`, socialMapping);
+
+
+      const fetchedData:SocialsData  = socialsData.data?.socials;
+
+      let data = {
+        ...socialMapping,
+        ...fetchedData
+      }
+
+      console.log(`socialMapping:`, socialMapping);
+
+      console.log(`data:`, data);
+
+    }
+
+
+  }, [socialsData])
+
+
+
+  /**
+   * 
+   * @param e {
+        _id: social._id,
+        name: social.name,
+        link: social.link,
+
+        __v: social.__v,
+      }));
+   */
+
+
+
+  // const [socialLinks, setSocialLinks] = useState([
+  //   {
+  //     id: 1,
+  //     platform: "GitHub",
+  //     url: "https://github.com/johndoe",
+  //     icon: Github,
+  //     color: "text-gray-700",
+  //   },
+  //   {
+  //     id: 2,
+  //     platform: "LinkedIn",
+  //     url: "https://linkedin.com/in/johndoe",
+  //     icon: Linkedin,
+  //     color: "text-blue-600",
+  //   },
+  //   {
+  //     id: 3,
+  //     platform: "Twitter",
+  //     url: "https://twitter.com/johndoe",
+  //     icon: Twitter,
+  //     color: "text-blue-400",
+  //   },
+  //   {
+  //     id: 4,
+  //     platform: "Website",
+  //     url: "https://johndoe.dev",
+  //     icon: Globe,
+  //     color: "text-green-600",
+  //   },
+  // ]);
 
   const submitSkillsData = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -67,7 +133,7 @@ const page = () => {
   return (
     <>
    {
-     false ? (
+    isLoading ? (<SkillSkeleton />) : (
 
       <Card className="border-0 w-full shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -115,21 +181,21 @@ const page = () => {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {socialLinks.map((link) => (
-            <main key={link.id} className="p-4 w-full border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
+          {socialLinks && socialLinks.length > 0 && socialLinks.map((link) => (
+            <main key={link._id} className="p-4 w-full border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
               <div
                 className="flex items-center justify-between"
               >
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-slate-50 rounded-lg">
-                    <link.icon className={`h-5 w-5 ${link.color}`} />
+                    {link.icon && <link.icon className={`h-5 w-5 ${link.color}`} />}
                   </div>
                   <div>
                     <p className="font-medium text-slate-900">
-                      {link.platform}
+                      {link.name}
                     </p>
                     <p className="text-sm text-slate-500 truncate max-w-[200px]">
-                      {link.url}
+                      {link.link}
                     </p>
                   </div>
                 </div>
@@ -166,8 +232,6 @@ const page = () => {
       </CardContent>
     </Card>
       
-    ) : (
-      <SkillSkeleton />
     )
    }
     </>

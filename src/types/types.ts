@@ -49,13 +49,43 @@ export interface User {
   _id: string;
 }
 
+// socials maped data
+
+export interface SocialsData {
+  message?: string;
+  status?: string;
+  data?: {
+    socials: {
+      _id: string;
+      name: string;
+      link: string;
+      icon: React.ElementType;
+      color: string;
+      __v: number;
+      createdAt: string;
+    }[];
+  }
+}
+
 export interface Social {
-  createdAt: string;
-  link: string;
-  name: string;
-  updatedAt: string;
-  __v: number;
   _id: string;
+  name: string;
+  link: string;
+  icon: React.ElementType;
+  color: string;
+  __v: number;
+  createdAt: string;
+}
+
+export interface SocialMapedData {
+  githubIcon: React.ElementType;
+  linkedinIcon: React.ElementType;
+  twitterIcon: React.ElementType;
+  githubColor: string;
+  linkedinColor: string;
+  twitterColor: string;
+  websiteIcon: React.ElementType;
+  websiteColor: string;
 }
 
 // Mapped Data interface for the overview stats
