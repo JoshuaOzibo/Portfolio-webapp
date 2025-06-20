@@ -66,7 +66,8 @@ const page = () => {
   }
   return (
     <>
-    false ? (
+   {
+     false ? (
 
       <Card className="border-0 w-full shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -168,6 +169,7 @@ const page = () => {
     ) : (
       <SkillSkeleton />
     )
+   }
     </>
   );
 };
