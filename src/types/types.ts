@@ -1,3 +1,16 @@
+interface socials{
+  socials: {
+    _id: string;
+    name: string;
+    link: string;
+    icon: React.ElementType;
+    color: string;
+    __v: number;
+    createdAt: string;
+  }[];
+}
+
+
 // API Response interfaces
 export interface ApiResponse {
   projects: Project[];
@@ -5,6 +18,7 @@ export interface ApiResponse {
   experiences: Experience[];
   users: User[];
   socials: Social[];
+  data?: socials
 }
 
 export interface Project {
@@ -54,17 +68,7 @@ export interface User {
 export interface SocialsData {
   message?: string;
   status?: string;
-  data?: {
-    socials: {
-      _id: string;
-      name: string;
-      link: string;
-      icon: React.ElementType;
-      color: string;
-      __v: number;
-      createdAt: string;
-    }[];
-  }
+  data?: socials;
 }
 
 export interface Social {

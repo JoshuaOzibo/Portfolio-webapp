@@ -22,7 +22,9 @@ import { ApiResponse, Social, SocialMapedData, SocialsData } from "@/types/types
 
 const page = () => {
   const [isAddingLink, setIsAddingLink] = useState(false);
-  const [socialLinks, setSocialLinks] = useState<Social[] | null>(null);
+  const [socialLinks, setSocialLinks] = useState<[]>([]);
+
+  console.log(socialLinks)
 
   const {
     data: socialsData,
@@ -63,6 +65,8 @@ const page = () => {
         ...socialMapping,
         ...fetchedData
       }
+
+      setSocialLinks(data)
 
       console.log(`socialMapping:`, socialMapping);
 
@@ -182,50 +186,55 @@ const page = () => {
       <CardContent>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {socialLinks && socialLinks.length > 0 && socialLinks.map((link) => (
-            <main key={link._id} className="p-4 w-full border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
-              <div
-                className="flex items-center justify-between"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-slate-50 rounded-lg">
-                    {link.icon && <link.icon className={`h-5 w-5 ${link.color}`} />}
-                  </div>
-                  <div>
-                    <p className="font-medium text-slate-900">
-                      {link.name}
-                    </p>
-                    <p className="text-sm text-slate-500 truncate max-w-[200px]">
-                      {link.link}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex md:block hidden gap-2">
-                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
 
-              <div className="flex justify-end gap-2 md:hidden block">
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                  <Edit className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </main>
+              
+
+
+
+            // <main key={link._id} className="p-4 w-full border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
+            //   <div
+            //     className="flex items-center justify-between"
+            //   >
+            //     <div className="flex items-center gap-3">
+            //       <div className="p-2 bg-slate-50 rounded-lg">
+            //         {link.icon && <link.icon className={`h-5 w-5 ${link.color}`} />}
+            //       </div>
+            //       <div>
+            //         <p className="font-medium text-slate-900">
+            //           {link.name}
+            //         </p>
+            //         <p className="text-sm text-slate-500 truncate max-w-[200px]">
+            //           {link.link}
+            //         </p>
+            //       </div>
+            //     </div>
+            //     <div className="flex md:block hidden gap-2">
+            //       <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+            //         <Edit className="h-4 w-4" />
+            //       </Button>
+            //       <Button
+            //         variant="ghost"
+            //         size="sm"
+            //         className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+            //       >
+            //         <Trash2 className="h-4 w-4" />
+            //       </Button>
+            //     </div>
+            //   </div>
+
+            //   <div className="flex justify-end gap-2 md:hidden block">
+            //     <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+            //       <Edit className="h-4 w-4" />
+            //     </Button>
+            //     <Button
+            //       variant="ghost"
+            //       size="sm"
+            //       className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+            //     >
+            //       <Trash2 className="h-4 w-4" />
+            //     </Button>
+            //   </div>
+            // </main>
 
           ))}
         </div>
