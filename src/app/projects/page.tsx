@@ -453,7 +453,7 @@ export default function ProjectsPage() {
           </div>
 
           {/* Projects Grid */}
-          <projectStat projects={projects} />
+          <projectStat projects={projects} getStatusColor={getStatusColor} />
         </div>
       )}
     </>
