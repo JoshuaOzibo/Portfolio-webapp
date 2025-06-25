@@ -11,26 +11,30 @@ import { Badge } from "@/components/ui/badge";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ApiResponse } from "../../types/types";
+
+type Project = {
+    id: number;
+    title: string;
+    description: string;
+    image: string;
+    technologies: string[];
+    liveUrl: string;
+    githubUrl: string;
+    status: "Live" | "In Progress" | "Draft";
+    featured: boolean;
+    views: string;
+    createdAt: string;
+};
+
 
 type projectTypes = {
-    projects: {
-        id: number,
-        title: string,
-        description: string,
-        image: string,
-        technologies: string[],
-        liveUrl: string,
-        githubUrl: string,
-        status: string,
-        featured: boolean,
-        views: string,
-        createdAt: string,
-    }
+    projects: Project[],
 
-}[]
+    getStatusColor: (status: string) => string,
 
-const projectStat = ({ projects, getStatusColor }: projectTypes[]) => {
+}
+
+const projectStat = ({ projects, getStatusColor }: projectTypes) => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project) => (

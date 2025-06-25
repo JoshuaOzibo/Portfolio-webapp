@@ -8,9 +8,11 @@ import QuickActionWidget from "@/components/widget/QuickActionWidget";
 import { useGet } from "@/hooks/use-fetch";
 import OverviewSkeleton from "../../components/pages_skeleton/overview.skeleton";
 import { ApiResponse, MappedData } from "@/types/types";
+import useStore from "@/store/store";
 
 const overview = () => {
   const [mappedData, setMappedData] = useState<MappedData | null>(null);
+  const { bears, increase, decrease } = useStore();
   
   const {
     data: projectsData,
@@ -68,8 +70,10 @@ const overview = () => {
     },
   ];
 
+
   return (
     <div className="w-full">
+
       <div className="space-y-8">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

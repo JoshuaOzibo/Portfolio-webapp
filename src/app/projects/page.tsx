@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ApiResponse } from "../../types/types";
 import ProjectSkeleton from "@/components/pages_skeleton/projects.skeleton";
+import ProjectGrid from "@/components/projectStat";
 
 import {
   Select,
@@ -28,7 +29,6 @@ import {
 import DialogModal from "@/components/re-usable_ui/dialog_modal";
 import { useGet, usePost } from "@/hooks/use-fetch";
 import { toast } from "@/components/ui/use-toast";
-
 
 
 interface Project {
@@ -216,7 +216,7 @@ export default function ProjectsPage() {
 
   return (
     <>
-      {!isLoading ? (
+      {isLoading ? (
         <ProjectSkeleton />
       ) : (
         <div className="space-y-8">
@@ -453,7 +453,7 @@ export default function ProjectsPage() {
           </div>
 
           {/* Projects Grid */}
-          <projectStat projects={projects} getStatusColor={getStatusColor} />
+          <ProjectGrid projects={projects} getStatusColor={getStatusColor} />
         </div>
       )}
     </>
