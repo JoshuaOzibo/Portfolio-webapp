@@ -182,26 +182,43 @@ const page = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          { socialLinks.map((link) => (
+            {socialLinks.map((link) => (
 
-            <main key={link._id} className="md:p-4 p-2 w-full border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
-              <div
-                className="flex items-center justify-between"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-slate-50 rounded-lg">
-                    {link.icon && <link.icon className={`h-5 w-5 ${link.color}`} />}
+              <main key={link._id} className="md:p-4 p-2 w-full border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
+                <div
+                  className="flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-slate-50 rounded-lg">
+                      {link.name === "Github" && <Github className={`h-5 w-5 ${link.color}`} />}
+                      {link.name === "Linkedin" && <Linkedin className={`h-5 w-5 ${link.color}`} />}
+                      {link.name === "Twitter" && <Twitter className={`h-5 w-5 ${link.color}`} />}
+                      {link.name === "Website" && <Globe className={`h-5 w-5 ${link.color}`} />}
+                    </div>
+                    <div>
+                      <p className="font-medium text-slate-900">
+                        {link.name}
+                      </p>
+                      <p className="text-sm text-slate-500 truncate max-w-[200px]">
+                        {link.link}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium text-slate-900">
-                      {link.name}
-                    </p>
-                    <p className="text-sm text-slate-500 truncate max-w-[200px]">
-                      {link.link}
-                    </p>
+                  <div className="flex md:block hidden gap-2">
+                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
-                <div className="flex md:block hidden gap-2">
+
+                <div className="flex justify-end gap-2 md:hidden block">
                   <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                     <Edit className="h-4 w-4" />
                   </Button>
@@ -213,24 +230,10 @@ const page = () => {
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
-              </div>
+              </main>
 
-              <div className="flex justify-end gap-2 md:hidden block">
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                  <Edit className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </main>
-
-          ))}
-        </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
 
