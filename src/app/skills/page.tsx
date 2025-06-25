@@ -15,12 +15,34 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useGet } from "@/hooks/use-fetch";
+import { useGet, usePost } from "@/hooks/use-fetch";
 import { ApiResponse, Social, SocialMapedData, SocialsData } from "@/types/types";
+
 
 const page = () => {
   const [isAddingLink, setIsAddingLink] = useState(false);
   const [socialLinks, setSocialLinks] = useState<[]>([]);
+  const [platform, setPlatform] = useState("");
+  const [url, setUrl] = useState("");
+
+  const {
+    mutate: postData,
+    isPending: isPosting,
+    error: postError,
+    data: postResponse,
+  } = usePost();
+
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    postData({
+      endpoint: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/skills/create`,
+      data: {
+        platform: platform,
+        url: url, 
+      }
+    })
+  }
 
   console.log(socialLinks)
 
@@ -73,66 +95,6 @@ const page = () => {
 
   }, [socialsData])
 
-
-  console.log(`Skills:`, socialLinks);
-
-
-
-  /**
-   * 
-   * @param e {
-        _id: social._id,
-        name: social.name,
-        link: social.link,
-
-        __v: social.__v,
-      }));
-   */
-
-
-
-  // const [socialLinks, setSocialLinks] = useState([
-  //   {
-  //     id: 1,
-  //     platform: "GitHub",
-  //     url: "https://github.com/johndoe",
-  //     icon: Github,
-  //     color: "text-gray-700",
-  //   },
-  //   {
-  //     id: 2,
-  //     platform: "LinkedIn",
-  //     url: "https://linkedin.com/in/johndoe",
-  //     icon: Linkedin,
-  //     color: "text-blue-600",
-  //   },
-  //   {
-  //     id: 3,
-  //     platform: "Twitter",
-  //     url: "https://twitter.com/johndoe",
-  //     icon: Twitter,
-  //     color: "text-blue-400",
-  //   },
-  //   {
-  //     id: 4,
-  //     platform: "Website",
-  //     url: "https://johndoe.dev",
-  //     icon: Globe,
-  //     color: "text-green-600",
-  //   },
-  // ]);
-
-  const submitSkillsData = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("submitSkillsData");
-
-    const formData = new FormData(e.target as HTMLFormElement);
-    const platform = formData.get("platform");
-    const url = formData.get("url");
-
-    console.log(platform, url);
-
-  }
   return (
     <>
 
@@ -150,7 +112,7 @@ const page = () => {
               <DialogHeader>
                 <DialogTitle>Add Social Link</DialogTitle>
               </DialogHeader>
-              <form onSubmit={submitSkillsData}>
+              <form onSubmit={handleSubmit}>
                 <div className="space-y-4">
                   <div>
                     <Label htmlFor="platform">Platform</Label>
@@ -158,11 +120,13 @@ const page = () => {
                       id="platform"
                       placeholder="e.g., GitHub, LinkedIn"
                       className="mt-2"
+                      name="platform"
+                      onChange={(e) => setPlatform(e.target.value)}
                     />
                   </div>
                   <div>
                     <Label htmlFor="url">URL</Label>
-                    <Input id="url" placeholder="https://" className="mt-2" />
+                    <Input id="url" placeholder="https://" className="mt-2" name="url" onChange={(e) => setUrl(e.target.value)} />
                   </div>
                   <div className="flex justify-end space-x-2 pt-4">
                     <Button
