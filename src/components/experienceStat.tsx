@@ -11,9 +11,7 @@ interface Experience {
     position: string
     startDate: string
     endDate: string
-    location: string
     type: string
-    description: string
     achievements: string[]
     technologies: string[]
     current: boolean
@@ -74,10 +72,7 @@ export default function ExperienceStat({ experiences }: { experiences: Experienc
                                         <Clock className="h-4 w-4" />
                                         <span>{calculateDuration(exp.startDate, exp.endDate)}</span>
                                     </div>
-                                    <div className="flex items-center gap-1">
-                                        <MapPin className="h-4 w-4" />
-                                        <span>{exp.location}</span>
-                                    </div>
+
                                     <Badge variant="outline" className="text-xs">
                                         {exp.type}
                                     </Badge>
@@ -99,10 +94,6 @@ export default function ExperienceStat({ experiences }: { experiences: Experienc
                         </div>
 
                         <div className="space-y-6">
-                            <div>
-                                <h4 className="font-medium text-slate-900 mb-2">Description</h4>
-                                <p className="text-slate-700 leading-relaxed">{exp.description}</p>
-                            </div>
 
                             <div>
                                 <h4 className="font-medium text-slate-900 mb-3">Key Achievements</h4>
