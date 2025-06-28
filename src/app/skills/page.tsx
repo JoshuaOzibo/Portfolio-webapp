@@ -17,6 +17,7 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useGet, usePost } from "@/hooks/use-fetch";
 import { ApiResponse, Social, SocialMapedData, SocialsData } from "@/types/types";
+import SkillsSkeleton from "@/components/pages_skeleton/skill.skeleton";
 
 
 const page = () => {
@@ -41,7 +42,14 @@ const page = () => {
         platform: platform,
         url: url, 
       }
-    })
+    });
+
+
+    // if(postResponse.status === '200'){
+    //   setIsAddingLink(false)
+    // }
+
+    console.log(postResponse)
   }
 
   console.log(socialLinks)
@@ -135,7 +143,12 @@ const page = () => {
             </DialogContent>
           </Dialog>
         </CardHeader>
-        <CardContent>
+        {isLoading && (
+          <SkillsSkeleton />
+        )}
+
+        {socialLinks.length > 0 && (
+          <CardContent>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {socialLinks.map((link) => (
               <main key={link._id} className="md:p-4 p-2 w-full border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
@@ -170,6 +183,7 @@ const page = () => {
             ))}
           </div>
         </CardContent>
+        )}
       </Card>
 
     </>
