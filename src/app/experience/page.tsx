@@ -10,73 +10,45 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Plus, Building, Calendar, MapPin, Clock } from "lucide-react"
 import ExperienceStat from "@/components/experienceStat"
 import ExperienceSkeleton from "@/components/pages_skeleton/experience.skeleton"
+import { useGet, usePost } from "@/hooks/use-fetch";
+import { Experience } from "@/types/types";
+import EmptyState from "@/components/re-usable_ui/empty_component"
+
 
 export default function ExperiencePage() {
-  const [experiences, setExperiences] = useState([
-    {
-      id: 1,
-      company: "Tech Solutions Inc.",
-      position: "Senior Full Stack Developer",
-      startDate: "2022-01",
-      endDate: "Present",
-      type: "Full-time",
-      achievements: [
-        "Led a team of 5 developers on a major e-commerce platform",
-        "Increased application performance by 40% through optimization",
-        "Implemented automated testing reducing bugs by 60%",
-      ],
-      technologies: ["React", "Node.js", "PostgreSQL", "AWS", "Docker"],
-      current: true,
-    },
-    {
-      id: 2,
-      company: "Digital Agency Co.",
-      position: "Frontend Developer",
-      startDate: "2020-06",
-      endDate: "2021-12",
-      type: "Full-time",
-      achievements: [
-        "Delivered 15+ client projects on time and within budget",
-        "Improved website loading speed by 35% on average",
-        "Mentored 2 junior developers",
-      ],
-      technologies: ["Vue.js", "JavaScript", "SCSS", "Webpack", "Figma"],
-      current: false,
-    },
-    {
-      id: 3,
-      company: "StartupXYZ",
-      position: "Junior Web Developer",
-      startDate: "2019-03",
-      endDate: "2020-05",
-      type: "Full-time",
-      achievements: [
-        "Developed company's main website from scratch",
-        "Created internal dashboard for team productivity tracking",
-        "Reduced manual processes by 25% through automation",
-      ],
-      technologies: ["HTML", "CSS", "JavaScript", "PHP", "MySQL"],
-      current: false,
-    },
-  ])
-
+  const { data: experienceResponse, isLoading: isLoadingExperiences } = useGet<{ experiences: Experience[] }>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/experiences`);
+  const experiences = experienceResponse?.experiences || [];
   const [isAddingExperience, setIsAddingExperience] = useState(false)
 
+  console.log(`experiences:`, experiences);
 
-  const totalExperience = experiences.reduce((total, exp) => {
+
+  if(experiences.length === 0) {
+    return (
+      <EmptyState title="No Experience found" description="You've processed all your projects" />
+    )
+  }
+
+
+  const totalExperience = experiences.reduce((total: number, exp: Experience) => {
     const start = new Date(exp.startDate)
     const end = exp.endDate === "Present" ? new Date() : new Date(exp.endDate)
     const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth())
     return total + months
-  }, 0)
+  }, 0) || 0
 
   const totalYears = Math.floor(totalExperience / 12)
   const totalMonths = totalExperience % 12
 
+  // Check if current position
+  const isCurrentPosition = (endDate: string) => {
+    return endDate === "Present" || new Date(endDate) > new Date()
+  }
+
   return (
     <>
       {
-        true ? (
+        !isLoadingExperiences ? (
           <div className="space-y-8">
             {/* Header */}
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -91,7 +63,7 @@ export default function ExperiencePage() {
                     Add Experience
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="bg-yellow-500">
+                <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Add Work Experience</DialogTitle>
                   </DialogHeader>
@@ -117,8 +89,8 @@ export default function ExperiencePage() {
                         <Input id="endDate" type="month" className="mt-2" />
                       </div>
                       <div>
-                        <Label htmlFor="location">Location</Label>
-                        <Input id="location" placeholder="City, State" className="mt-2" />
+                        <Label htmlFor="liveLink">Company Website</Label>
+                        <Input id="liveLink" placeholder="https://company.com" className="mt-2" />
                       </div>
                     </div>
 
@@ -133,18 +105,13 @@ export default function ExperiencePage() {
                     </div>
 
                     <div>
-                      <Label htmlFor="achievements">Key Achievements (one per line)</Label>
-                      <Textarea
-                        id="achievements"
-                        placeholder="• Led a team of 5 developers&#10;• Increased performance by 40%&#10;• Implemented new features"
-                        rows={3}
-                        className="mt-2"
-                      />
+                      <Label htmlFor="technologies">Technologies Used</Label>
+                      <Input id="technologies" placeholder="React, Node.js, AWS, etc. (comma-separated)" className="mt-2" />
                     </div>
 
                     <div>
-                      <Label htmlFor="technologies">Technologies Used</Label>
-                      <Input id="technologies" placeholder="React, Node.js, AWS, etc. (comma-separated)" className="mt-2" />
+                      <Label htmlFor="image">Company Logo URL</Label>
+                      <Input id="image" placeholder="https://example.com/logo.png" className="mt-2" />
                     </div>
 
                     <div className="flex items-center space-x-2">
@@ -199,7 +166,7 @@ export default function ExperiencePage() {
                     <div>
                       <p className="text-sm text-slate-600">Companies</p>
                       <p className="md:text-2xl text-xl font-bold text-slate-900">
-                        {new Set(experiences.map((exp) => exp.company)).size}
+                        {new Set(experiences.map((exp) => exp.companyName)).size}
                       </p>
                     </div>
                     <div className="p-3 hidden lg:block md:hidden sm:block bg-purple-50 rounded-xl">
@@ -214,7 +181,9 @@ export default function ExperiencePage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-slate-600">Current Role</p>
-                      <p className="md:text-2xl text-xl font-bold text-slate-900">{experiences.filter((exp) => exp.current).length}</p>
+                      <p className="md:text-2xl text-xl font-bold text-slate-900">
+                        {experiences.filter((exp) => isCurrentPosition(exp.endDate)).length}
+                      </p>
                     </div>
                     <div className="p-3 hidden lg:block md:hidden sm:block bg-orange-50 rounded-xl">
                       <Calendar className="h-6 w-6 text-orange-600" />
@@ -225,7 +194,15 @@ export default function ExperiencePage() {
             </div>
 
             {/* Experience Timeline */}
-            <ExperienceStat experiences={experiences} />
+            {experiences && experiences.length > 0 ? (
+              <ExperienceStat experiences={experiences} />
+            ) : (
+              <Card className="border-0 shadow-sm">
+                <CardContent className="p-8 text-center">
+                  <p className="text-slate-600">No work experience added yet. Add your first experience to get started!</p>
+                </CardContent>
+              </Card>
+            )}
           </div>
         ) : (
           <ExperienceSkeleton />

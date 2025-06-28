@@ -46,8 +46,14 @@ export interface Skill {
 
 export interface Experience {
   createdAt: string;
-  title: string;
-  company?: string;
+  companyName: string;
+  position: string;
+  startDate: string;
+  endDate: string;
+  responsibility: string;
+  technologies: string[];
+  image: string;
+  liveLink: string;
   updatedAt: string;
   __v: number;
   _id: string;

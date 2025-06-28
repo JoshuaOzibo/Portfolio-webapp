@@ -3,20 +3,9 @@
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
 import { Card, CardContent } from "./ui/card"
-import { Edit, Trash2, Building, Calendar, MapPin, Clock } from "lucide-react"
-
-interface Experience {
-    id: number
-    company: string
-    position: string
-    startDate: string
-    endDate: string
-    type: string
-    achievements: string[]
-    technologies: string[]
-    current: boolean
-}
-
+import { Edit, Trash2, Building, Calendar, MapPin, Clock, ExternalLink } from "lucide-react"
+import { Experience } from "@/types/types"
+import Image from "next/image"
 
 export default function ExperienceStat({ experiences }: { experiences: Experience[] }) {
 
@@ -40,23 +29,37 @@ export default function ExperienceStat({ experiences }: { experiences: Experienc
         return `${years} year${years !== 1 ? "s" : ""} ${remainingMonths} month${remainingMonths !== 1 ? "s" : ""}`
     }
 
+    // Check if current position
+    const isCurrentPosition = (endDate: string) => {
+        return endDate === "Present" || new Date(endDate) > new Date()
+    }
 
     return (
         <div className="space-y-6">
-            {experiences.map((exp, index) => (
-                <Card key={exp.id} className="border-0 shadow-sm hover:shadow-md transition-shadow">
+            {experiences.map((exp) => (
+                <Card key={exp._id} className="border-0 shadow-sm hover:shadow-md transition-shadow">
                     <CardContent className="p-8">
                         <div className="flex items-start justify-between mb-6">
                             <div className="flex-1">
                                 <div className="flex items-center gap-3 mb-2">
                                     <div className="p-2 md:block hidden bg-blue-50 rounded-lg">
-                                        <Building className="h-5 w-5 text-blue-600" />
+                                        {exp.image ? (
+                                            <Image 
+                                                src={exp.image} 
+                                                alt={exp.companyName}
+                                                width={20}
+                                                height={20}
+                                                className="h-5 w-5 object-contain"
+                                            />
+                                        ) : (
+                                            <Building className="h-5 w-5 text-blue-600" />
+                                        )}
                                     </div>
                                     <div>
                                         <h3 className="md:text-xl text-sm font-semibold text-slate-900">{exp.position}</h3>
-                                        <p className="text-blue-600 font-medium">{exp.company}</p>
+                                        <p className="text-blue-600 font-medium">{exp.companyName}</p>
                                     </div>
-                                    {exp.current && (
+                                    {isCurrentPosition(exp.endDate) && (
                                         <Badge className="bg-green-100 text-green-700 border-green-200">Current Position</Badge>
                                     )}
                                 </div>
@@ -72,13 +75,20 @@ export default function ExperienceStat({ experiences }: { experiences: Experienc
                                         <Clock className="h-4 w-4" />
                                         <span>{calculateDuration(exp.startDate, exp.endDate)}</span>
                                     </div>
-
-                                    <Badge variant="outline" className="text-xs">
-                                        {exp.type}
-                                    </Badge>
+                                    {exp.liveLink && (
+                                        <div className="flex items-center gap-1">
+                                            <ExternalLink className="h-4 w-4" />
+                                            <a 
+                                                href={exp.liveLink} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer"
+                                                className="text-blue-600 hover:text-blue-700 underline"
+                                            >
+                                                View Company
+                                            </a>
+                                        </div>
+                                    )}
                                 </div>
-
-
                             </div>
                             <div className="flex lg:block hidden gap-2">
                                 <Button variant="outline" size="sm" className="gap-2">
@@ -90,33 +100,28 @@ export default function ExperienceStat({ experiences }: { experiences: Experienc
                                     Delete
                                 </Button>
                             </div>
-
                         </div>
 
                         <div className="space-y-6">
-
                             <div>
-                                <h4 className="font-medium text-slate-900 mb-3">Key Achievements</h4>
-                                <ul className="space-y-2">
-                                    {exp.achievements.map((achievement, i) => (
-                                        <li key={i} className="flex items-start gap-2">
-                                            <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
-                                            <span className="text-slate-700">{achievement}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-
-                            <div>
-                                <h4 className="font-medium text-slate-900 mb-3">Technologies Used</h4>
-                                <div className="flex flex-wrap gap-2">
-                                    {exp.technologies.map((tech, i) => (
-                                        <Badge key={i} variant="outline" className="text-xs">
-                                            {tech}
-                                        </Badge>
-                                    ))}
+                                <h4 className="font-medium text-slate-900 mb-3">Responsibilities & Achievements</h4>
+                                <div className="text-slate-700 whitespace-pre-line">
+                                    {exp.responsibility}
                                 </div>
                             </div>
+
+                            {exp.technologies && exp.technologies.length > 0 && (
+                                <div>
+                                    <h4 className="font-medium text-slate-900 mb-3">Technologies Used</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {exp.technologies.map((tech, i) => (
+                                            <Badge key={i} variant="outline" className="text-xs">
+                                                {tech}
+                                            </Badge>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
 
                             <div className="flex gap-2 lg:hidden block">
                                 <Button variant="outline" size="sm" className="gap-2">
