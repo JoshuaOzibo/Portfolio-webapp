@@ -7,17 +7,25 @@ import { Label } from "@/components/ui/label";
 import { Plus} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 
 interface SkillDialogProps {
   isAddingLink: boolean;
   setIsAddingLink: (value: boolean) => void;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  url: string;
+  setUrl: (value: string) => void;
+  platform: string;
+  setPlatform: (value: string) => void;
 }
 
 const SkillDialog = ({ 
     isAddingLink, 
     setIsAddingLink,
-    handleSubmit 
+    handleSubmit,
+    url,
+    setUrl,
+    platform,
+    setPlatform
 }: SkillDialogProps) => {
 
   return(

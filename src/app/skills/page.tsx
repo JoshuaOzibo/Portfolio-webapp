@@ -37,14 +37,16 @@ const page = () => {
         url: url,
       }
     });
+  };
 
-
-    // if(postResponse.status === '200'){
-    //   setIsAddingLink(false)
-    // }
-
-    console.log(postResponse)
-  }
+  // Reset form and close dialog after successful submission
+  useEffect(() => {
+    if (postResponse && !isPosting) {
+      setPlatform("");
+      setUrl("");
+      setIsAddingLink(false);
+    }
+  }, [postResponse, isPosting]);
 
   console.log(socialLinks)
 
@@ -95,7 +97,15 @@ const page = () => {
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-lg font-semibold">Social Links</CardTitle>
           {/* skills dialog  */}
-          <SkillDialog isAddingLink={isAddingLink} setIsAddingLink={setIsAddingLink} />
+          <SkillDialog 
+          isAddingLink={isAddingLink} 
+          setIsAddingLink={setIsAddingLink}
+          handleSubmit={handleSubmit}
+          url={url}
+          setUrl={setUrl}
+          platform={platform}
+    setPlatform={setPlatform}
+          />
         </CardHeader>
         {isLoading && (
           <SkillsSkeleton />
