@@ -3,21 +3,15 @@
 import { useEffect, useState } from "react";
 import { Github, Linkedin, Globe, Twitter, CloudCog } from "lucide-react";
 import { CardContent } from "@/components/ui/card";
-import { DialogHeader } from "@/components/ui/dialog";
-import { DialogTitle } from "@/components/ui/dialog";
-import { DialogTrigger } from "@/components/ui/dialog";
-import { DialogContent } from "@/components/ui/dialog";
-import { Dialog } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { CardTitle } from "@/components/ui/card";
 import { CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Plus, Edit, Trash2 } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Edit, Trash2 } from "lucide-react";
 import { useGet, usePost } from "@/hooks/use-fetch";
 import { ApiResponse, Social, SocialMapedData, SocialsData } from "@/types/types";
 import SkillsSkeleton from "@/components/pages_skeleton/skill.skeleton";
+import SkillDialog from '../../Dialogs/skillDialog';
 
 
 const page = () => {
@@ -100,48 +94,8 @@ const page = () => {
       <Card className="border-0 w-full shadow-sm">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-lg font-semibold">Social Links</CardTitle>
-          <Dialog open={isAddingLink} onOpenChange={setIsAddingLink}>
-            <DialogTrigger asChild>
-              <Button size="sm" className="gap-2">
-                <Plus className="h-4 w-4" />
-                Add Link
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md">
-              <DialogHeader>
-                <DialogTitle>Add Social Link</DialogTitle>
-              </DialogHeader>
-              <form onSubmit={handleSubmit}>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="platform">Platform</Label>
-                    <Input
-                      id="platform"
-                      placeholder="e.g., GitHub, LinkedIn"
-                      className="mt-2"
-                      name="platform"
-                      onChange={(e) => setPlatform(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="url">URL</Label>
-                    <Input id="url" placeholder="https://" className="mt-2" name="url" onChange={(e) => setUrl(e.target.value)} />
-                  </div>
-                  <div className="flex justify-end space-x-2 pt-4">
-                    <Button
-                      variant="outline"
-                      onClick={() => setIsAddingLink(false)}
-                    >
-                      Cancel
-                    </Button>
-                    <button type="submit">
-                      Add Link
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </DialogContent>
-          </Dialog>
+          {/* skills dialog  */}
+          <SkillDialog isAddingLink={isAddingLink} setIsAddingLink={setIsAddingLink} />
         </CardHeader>
         {isLoading && (
           <SkillsSkeleton />
