@@ -81,7 +81,7 @@ const projectStat = ({ projects, getStatusColor }: projectTypes) => {
                         </div>
                     </div>
 
-                    <CardContent className="p-6">
+                    <CardContent className="p-3">
                         <div className="space-y-4">
                             <div>
                                 <h3 className="text-lg font-semibold text-slate-900 mb-2">

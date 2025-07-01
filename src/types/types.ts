@@ -33,7 +33,7 @@ export interface Project {
   views?: number;
   __v: number;
   _id: string;
-  status?: "Live" | "In Progress" | "Draft";
+  status?: string;
   featured?: boolean;
 }
 

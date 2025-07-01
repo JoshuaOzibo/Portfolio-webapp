@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ApiResponse, Project } from "../../types/types";
+import { Project } from "../../types/types";
 
 interface ProjectsApiResponse {
   status: string;
@@ -24,76 +24,7 @@ import { toast } from "@/components/ui/use-toast";
 import ProjectDialog from "@/Dialogs/projectDialog";
 
 
-
-
 export default function ProjectsPage() {
-
-
-
-  // const [projects, setProjects] = useState<Project[]>([
-  //   {
-  //     id: 1,
-  //     title: "E-commerce Platform",
-  //     description:
-  //       "A full-stack e-commerce solution with React, Node.js, and PostgreSQL. Features include user authentication, payment processing, and admin dashboard.",
-  //     image: "/placeholder.svg?height=300&width=400",
-  //     technologies: [
-  //       "React",
-  //       "Node.js",
-  //       "PostgreSQL",
-  //       "Stripe",
-  //       "Tailwind CSS",
-  //     ],
-  //     liveUrl: "https://ecommerce-demo.com",
-  //     githubUrl: "https://github.com/johndoe/ecommerce",
-  //     status: "Live",
-  //     featured: true,
-  //     views: "2.1k",
-  //     createdAt: "2024-01-15",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Task Management App",
-  //     description:
-  //       "A collaborative task management application with real-time updates, team collaboration features, and project tracking.",
-  //     image: "/placeholder.svg?height=300&width=400",
-  //     technologies: ["Vue.js", "Firebase", "Tailwind CSS", "Socket.io"],
-  //     liveUrl: "https://taskapp-demo.com",
-  //     githubUrl: "https://github.com/johndoe/taskapp",
-  //     status: "In Progress",
-  //     featured: false,
-  //     views: "1.5k",
-  //     createdAt: "2024-01-10",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Weather Dashboard",
-  //     description:
-  //       "A responsive weather dashboard with location-based forecasts, interactive maps, and detailed weather analytics.",
-  //     image: "/placeholder.svg?height=300&width=400",
-  //     technologies: ["React", "OpenWeather API", "Chart.js", "Mapbox"],
-  //     liveUrl: "https://weather-demo.com",
-  //     githubUrl: "https://github.com/johndoe/weather",
-  //     status: "Live",
-  //     featured: true,
-  //     views: "3.2k",
-  //     createdAt: "2024-01-05",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "Portfolio Website",
-  //     description:
-  //       "A modern, responsive portfolio website built with Next.js and featuring smooth animations and optimized performance.",
-  //     image: "/placeholder.svg?height=300&width=400",
-  //     technologies: ["Next.js", "TypeScript", "Framer Motion", "Tailwind CSS"],
-  //     liveUrl: "https://johndoe.dev",
-  //     githubUrl: "https://github.com/johndoe/portfolio",
-  //     status: "Live",
-  //     featured: false,
-  //     views: "4.8k",
-  //     createdAt: "2023-12-20",
-  //   },
-  // ]);
 
   const [isAddingProject, setIsAddingProject] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -196,7 +127,7 @@ export default function ProjectsPage() {
           description: "Project created successfully",
         });
 
-      setFeatured(false);
+        setFeatured(false);
       } else {
         toast({
           title: "Failed to create project",
