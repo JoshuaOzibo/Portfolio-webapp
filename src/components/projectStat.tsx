@@ -20,7 +20,7 @@ type Project = {
     technologies: string[];
     liveUrl: string;
     githubUrl: string;
-    status: "Live" | "In Progress" | "Draft";
+    status: string;
     featured: boolean;
     views: string;
     createdAt: string;

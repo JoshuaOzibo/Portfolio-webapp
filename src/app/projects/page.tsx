@@ -20,11 +20,12 @@ import {
   Code2,
 } from "lucide-react";
 import { useGet, usePost } from "@/hooks/use-fetch";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import ProjectDialog from "@/Dialogs/projectDialog";
 
 
 export default function ProjectsPage() {
+  const { toast } = useToast();
 
   const [isAddingProject, setIsAddingProject] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -46,26 +47,22 @@ export default function ProjectsPage() {
     error,
   } = useGet<ProjectsApiResponse>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects`);
 
-  // console.log(`project page: ${projectsData}`);
-
-  useEffect(() => {
-    if (projectsData) {
-      console.log(`projectsData:`, projectsData);
-    }
-  }, [projectsData]);
+  if(!projectsData){
+    return;
+  }
 
   // Transform API data to match ProjectGrid expectations
   const transformedProjects = projectsData?.data?.projects?.map((project) => ({
     id: parseInt(project._id.slice(-6), 16), // Use last 6 chars of _id as numeric id
     title: project.title,
     description: project.description,
-    image: project.image || "/placeholder.svg",
-    technologies: project.skills || [],
-    liveUrl: project.liveLink || "",
-    githubUrl: project.githubLink || "",
-    status: (project.status as "Live" | "In Progress" | "Draft") || "In Progress",
+    image: project.image,
+    technologies: project.skills,
+    liveUrl: project.liveLink as string,
+    githubUrl: project.githubLink as string,
+    status: project.status as string,
     featured: project.featured || false,
-    views: project.views?.toString() || "0",
+    views: project.views?.toString() as string,
     createdAt: project.createdAt,
   })) || [];
 
@@ -98,6 +95,39 @@ export default function ProjectsPage() {
     data: postResponse,
   } = usePost();
 
+  // Handle success case
+  useEffect(() => {
+    if (postResponse) {
+      toast({
+        title: "Success",
+        description: "Project created successfully!",
+      });
+      
+      // Reset form
+      setIsAddingProject(false);
+      setTitle("");
+      setDescription("");
+      setTechnologies([]);
+      setLiveUrl("");
+      setGithubUrl("");
+      setStatus("In Progress");
+      setProjectImage(null);
+      setFeatured(false);
+    }
+  }, [postResponse, toast]);
+
+  // Handle error case
+  useEffect(() => {
+    if (postError) {
+      const errorMessage = (postError.response?.data as any)?.message || "Failed to create project. Please try again.";
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    }
+  }, [postError, toast]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -120,31 +150,13 @@ export default function ProjectsPage() {
           featured: featured,
         },
       });
-
-      if (postResponse) {
-        toast({
-          title: "Project created successfully",
-          description: "Project created successfully",
-        });
-
-        setFeatured(false);
-      } else {
-        toast({
-          title: "Failed to create project",
-          description: "Failed to create project",
-        });
-      }
-
-      setIsAddingProject(false);
-      setTitle("");
-      setDescription("");
-      setTechnologies([]);
-      setLiveUrl("");
-      setGithubUrl("");
-      setStatus("In Progress");
-      setProjectImage(null);
     } catch (error) {
       console.error("Error converting image:", error);
+      toast({
+        title: "Error",
+        description: "Failed to process image. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
