@@ -1,8 +1,16 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ApiResponse } from "../../types/types";
+import { ApiResponse, Project } from "../../types/types";
+
+interface ProjectsApiResponse {
+  status: string;
+  results: number;
+  data: {
+    projects: Project[];
+  };
+}
 import ProjectSkeleton from "@/components/pages_skeleton/projects.skeleton";
 import ProjectGrid from "@/components/projectStat";
 import {
@@ -16,88 +24,76 @@ import { toast } from "@/components/ui/use-toast";
 import ProjectDialog from "@/Dialogs/projectDialog";
 
 
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  technologies: string[];
-  liveUrl: string;
-  githubUrl: string;
-  status: "Live" | "In Progress" | "Draft";
-  featured: boolean;
-  views: string;
-  createdAt: string;
-}
+
 
 export default function ProjectsPage() {
 
 
 
-  const [projects, setProjects] = useState<Project[]>([
-    {
-      id: 1,
-      title: "E-commerce Platform",
-      description:
-        "A full-stack e-commerce solution with React, Node.js, and PostgreSQL. Features include user authentication, payment processing, and admin dashboard.",
-      image: "/placeholder.svg?height=300&width=400",
-      technologies: [
-        "React",
-        "Node.js",
-        "PostgreSQL",
-        "Stripe",
-        "Tailwind CSS",
-      ],
-      liveUrl: "https://ecommerce-demo.com",
-      githubUrl: "https://github.com/johndoe/ecommerce",
-      status: "Live",
-      featured: true,
-      views: "2.1k",
-      createdAt: "2024-01-15",
-    },
-    {
-      id: 2,
-      title: "Task Management App",
-      description:
-        "A collaborative task management application with real-time updates, team collaboration features, and project tracking.",
-      image: "/placeholder.svg?height=300&width=400",
-      technologies: ["Vue.js", "Firebase", "Tailwind CSS", "Socket.io"],
-      liveUrl: "https://taskapp-demo.com",
-      githubUrl: "https://github.com/johndoe/taskapp",
-      status: "In Progress",
-      featured: false,
-      views: "1.5k",
-      createdAt: "2024-01-10",
-    },
-    {
-      id: 3,
-      title: "Weather Dashboard",
-      description:
-        "A responsive weather dashboard with location-based forecasts, interactive maps, and detailed weather analytics.",
-      image: "/placeholder.svg?height=300&width=400",
-      technologies: ["React", "OpenWeather API", "Chart.js", "Mapbox"],
-      liveUrl: "https://weather-demo.com",
-      githubUrl: "https://github.com/johndoe/weather",
-      status: "Live",
-      featured: true,
-      views: "3.2k",
-      createdAt: "2024-01-05",
-    },
-    {
-      id: 4,
-      title: "Portfolio Website",
-      description:
-        "A modern, responsive portfolio website built with Next.js and featuring smooth animations and optimized performance.",
-      image: "/placeholder.svg?height=300&width=400",
-      technologies: ["Next.js", "TypeScript", "Framer Motion", "Tailwind CSS"],
-      liveUrl: "https://johndoe.dev",
-      githubUrl: "https://github.com/johndoe/portfolio",
-      status: "Live",
-      featured: false,
-      views: "4.8k",
-      createdAt: "2023-12-20",
-    },
-  ]);
+  // const [projects, setProjects] = useState<Project[]>([
+  //   {
+  //     id: 1,
+  //     title: "E-commerce Platform",
+  //     description:
+  //       "A full-stack e-commerce solution with React, Node.js, and PostgreSQL. Features include user authentication, payment processing, and admin dashboard.",
+  //     image: "/placeholder.svg?height=300&width=400",
+  //     technologies: [
+  //       "React",
+  //       "Node.js",
+  //       "PostgreSQL",
+  //       "Stripe",
+  //       "Tailwind CSS",
+  //     ],
+  //     liveUrl: "https://ecommerce-demo.com",
+  //     githubUrl: "https://github.com/johndoe/ecommerce",
+  //     status: "Live",
+  //     featured: true,
+  //     views: "2.1k",
+  //     createdAt: "2024-01-15",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Task Management App",
+  //     description:
+  //       "A collaborative task management application with real-time updates, team collaboration features, and project tracking.",
+  //     image: "/placeholder.svg?height=300&width=400",
+  //     technologies: ["Vue.js", "Firebase", "Tailwind CSS", "Socket.io"],
+  //     liveUrl: "https://taskapp-demo.com",
+  //     githubUrl: "https://github.com/johndoe/taskapp",
+  //     status: "In Progress",
+  //     featured: false,
+  //     views: "1.5k",
+  //     createdAt: "2024-01-10",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "Weather Dashboard",
+  //     description:
+  //       "A responsive weather dashboard with location-based forecasts, interactive maps, and detailed weather analytics.",
+  //     image: "/placeholder.svg?height=300&width=400",
+  //     technologies: ["React", "OpenWeather API", "Chart.js", "Mapbox"],
+  //     liveUrl: "https://weather-demo.com",
+  //     githubUrl: "https://github.com/johndoe/weather",
+  //     status: "Live",
+  //     featured: true,
+  //     views: "3.2k",
+  //     createdAt: "2024-01-05",
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "Portfolio Website",
+  //     description:
+  //       "A modern, responsive portfolio website built with Next.js and featuring smooth animations and optimized performance.",
+  //     image: "/placeholder.svg?height=300&width=400",
+  //     technologies: ["Next.js", "TypeScript", "Framer Motion", "Tailwind CSS"],
+  //     liveUrl: "https://johndoe.dev",
+  //     githubUrl: "https://github.com/johndoe/portfolio",
+  //     status: "Live",
+  //     featured: false,
+  //     views: "4.8k",
+  //     createdAt: "2023-12-20",
+  //   },
+  // ]);
 
   const [isAddingProject, setIsAddingProject] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -117,9 +113,30 @@ export default function ProjectsPage() {
     data: projectsData,
     isLoading,
     error,
-  } = useGet<ApiResponse>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`);
+  } = useGet<ProjectsApiResponse>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects`);
 
-  console.log(`project page: ${projectsData}`);
+  // console.log(`project page: ${projectsData}`);
+
+  useEffect(() => {
+    if (projectsData) {
+      console.log(`projectsData:`, projectsData);
+    }
+  }, [projectsData]);
+
+  // Transform API data to match ProjectGrid expectations
+  const transformedProjects = projectsData?.data?.projects?.map((project) => ({
+    id: parseInt(project._id.slice(-6), 16), // Use last 6 chars of _id as numeric id
+    title: project.title,
+    description: project.description,
+    image: project.image || "/placeholder.svg",
+    technologies: project.skills || [],
+    liveUrl: project.liveLink || "",
+    githubUrl: project.githubLink || "",
+    status: (project.status as "Live" | "In Progress" | "Draft") || "In Progress",
+    featured: project.featured || false,
+    views: project.views?.toString() || "0",
+    createdAt: project.createdAt,
+  })) || [];
 
   const convertImageToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -178,6 +195,8 @@ export default function ProjectsPage() {
           title: "Project created successfully",
           description: "Project created successfully",
         });
+
+      setFeatured(false);
       } else {
         toast({
           title: "Failed to create project",
@@ -193,7 +212,6 @@ export default function ProjectsPage() {
       setGithubUrl("");
       setStatus("In Progress");
       setProjectImage(null);
-      setFeatured(false);
     } catch (error) {
       console.error("Error converting image:", error);
     }
@@ -251,6 +269,7 @@ export default function ProjectsPage() {
                 setGithubUrl={setGithubUrl}
                 featured={featured}
                 setFeatured={setFeatured}
+                isPosting={isPosting}
               />
             </div>
           </div>
@@ -263,7 +282,7 @@ export default function ProjectsPage() {
                   <div>
                     <p className="text-sm text-slate-600">Total Projects</p>
                     <p className="text-2xl font-bold text-slate-900">
-                      {projects.length}
+                      {transformedProjects.length}
                     </p>
                   </div>
                   <div className="p-3 bg-blue-50 rounded-xl">
@@ -278,7 +297,7 @@ export default function ProjectsPage() {
                   <div>
                     <p className="text-sm text-slate-600">Live Projects</p>
                     <p className="text-2xl font-bold text-slate-900">
-                      {projects.filter((p) => p.status === "Live").length}
+                      {transformedProjects.filter((p) => p.status === "Live").length}
                     </p>
                   </div>
                   <div className="p-3 bg-green-50 rounded-xl">
@@ -290,7 +309,7 @@ export default function ProjectsPage() {
           </div>
 
           {/* Projects Grid */}
-          <ProjectGrid projects={projects} getStatusColor={getStatusColor} />
+          <ProjectGrid projects={transformedProjects} getStatusColor={getStatusColor} />
         </div>
       )}
     </>

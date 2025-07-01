@@ -16,7 +16,6 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import {
-
     Upload,
     Plus,
 } from "lucide-react";
@@ -43,6 +42,7 @@ type ProjectDialogProps = {
     setGithubUrl: React.Dispatch<React.SetStateAction<string>>;
     featured: boolean;
     setFeatured: React.Dispatch<React.SetStateAction<boolean>>;
+    isPosting: boolean;
 };
 
 const ProjectDialog: React.FC<ProjectDialogProps> = ({
@@ -65,6 +65,7 @@ const ProjectDialog: React.FC<ProjectDialogProps> = ({
     setGithubUrl,
     featured,
     setFeatured,
+    isPosting,
 }) => {
     return (
 
@@ -249,7 +250,12 @@ const ProjectDialog: React.FC<ProjectDialogProps> = ({
                                 >
                                     Cancel
                                 </Button>
-                                <Button type="submit">Create Project</Button>
+
+                                {isPosting ? (
+                                    <Button type="submit" disabled>Creating Project...</Button>
+                                ) : (
+                                    <Button type="submit">Create Project</Button>
+                                )}
                             </div>
                         </div>
                     </form>
