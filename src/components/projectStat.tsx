@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 type Project = {
     id: number;
@@ -26,15 +27,34 @@ type Project = {
     createdAt: string;
 };
 
-
 type projectTypes = {
     projects: Project[],
-
     getStatusColor: (status: string) => string,
-
 }
 
+// Helper function to check if a string is base64 encoded
+const isBase64 = (str: string): boolean => {
+    try {
+        if (!str || typeof str !== 'string') return false;
+        return str.startsWith('data:image/') || str.startsWith('data:application/');
+    } catch {
+        return false;
+    }
+};
+
 const projectStat = ({ projects, getStatusColor }: projectTypes) => {
+    console.log(projects);
+    
+    // Debug: Log image handling for each project
+    projects.forEach((project, index) => {
+        console.log(`ProjectStat ${index + 1}:`, {
+            title: project.title,
+            imageType: typeof project.image,
+            isBase64: isBase64(project.image),
+            imageLength: project.image?.length
+        });
+    });
+    
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project) => (
@@ -43,11 +63,30 @@ const projectStat = ({ projects, getStatusColor }: projectTypes) => {
                     className="border-0 shadow-sm hover:shadow-lg transition-all duration-300 group"
                 >
                     <div className="relative">
-                        <img
-                            src={project.image || "/placeholder.svg"}
-                            alt={project.title}
-                            className="w-full h-48 object-cover rounded-t-lg bg-slate-100"
-                        />
+                        {isBase64(project.image) ? (
+                            // Use regular img tag for base64 images
+                            <img
+                                src={project.image}
+                                alt={project.title}
+                                className="w-full h-48 object-cover rounded-t-lg bg-slate-100"
+                                onError={(e) => {
+                                    console.error('Error loading base64 image for:', project.title);
+                                    e.currentTarget.src = '/out-of-stock.webp';
+                                }}
+                            />
+                        ) : (
+                            // Use Next.js Image component for regular URLs
+                            <Image
+                                src={project.image}
+                                alt={project.title}
+                                width={400}
+                                height={192}
+                                className="w-full h-48 object-cover rounded-t-lg bg-slate-100"
+                                onError={(e) => {
+                                    console.error('Error loading image for:', project.title);
+                                }}
+                            />
+                        )}
                         <div className="absolute top-4 left-4 flex gap-2">
                             <Badge
                                 className={`${getStatusColor(project.status)} border`}

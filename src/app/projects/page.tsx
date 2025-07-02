@@ -48,14 +48,13 @@ export default function ProjectsPage() {
     error,
   } = useGet<ProjectsApiResponse>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects`);
 
-
   // Transform API data to match ProjectGrid expectations
   const transformedProjects = projectsData?.data?.projects?.map((project) => ({
     id: parseInt(project._id.slice(-6), 16), // Use last 6 chars of _id as numeric id
     title: project.title,
     description: project.description,
     image: project.image,
-    technologies: project.skills,
+    technologies: project.skills || [],
     liveUrl: project.liveLink as string,
     githubUrl: project.githubLink as string,
     status: project.status as string,
