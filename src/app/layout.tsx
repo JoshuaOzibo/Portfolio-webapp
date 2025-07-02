@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "../components/navbar";
 import Sidebar from "@/components/sidebar";
 import Providers from "../providers/providers";
+import { Toaster } from "@/components/ui/sonner"
+
 
 import "./globals.css";
 
@@ -39,6 +41,7 @@ export default function RootLayout({
               </main>
             </div>
           </div>
+          <Toaster position="top-right" richColors/>
         </Providers>
       </body>
     </html>

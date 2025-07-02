@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Project } from "../../types/types";
+import { toast } from "sonner"
 
 interface ProjectsApiResponse {
   status: string;
@@ -20,12 +21,12 @@ import {
   Code2,
 } from "lucide-react";
 import { useGet, usePost } from "@/hooks/use-fetch";
-import { useToast } from "@/hooks/use-toast";
+// import { useToast } from "@/hooks/use-toast";
 import ProjectDialog from "@/Dialogs/projectDialog";
 
 
 export default function ProjectsPage() {
-  const { toast } = useToast();
+  // const { toast } = useToast();
 
   const [isAddingProject, setIsAddingProject] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -47,9 +48,6 @@ export default function ProjectsPage() {
     error,
   } = useGet<ProjectsApiResponse>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects`);
 
-  if(!projectsData){
-    return;
-  }
 
   // Transform API data to match ProjectGrid expectations
   const transformedProjects = projectsData?.data?.projects?.map((project) => ({
@@ -98,10 +96,8 @@ export default function ProjectsPage() {
   // Handle success case
   useEffect(() => {
     if (postResponse) {
-      toast({
-        title: "Success",
-        description: "Project created successfully!",
-      });
+      console.log("Project created successfully, showing toast...");
+      toast.success("Project created successfully!");
       
       // Reset form
       setIsAddingProject(false);
@@ -119,14 +115,11 @@ export default function ProjectsPage() {
   // Handle error case
   useEffect(() => {
     if (postError) {
+      console.log("Project creation failed, showing error toast...");
       const errorMessage = (postError.response?.data as any)?.message || "Failed to create project. Please try again.";
-      toast({
-        title: "Error",
-        description: errorMessage,
-        variant: "destructive",
-      });
+      toast.error(errorMessage);
     }
-  }, [postError, toast]);
+  }, [postError]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -152,11 +145,7 @@ export default function ProjectsPage() {
       });
     } catch (error) {
       console.error("Error converting image:", error);
-      toast({
-        title: "Error",
-        description: "Failed to process image. Please try again.",
-        variant: "destructive",
-      });
+        toast.error("Failed to process image. Please try again.");
     }
   };
 
@@ -164,6 +153,21 @@ export default function ProjectsPage() {
     <>
       {isLoading ? (
         <ProjectSkeleton />
+      ) : error ? (
+        <div className="space-y-8">
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-bold text-red-600 mb-4">Error Loading Projects</h2>
+            <p className="text-gray-600 mb-4">
+              {error.message || "Failed to load projects. Please try again."}
+            </p>
+            <Button 
+              onClick={() => window.location.reload()} 
+              variant="outline"
+            >
+              Retry
+            </Button>
+          </div>
+        </div>
       ) : (
         <div className="space-y-8">
           {/* Header */}
@@ -192,6 +196,7 @@ export default function ProjectsPage() {
                 </Button>
               </div>
 
+              
               <ProjectDialog
                 isAddingProject={isAddingProject}
                 setIsAddingProject={setIsAddingProject}
@@ -250,6 +255,17 @@ export default function ProjectsPage() {
               </CardContent>
             </Card>
           </div>
+
+          <Button
+                onClick={() => {
+                  console.log("Test toast clicked");
+                  toast.success("Test toast - this should work!");
+                }}
+                variant="outline"
+                size="sm"
+              >
+                Test Toast
+              </Button>
 
           {/* Projects Grid */}
           <ProjectGrid projects={transformedProjects} getStatusColor={getStatusColor} />
