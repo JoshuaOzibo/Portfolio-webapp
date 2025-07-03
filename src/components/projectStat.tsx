@@ -30,6 +30,8 @@ type Project = {
 type projectTypes = {
     projects: Project[],
     getStatusColor: (status: string) => string,
+    onDelete?: (id: string) => void,
+    onUpdate?: (id: string, data: any) => void,
 }
 
 // Helper function to check if a string is base64 encoded
@@ -42,7 +44,7 @@ const isBase64 = (str: string): boolean => {
     }
 };
 
-const projectStat = ({ projects, getStatusColor }: projectTypes) => {
+const projectStat = ({ projects, getStatusColor, onDelete, onUpdate }: projectTypes) => {
     console.log(projects);
     
     // Debug: Log image handling for each project
@@ -106,6 +108,7 @@ const projectStat = ({ projects, getStatusColor }: projectTypes) => {
                                     size="sm"
                                     variant="secondary"
                                     className="h-8 w-8 p-0"
+                                    onClick={() => onUpdate?.(project.id.toString(), project)}
                                 >
                                     <Edit className="h-4 w-4" />
                                 </Button>
@@ -113,6 +116,7 @@ const projectStat = ({ projects, getStatusColor }: projectTypes) => {
                                     size="sm"
                                     variant="secondary"
                                     className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                                    onClick={() => onDelete?.(project.id.toString())}
                                 >
                                     <Trash2 className="h-4 w-4" />
                                 </Button>
@@ -149,9 +153,23 @@ const projectStat = ({ projects, getStatusColor }: projectTypes) => {
 
                             <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                                 <div className="flex items-center gap-4 text-sm text-slate-500">
-                                    <div className="flex items-center gap-1">
-                                        <Calendar className="h-4 w-4" />
-                                        {new Date(project.createdAt).toLocaleDateString()}
+                                    <div className="flex items-center gap-2">
+                                        <Button
+                                            size="sm"
+                                            variant="ghost"
+                                            className="h-6 w-6 p-0 text-slate-500 hover:text-blue-600"
+                                            onClick={() => onUpdate?.(project.id.toString(), project)}
+                                        >
+                                            <Edit className="h-3 w-3" />
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            variant="ghost"
+                                            className="h-6 w-6 p-0 text-slate-500 hover:text-red-600"
+                                            onClick={() => onDelete?.(project.id.toString())}
+                                        >
+                                            <Trash2 className="h-3 w-3" />
+                                        </Button>
                                     </div>
                                 </div>
                                 <div className="flex gap-2">

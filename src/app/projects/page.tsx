@@ -20,13 +20,11 @@ import {
 
   Code2,
 } from "lucide-react";
-import { useGet, usePost } from "@/hooks/use-fetch";
-// import { useToast } from "@/hooks/use-toast";
+import { useGet, usePost,  usePut, useDelete} from "@/hooks/use-fetch";
 import ProjectDialog from "@/Dialogs/projectDialog";
 
 
 export default function ProjectsPage() {
-  // const { toast } = useToast();
 
   const [isAddingProject, setIsAddingProject] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -47,6 +45,33 @@ export default function ProjectsPage() {
     isLoading,
     error,
   } = useGet<ProjectsApiResponse>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects`);
+
+  const {
+    mutate: deleteData,
+    isPending: isDeleting,
+    error: deleteError,
+    data: deleteResponse,
+  } = useDelete();
+
+  const {
+    mutate: putData,
+    isPending: isPutting,
+    error: putError,
+    data: putResponse,
+  } = usePut();
+  
+
+    const handleDelete = (id: string) => {
+      deleteData(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${id}`);
+    };
+
+    const handlePut = (id: string, data: any) => {
+      putData({
+        endpoint: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${id}`,
+        data: data,
+      });
+    };
+  
 
   // Transform API data to match ProjectGrid expectations
   const transformedProjects = projectsData?.data?.projects?.map((project) => ({
@@ -95,7 +120,6 @@ export default function ProjectsPage() {
   // Handle success case
   useEffect(() => {
     if (postResponse) {
-      console.log("Project created successfully, showing toast...");
       toast.success("Project created successfully!");
       
       // Reset form
@@ -114,11 +138,38 @@ export default function ProjectsPage() {
   // Handle error case
   useEffect(() => {
     if (postError) {
-      console.log("Project creation failed, showing error toast...");
       const errorMessage = (postError.response?.data as any)?.message || "Failed to create project. Please try again.";
       toast.error(errorMessage);
     }
   }, [postError]);
+
+  // Handle delete success and error
+  useEffect(() => {
+    if (deleteResponse) {
+      toast.success("Project deleted successfully!");
+    }
+  }, [deleteResponse]);
+
+  useEffect(() => {
+    if (deleteError) {
+      const errorMessage = (deleteError.response?.data as any)?.message || "Failed to delete project. Please try again.";
+      toast.error(errorMessage);
+    }
+  }, [deleteError]);
+
+  // Handle update success and error
+  useEffect(() => {
+    if (putResponse) {
+      toast.success("Project updated successfully!");
+    }
+  }, [putResponse]);
+
+  useEffect(() => {
+    if (putError) {
+      const errorMessage = (putError.response?.data as any)?.message || "Failed to update project. Please try again.";
+      toast.error(errorMessage);
+    }
+  }, [putError]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -255,19 +306,13 @@ export default function ProjectsPage() {
             </Card>
           </div>
 
-          <Button
-                onClick={() => {
-                  console.log("Test toast clicked");
-                  toast.success("Test toast - this should work!");
-                }}
-                variant="outline"
-                size="sm"
-              >
-                Test Toast
-              </Button>
-
           {/* Projects Grid */}
-          <ProjectGrid projects={transformedProjects} getStatusColor={getStatusColor} />
+          <ProjectGrid 
+            projects={transformedProjects} 
+            getStatusColor={getStatusColor}
+            onDelete={handleDelete}
+            onUpdate={handlePut}
+          />
         </div>
       )}
     </>
