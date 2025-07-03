@@ -8,26 +8,66 @@ import { CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Edit, Trash2 } from "lucide-react";
-import { useGet, usePost } from "@/hooks/use-fetch";
+import { useGet, usePost, usePut, useDelete } from "@/hooks/use-fetch";
 import { ApiResponse, Social, SocialMapedData, SocialsData } from "@/types/types";
 import SkillsSkeleton from "@/components/pages_skeleton/skill.skeleton";
 import SkillDialog from '../../Dialogs/skillDialog';
 import EmptyState from "@/components/re-usable_ui/empty_component";
-  
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+
 
 const page = () => {
+  const queryClient = useQueryClient();
+  const socialsEndpoint = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/socials`;
+  
   const [isAddingLink, setIsAddingLink] = useState(false);
   const [socialLinks, setSocialLinks] = useState<Social[]>([]);
   const [platform, setPlatform] = useState("");
   const [url, setUrl] = useState("");
+  const [editingSocial, setEditingSocial] = useState<Social | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const refetchSocials = () => {
+    queryClient.invalidateQueries({ queryKey: [socialsEndpoint] });
+  };
 
   const {
     mutate: postData,
     isPending: isPosting,
     error: postError,
     data: postResponse,
-  } = usePost();
+  } = usePost(() => {
+    toast.success("Social link added successfully!");
+    setPlatform("");
+    setUrl("");
+    setIsAddingLink(false);
+    refetchSocials();
+  });
 
+  const {
+    mutate: putData,
+    isPending: isUpdating,
+    error: putError,
+    data: putResponse,
+  } = usePut(() => {
+    toast.success("Social link updated successfully!");
+    setIsEditing(false);
+    setEditingSocial(null);
+    setPlatform("");
+    setUrl("");
+    refetchSocials();
+  });
+
+  const {
+    mutate: deleteData,
+    isPending: isDeleting,
+    error: deleteError,
+    data: deleteResponse,
+  } = useDelete(() => {
+    toast.success("Social link deleted successfully!");
+    refetchSocials();
+  });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,23 +80,73 @@ const page = () => {
     });
   };
 
-  // Reset form and close dialog after successful submission
-  useEffect(() => {
-    if (postResponse && !isPosting) {
-      setPlatform("");
-      setUrl("");
-      setIsAddingLink(false);
-    }
-  }, [postResponse, isPosting]);
+  const handleEdit = (social: Social) => {
+    setEditingSocial(social);
+    setPlatform(social.name);
+    setUrl(social.link);
+    setIsEditing(true);
+    setIsAddingLink(false);
+  };
 
-  console.log(socialLinks)
+  const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!editingSocial) return;
+    putData({
+      endpoint: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/socials/${editingSocial._id}`,
+      data: {
+        name: platform,
+        link: url,
+      },
+    });
+  };
+
+  const handleDelete = (id: string) => {
+    deleteData(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/socials/${id}`);
+  };
+
+  const handleAddSocial = () => {
+    setEditingSocial(null);
+    setPlatform("");
+    setUrl("");
+    setIsAddingLink(true);
+    setIsEditing(false);
+  };
+
+  const handleCloseDialog = () => {
+    setIsAddingLink(false);
+    setIsEditing(false);
+    setEditingSocial(null);
+    setPlatform("");
+    setUrl("");
+  };
+
+  // Handle error cases
+  useEffect(() => {
+    if (postError) {
+      const errorMessage = (postError.response?.data as any)?.message || "Failed to add social link. Please try again.";
+      toast.error(errorMessage);
+    }
+  }, [postError]);
+
+  useEffect(() => {
+    if (putError) {
+      const errorMessage = (putError.response?.data as any)?.message || "Failed to update social link. Please try again.";
+      toast.error(errorMessage);
+    }
+  }, [putError]);
+
+  useEffect(() => {
+    if (deleteError) {
+      const errorMessage = (deleteError.response?.data as any)?.message || "Failed to delete social link. Please try again.";
+      toast.error(errorMessage);
+    }
+  }, [deleteError]);
 
   const {
     data: socialsData,
     isLoading,
     error,
   } = useGet<ApiResponse>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/socials`);
-
 
   const socialMapedData: SocialMapedData = {
     githubIcon: Github,
@@ -79,7 +169,7 @@ const page = () => {
   useEffect(() => {
     if (socialsData) {
       const fetchedData = socialsData.data?.socials || [];
-      const data = fetchedData.map((social) => {
+      const data = fetchedData.map((social: Social) => {
         const mapping = socialMapping[social.name as keyof typeof socialMapping];
         return {
           ...social,
@@ -93,20 +183,12 @@ const page = () => {
 
   return (
     <>
-
       <Card className="border-0 w-full shadow-sm">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-lg font-semibold">Social Links</CardTitle>
-          {/* skills dialog  */}
-          <SkillDialog 
-          isAddingLink={isAddingLink} 
-          setIsAddingLink={setIsAddingLink}
-          handleSubmit={handleSubmit}
-          url={url}
-          setUrl={setUrl}
-          platform={platform}
-    setPlatform={setPlatform}
-          />
+          <Button variant="outline" size="sm" onClick={handleAddSocial}>
+            Add Social
+          </Button>
         </CardHeader>
         {isLoading && (
           <SkillsSkeleton />
@@ -128,19 +210,19 @@ const page = () => {
                       </div>
                     </div>
                     <div className="flex md:block hidden gap-2">
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => handleEdit(link)}>
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-red-600 hover:text-red-700">
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-red-600 hover:text-red-700" onClick={() => handleDelete(link._id)} disabled={isDeleting}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
                   <div className="flex justify-end gap-2 md:hidden block">
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => handleEdit(link)}>
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-red-600 hover:text-red-700">
+                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-red-600 hover:text-red-700" onClick={() => handleDelete(link._id)} disabled={isDeleting}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -153,8 +235,26 @@ const page = () => {
         {socialLinks.length === 0 && (
           <EmptyState title="No socials found" description="Add a new social to get started" />
         )}
-        </Card>
+      </Card>
 
+      {/* Social Dialog - handles both add and edit */}
+      <SkillDialog
+        isAddingLink={isAddingLink || isEditing}
+        setIsAddingLink={(open) => {
+          if (!open) {
+            handleCloseDialog();
+          } else {
+            setIsAddingLink(open);
+          }
+        }}
+        handleSubmit={isEditing ? handleUpdate : handleSubmit}
+        url={url}
+        setUrl={setUrl}
+        platform={platform}
+        setPlatform={setPlatform}
+        isEditing={isEditing}
+        onClose={handleCloseDialog}
+      />
     </>
   );
 };

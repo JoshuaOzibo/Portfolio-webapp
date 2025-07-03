@@ -151,7 +151,7 @@ const page = () => {
     
     useEffect(() => {
         if (skillsData) {
-            const fetchedData = skillsData.data?.skills || [];
+            const fetchedData = skillsData.skills || [];
             setSkills(fetchedData);
         }
     }, [skillsData]);
@@ -176,7 +176,7 @@ const page = () => {
 
     useEffect(() => {
         if (skillsData) {
-            const fetchedData = skillsData.data?.skills || [];
+            const fetchedData = skillsData.skills || [];
             const data = fetchedData.map((skill: Skill) => {
                 const mapping = socialMapping[skill.skillName as keyof typeof socialMapping];
                 return {
