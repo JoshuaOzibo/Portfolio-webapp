@@ -16,6 +16,8 @@ interface SkillDialogProps {
   setUrl: (value: string) => void;
   platform: string;
   setPlatform: (value: string) => void;
+  isEditing?: boolean;
+  onClose?: () => void;
 }
 
 const SkillDialog = ({ 
@@ -25,28 +27,32 @@ const SkillDialog = ({
     url,
     setUrl,
     platform,
-    setPlatform
+    setPlatform,
+    isEditing = false,
+    onClose
 }: SkillDialogProps) => {
 
+  const handleOpenChange = (open: boolean) => {
+    setIsAddingLink(open);
+    if (!open && onClose) {
+      onClose();
+    }
+  };
+
   return(
-    <Dialog open={isAddingLink} onOpenChange={setIsAddingLink}>
-      <DialogTrigger asChild>
-        <Button size="sm" className="gap-2">
-          <Plus className="h-4 w-4" />
-          Add Link
-        </Button>
-      </DialogTrigger>
+    <Dialog open={isAddingLink} onOpenChange={handleOpenChange}>
+      
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Add Social Link</DialogTitle>
+          <DialogTitle>{isEditing ? "Edit Skill" : "Add Skill"}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="platform">Platform</Label>
+              <Label htmlFor="platform">Skill Name</Label>
               <Input
                 id="platform"
-                placeholder="e.g., GitHub, LinkedIn"
+                placeholder="e.g., React, Node.js"
                 className="mt-2"
                 name="platform"
                 value={platform}
@@ -54,7 +60,7 @@ const SkillDialog = ({
               />
             </div>
             <div>
-              <Label htmlFor="url">URL</Label>
+              <Label htmlFor="url">Image URL</Label>
               <Input 
                 id="url" 
                 placeholder="https://" 
@@ -68,12 +74,15 @@ const SkillDialog = ({
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setIsAddingLink(false)}
+                onClick={() => {
+                  setIsAddingLink(false);
+                  if (onClose) onClose();
+                }}
               >
                 Cancel
               </Button>
               <Button type="submit">
-                Add Link
+                {isEditing ? "Update Skill" : "Add Skill"}
               </Button>
             </div>
           </div>
