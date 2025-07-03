@@ -24,15 +24,17 @@ import React from "react";
 interface ProjectDialogProps {
     open: boolean;
     setOpen: (open: boolean) => void;
-    editingProject: UIProject | null;
+    editingProject: any | null;
     handleClose: () => void;
     handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
     project_image: File | null;
     setProjectImage: React.Dispatch<React.SetStateAction<File | null>>;
+    previousImage: string | null;
+    setPreviousImage: React.Dispatch<React.SetStateAction<string | null>>;
     title: string;
     setTitle: React.Dispatch<React.SetStateAction<string>>;
-    status: "Live" | "In Progress" | "Draft";
-    setStatus: React.Dispatch<React.SetStateAction<"Live" | "In Progress" | "Draft">>;
+    status: string;
+    setStatus: React.Dispatch<React.SetStateAction<string>>;
     description: string;
     setDescription: React.Dispatch<React.SetStateAction<string>>;
     technologies: string[];
@@ -54,6 +56,8 @@ const ProjectDialog: React.FC<ProjectDialogProps> = ({
     handleSubmit,
     project_image,
     setProjectImage,
+    previousImage,
+    setPreviousImage,
     title,
     setTitle,
     status,
@@ -131,6 +135,13 @@ const ProjectDialog: React.FC<ProjectDialogProps> = ({
                                             Selected: {project_image.name}
                                         </p>
                                     )}
+                                    {(!project_image && previousImage) && (
+                                        <img
+                                            src={previousImage}
+                                            alt="Current project"
+                                            className="mx-auto mt-2 rounded-lg max-h-32"
+                                        />
+                                    )}
                                 </div>
                             </div>
 
@@ -151,7 +162,7 @@ const ProjectDialog: React.FC<ProjectDialogProps> = ({
                                     <Select
                                         value={status}
                                         onValueChange={(value) =>
-                                            setStatus(value as "Live" | "In Progress" | "Draft")
+                                            setStatus(value)
                                         }
                                     >
                                         <SelectTrigger className="mt-2">

@@ -51,12 +51,11 @@ export default function ProjectsPage() {
   const [technologies, setTechnologies] = useState<string[]>([]);
   const [liveUrl, setLiveUrl] = useState("");
   const [githubUrl, setGithubUrl] = useState("");
-  const [status, setStatus] = useState<"Live" | "In Progress" | "Draft">(
-    "In Progress"
-  );
+  const [status, setStatus] = useState("");
   const [project_image, setProjectImage] = useState<File | null>(null);
   const [featured, setFeatured] = useState(false);
   const [transformedProjects, setTransformedProjects] = useState<UIProject[]>([]);
+  const [previousImage, setPreviousImage] = useState<string | null>(null);
   
   const projectsEndpoint = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects`;
   
@@ -118,9 +117,10 @@ export default function ProjectsPage() {
       setTechnologies(project.technologies);
       setLiveUrl(project.liveUrl);
       setGithubUrl(project.githubUrl);
-      setStatus(project.status as "Live" | "In Progress" | "Draft");
+      setStatus(project.status);
       setFeatured(project.featured);
       setProjectImage(null);
+      setPreviousImage(project.image);
     };
 
     // Reset form when dialog is closed
@@ -135,6 +135,7 @@ export default function ProjectsPage() {
       setStatus("In Progress");
       setProjectImage(null);
       setFeatured(false);
+      setPreviousImage(null);
     };
   
 
@@ -233,19 +234,20 @@ export default function ProjectsPage() {
     setStatus("In Progress");
     setProjectImage(null);
     setFeatured(false);
+    setPreviousImage(null);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      let imageBase64 = null;
+      let imageToSend = previousImage;
       if (project_image) {
-        imageBase64 = await convertImageToBase64(project_image);
+        imageToSend = await convertImageToBase64(project_image);
       }
       const projectData = {
         title,
         description,
-        image: imageBase64,
+        image: imageToSend,
         skills: technologies,
         liveLink: liveUrl,
         githubLink: githubUrl,
@@ -253,13 +255,11 @@ export default function ProjectsPage() {
         featured,
       };
       if (editingProject) {
-        // Update
         putData({
           endpoint: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${editingProject.id}`,
           data: projectData,
         });
       } else {
-        // Create
         postData({
           endpoint: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/create`,
           data: projectData,
@@ -350,6 +350,8 @@ export default function ProjectsPage() {
                 featured={featured}
                 setFeatured={setFeatured}
                 isPosting={isPosting || isUpdating}
+                previousImage={previousImage}
+                setPreviousImage={setPreviousImage}
               />
             </div>
           </div>
