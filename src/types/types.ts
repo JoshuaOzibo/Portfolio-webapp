@@ -44,6 +44,8 @@ export interface Skill {
   updatedAt: string;
   __v: number;
   _id: string;
+  icon: React.ElementType;
+  color: string;
 }
 
 export interface Experience {

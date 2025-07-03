@@ -64,6 +64,15 @@ const Sidebar = () => {
           </div>
           <span className="hidden md:block">Skills</span>
         </Link>
+        <Link
+          href="/socials"
+          className=" border border-gray-200  flex items-center gap-3 md:p-4 p-3 text-gray-700 hover:bg-gray-50 rounded-lg relative"
+        >
+          <div className="p-3 rounded-xl bg-green-50">
+            <Code2 className="h-6 w-6 text-green-600" />
+          </div>
+          <span className="hidden md:block">Socials</span>
+        </Link>
 
         <Link
           href="/experience"
