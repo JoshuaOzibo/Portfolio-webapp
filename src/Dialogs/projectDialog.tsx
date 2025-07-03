@@ -6,7 +6,6 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
-    DialogTrigger
 } from "@/components/ui/dialog"
 import {
     Select,
@@ -22,9 +21,11 @@ import {
 import { Button } from "@/components/ui/button";
 import React from "react";
 
-type ProjectDialogProps = {
-    isAddingProject: boolean;
-    setIsAddingProject: (value: boolean) => void;
+interface ProjectDialogProps {
+    open: boolean;
+    setOpen: (open: boolean) => void;
+    editingProject: UIProject | null;
+    handleClose: () => void;
     handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
     project_image: File | null;
     setProjectImage: React.Dispatch<React.SetStateAction<File | null>>;
@@ -43,13 +44,13 @@ type ProjectDialogProps = {
     featured: boolean;
     setFeatured: React.Dispatch<React.SetStateAction<boolean>>;
     isPosting: boolean;
-    isUpdating?: boolean;
-    editingProject?: any;
-};
+}
 
 const ProjectDialog: React.FC<ProjectDialogProps> = ({
-    isAddingProject,
-    setIsAddingProject,
+    open,
+    setOpen,
+    editingProject,
+    handleClose,
     handleSubmit,
     project_image,
     setProjectImage,
@@ -68,24 +69,12 @@ const ProjectDialog: React.FC<ProjectDialogProps> = ({
     featured,
     setFeatured,
     isPosting,
-    isUpdating = false,
-    editingProject,
 }) => {
     return (
-
-        <Dialog open={isAddingProject} onOpenChange={setIsAddingProject}>
-            {!isUpdating && (
-                <DialogTrigger asChild>
-                    <Button className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600">
-                        <Plus className="h-4 w-4" />
-                        Add Project
-                    </Button>
-                </DialogTrigger>
-            )}
-
+        <Dialog open={open} onOpenChange={(val) => { setOpen(val); if (!val) handleClose(); }}>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                    <DialogTitle>{isUpdating ? 'Update Project' : 'Add New Project'}</DialogTitle>
+                    <DialogTitle>{editingProject ? 'Update Project' : 'Add New Project'}</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-6">
                     {/* Project Image Upload */}
@@ -251,18 +240,18 @@ const ProjectDialog: React.FC<ProjectDialogProps> = ({
                                 <Button
                                     variant="outline"
                                     type="button"
-                                    onClick={() => setIsAddingProject(false)}
+                                    onClick={handleClose}
                                 >
                                     Cancel
                                 </Button>
 
                                 {isPosting ? (
                                     <Button type="submit" disabled>
-                                        {isUpdating ? 'Updating Project...' : 'Creating Project...'}
+                                        {editingProject ? 'Updating Project...' : 'Creating Project...'}
                                     </Button>
                                 ) : (
                                     <Button type="submit">
-                                        {isUpdating ? 'Update Project' : 'Create Project'}
+                                        {editingProject ? 'Update Project' : 'Create Project'}
                                     </Button>
                                 )}
                             </div>
@@ -271,7 +260,6 @@ const ProjectDialog: React.FC<ProjectDialogProps> = ({
                 </div>
             </DialogContent>
         </Dialog>
-
     );
 };
 

@@ -43,9 +43,8 @@ import ProjectDialog from "@/Dialogs/projectDialog";
 export default function ProjectsPage() {
   const queryClient = useQueryClient();
 
-  const [isAddingProject, setIsAddingProject] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<UIProject | null>(null);
-  const [isUpdatingProject, setIsUpdatingProject] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -92,8 +91,7 @@ export default function ProjectsPage() {
     refetchProjects();
     
     // Reset form
-    setIsAddingProject(false);
-    setIsUpdatingProject(false);
+    setIsDialogOpen(false);
     setEditingProject(null);
     setTitle("");
     setDescription("");
@@ -112,8 +110,9 @@ export default function ProjectsPage() {
     };
 
     // Open edit dialog and populate form
-    const handleEditProject = (id: string, project: any) => {
+    const handleEditProject = (id: string, project: UIProject) => {
       setEditingProject(project);
+      setIsDialogOpen(true);
       setTitle(project.title);
       setDescription(project.description);
       setTechnologies(project.technologies);
@@ -121,23 +120,12 @@ export default function ProjectsPage() {
       setGithubUrl(project.githubUrl);
       setStatus(project.status as "Live" | "In Progress" | "Draft");
       setFeatured(project.featured);
-      setProjectImage(null); // Reset image for now
-      setIsUpdatingProject(true);
-      setIsAddingProject(true);
-    };
-
-    // Update Project
-    const handlePut = (id: string, data: any) => {
-      putData({
-        endpoint: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${id}`,
-        data: data,
-      });
+      setProjectImage(null);
     };
 
     // Reset form when dialog is closed
     const handleCloseDialog = () => {
-      setIsAddingProject(false);
-      setIsUpdatingProject(false);
+      setIsDialogOpen(false);
       setEditingProject(null);
       setTitle("");
       setDescription("");
@@ -200,8 +188,7 @@ export default function ProjectsPage() {
     refetchProjects();
     
     // Reset form
-    setIsAddingProject(false);
-    setIsUpdatingProject(false);
+    setIsDialogOpen(false);
     setEditingProject(null);
     setTitle("");
     setDescription("");
@@ -235,31 +222,44 @@ export default function ProjectsPage() {
     }
   }, [putError]);
 
+  const handleAddProject = () => {
+    setEditingProject(null);
+    setIsDialogOpen(true);
+    setTitle("");
+    setDescription("");
+    setTechnologies([]);
+    setLiveUrl("");
+    setGithubUrl("");
+    setStatus("In Progress");
+    setProjectImage(null);
+    setFeatured(false);
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
       let imageBase64 = null;
       if (project_image) {
         imageBase64 = await convertImageToBase64(project_image);
       }
-
       const projectData = {
-        title: title,
-        description: description,
+        title,
+        description,
         image: imageBase64,
         skills: technologies,
         liveLink: liveUrl,
         githubLink: githubUrl,
-        status: status,
-        featured: featured,
+        status,
+        featured,
       };
-
-      if (isUpdatingProject && editingProject) {
-        // Update existing project
-        handlePut(editingProject.id, projectData);
+      if (editingProject) {
+        // Update
+        putData({
+          endpoint: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${editingProject.id}`,
+          data: projectData,
+        });
       } else {
-        // Create new project
+        // Create
         postData({
           endpoint: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/create`,
           data: projectData,
@@ -316,12 +316,22 @@ export default function ProjectsPage() {
                 >
                   List
                 </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleAddProject}
+                >
+                  Add Project
+                </Button>
               </div>
 
               
               <ProjectDialog
-                isAddingProject={isAddingProject}
-                setIsAddingProject={handleCloseDialog}
+                open={isDialogOpen}
+                setOpen={setIsDialogOpen}
+                editingProject={editingProject}
+                handleClose={handleCloseDialog}
                 handleSubmit={handleSubmit}
                 project_image={project_image}
                 setProjectImage={setProjectImage}
@@ -340,8 +350,6 @@ export default function ProjectsPage() {
                 featured={featured}
                 setFeatured={setFeatured}
                 isPosting={isPosting || isUpdating}
-                isUpdating={isUpdatingProject}
-                editingProject={editingProject}
               />
             </div>
           </div>
