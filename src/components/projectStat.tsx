@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 type Project = {
-    id: number;
+    id: string;
     title: string;
     description: string;
     image: string;
@@ -46,16 +46,6 @@ const isBase64 = (str: string): boolean => {
 
 const projectStat = ({ projects, getStatusColor, onDelete, onUpdate }: projectTypes) => {
     console.log(projects);
-    
-    // Debug: Log image handling for each project
-    projects.forEach((project, index) => {
-        console.log(`ProjectStat ${index + 1}:`, {
-            title: project.title,
-            imageType: typeof project.image,
-            isBase64: isBase64(project.image),
-            imageLength: project.image?.length
-        });
-    });
     
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -104,22 +94,22 @@ const projectStat = ({ projects, getStatusColor, onDelete, onUpdate }: projectTy
                         </div>
                         <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                             <div className="flex gap-2">
-                                <Button
+                                {/* <Button
                                     size="sm"
                                     variant="secondary"
                                     className="h-8 w-8 p-0"
                                     onClick={() => onUpdate?.(project.id.toString(), project)}
                                 >
                                     <Edit className="h-4 w-4" />
-                                </Button>
-                                <Button
+                                </Button> */}
+                                {/* <Button
                                     size="sm"
                                     variant="secondary"
                                     className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
-                                    onClick={() => onDelete?.(project.id.toString())}
+                                    onClick={(e) => console.log(e)} //() => onDelete?.(project.id.toString())
                                 >
                                     <Trash2 className="h-4 w-4" />
-                                </Button>
+                                </Button> */}
                             </div>
                         </div>
                     </div>
@@ -158,7 +148,7 @@ const projectStat = ({ projects, getStatusColor, onDelete, onUpdate }: projectTy
                                             size="sm"
                                             variant="ghost"
                                             className="h-6 w-6 p-0 text-slate-500 hover:text-blue-600"
-                                            onClick={() => onUpdate?.(project.id.toString(), project)}
+                                            onClick={() => onUpdate?.(project.id.toString(), project)} 
                                         >
                                             <Edit className="h-3 w-3" />
                                         </Button>

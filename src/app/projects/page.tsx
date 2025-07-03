@@ -55,7 +55,7 @@ export default function ProjectsPage() {
 
   const {
     mutate: putData,
-    isPending: isPutting,
+    isPending: isUpdating,
     error: putError,
     data: putResponse,
   } = usePut();
@@ -75,7 +75,7 @@ export default function ProjectsPage() {
 
   // Transform API data to match ProjectGrid expectations
   const transformedProjects = projectsData?.data?.projects?.map((project) => ({
-    id: parseInt(project._id.slice(-6), 16), // Use last 6 chars of _id as numeric id
+    id: project._id,
     title: project.title,
     description: project.description,
     image: project.image,
