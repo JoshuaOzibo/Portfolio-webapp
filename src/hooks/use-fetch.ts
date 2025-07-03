@@ -38,32 +38,35 @@ export function useGet<TData = unknown>(
 }
 
 // POST hook
-export function usePost<TData = unknown, TVariables = unknown>() {
+export function usePost<TData = unknown, TVariables = unknown>(onSuccess?: () => void) {
   return useMutation<TData, AxiosError, { endpoint: string; data: TVariables }>({
     mutationFn: async ({ endpoint, data }: { endpoint: string; data: TVariables }) => {
       const response = await api.post<TData>(endpoint, data);
       return response.data;
     },
+    onSuccess,
   });
 }
 
 // PUT hook
-export function usePut<TData = unknown, TVariables = unknown>() {
+export function usePut<TData = unknown, TVariables = unknown>(onSuccess?: () => void) {
   return useMutation<TData, AxiosError, { endpoint: string; data: TVariables }>({
     mutationFn: async ({ endpoint, data }: { endpoint: string; data: TVariables }) => {
       const response = await api.put<TData>(endpoint, data);
       return response.data;
     },
+    onSuccess,
   });
 }
 
 // DELETE hook
-export function useDelete<TData = unknown>() {
+export function useDelete<TData = unknown>(onSuccess?: () => void) {
   return useMutation<TData, AxiosError, string>({
     mutationFn: async (endpoint: string) => {
       const response = await api.delete<TData>(endpoint);
       return response.data;
     },
+    onSuccess,
   });
 }
 

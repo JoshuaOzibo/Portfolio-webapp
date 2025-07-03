@@ -43,6 +43,8 @@ type ProjectDialogProps = {
     featured: boolean;
     setFeatured: React.Dispatch<React.SetStateAction<boolean>>;
     isPosting: boolean;
+    isUpdating?: boolean;
+    editingProject?: any;
 };
 
 const ProjectDialog: React.FC<ProjectDialogProps> = ({
@@ -66,21 +68,24 @@ const ProjectDialog: React.FC<ProjectDialogProps> = ({
     featured,
     setFeatured,
     isPosting,
+    isUpdating = false,
+    editingProject,
 }) => {
     return (
 
         <Dialog open={isAddingProject} onOpenChange={setIsAddingProject}>
-            <DialogTrigger asChild>
-                <Button className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600">
-                    <Plus className="h-4 w-4" />
-                    {/* button to be triggered */}
-                    Add Project
-                </Button>
-            </DialogTrigger>
+            {!isUpdating && (
+                <DialogTrigger asChild>
+                    <Button className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600">
+                        <Plus className="h-4 w-4" />
+                        Add Project
+                    </Button>
+                </DialogTrigger>
+            )}
 
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                    <DialogTitle>Add New Project</DialogTitle>
+                    <DialogTitle>{isUpdating ? 'Update Project' : 'Add New Project'}</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-6">
                     {/* Project Image Upload */}
@@ -252,9 +257,13 @@ const ProjectDialog: React.FC<ProjectDialogProps> = ({
                                 </Button>
 
                                 {isPosting ? (
-                                    <Button type="submit" disabled>Creating Project...</Button>
+                                    <Button type="submit" disabled>
+                                        {isUpdating ? 'Updating Project...' : 'Creating Project...'}
+                                    </Button>
                                 ) : (
-                                    <Button type="submit">Create Project</Button>
+                                    <Button type="submit">
+                                        {isUpdating ? 'Update Project' : 'Create Project'}
+                                    </Button>
                                 )}
                             </div>
                         </div>

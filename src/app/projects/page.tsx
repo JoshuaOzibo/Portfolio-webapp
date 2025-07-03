@@ -5,6 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Project } from "../../types/types";
 import { toast } from "sonner"
 
+// UI Project interface that matches ProjectGrid expectations
+interface UIProject {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  technologies: string[];
+  liveUrl: string;
+  githubUrl: string;
+  status: string;
+  featured: boolean;
+  views: string;
+  createdAt: string;
+}
+
 interface ProjectsApiResponse {
   status: string;
   results: number;
@@ -21,13 +36,16 @@ import {
   Code2,
 } from "lucide-react";
 import { useGet, usePost,  usePut, useDelete} from "@/hooks/use-fetch";
+import { useQueryClient } from "@tanstack/react-query";
 import ProjectDialog from "@/Dialogs/projectDialog";
 
 
 export default function ProjectsPage() {
+  const queryClient = useQueryClient();
 
   const [isAddingProject, setIsAddingProject] = useState(false);
-  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [editingProject, setEditingProject] = useState<UIProject | null>(null);
+  const [isUpdatingProject, setIsUpdatingProject] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -39,54 +57,116 @@ export default function ProjectsPage() {
   );
   const [project_image, setProjectImage] = useState<File | null>(null);
   const [featured, setFeatured] = useState(false);
-
+  const [transformedProjects, setTransformedProjects] = useState<UIProject[]>([]);
+  
+  const projectsEndpoint = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects`;
+  
   const {
     data: projectsData,
     isLoading,
     error,
-  } = useGet<ProjectsApiResponse>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects`);
+  } = useGet<ProjectsApiResponse>(projectsEndpoint);
+
+  // Function to refetch projects data
+  const refetchProjects = () => {
+    queryClient.invalidateQueries({ queryKey: [projectsEndpoint] });
+  };
 
   const {
     mutate: deleteData,
     isPending: isDeleting,
     error: deleteError,
     data: deleteResponse,
-  } = useDelete();
+  } = useDelete(() => {
+    toast.success("Project deleted successfully!");
+    refetchProjects();
+  });
 
   const {
     mutate: putData,
     isPending: isUpdating,
     error: putError,
     data: putResponse,
-  } = usePut();
+  } = usePut(() => {
+    toast.success("Project updated successfully!");
+    refetchProjects();
+    
+    // Reset form
+    setIsAddingProject(false);
+    setIsUpdatingProject(false);
+    setEditingProject(null);
+    setTitle("");
+    setDescription("");
+    setTechnologies([]);
+    setLiveUrl("");
+    setGithubUrl("");
+    setStatus("In Progress");
+    setProjectImage(null);
+    setFeatured(false);
+  });
   
 
+    // Delete Project
     const handleDelete = (id: string) => {
       deleteData(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${id}`);
     };
 
+    // Open edit dialog and populate form
+    const handleEditProject = (id: string, project: any) => {
+      setEditingProject(project);
+      setTitle(project.title);
+      setDescription(project.description);
+      setTechnologies(project.technologies);
+      setLiveUrl(project.liveUrl);
+      setGithubUrl(project.githubUrl);
+      setStatus(project.status as "Live" | "In Progress" | "Draft");
+      setFeatured(project.featured);
+      setProjectImage(null); // Reset image for now
+      setIsUpdatingProject(true);
+      setIsAddingProject(true);
+    };
+
+    // Update Project
     const handlePut = (id: string, data: any) => {
       putData({
         endpoint: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${id}`,
         data: data,
       });
     };
+
+    // Reset form when dialog is closed
+    const handleCloseDialog = () => {
+      setIsAddingProject(false);
+      setIsUpdatingProject(false);
+      setEditingProject(null);
+      setTitle("");
+      setDescription("");
+      setTechnologies([]);
+      setLiveUrl("");
+      setGithubUrl("");
+      setStatus("In Progress");
+      setProjectImage(null);
+      setFeatured(false);
+    };
   
 
-  // Transform API data to match ProjectGrid expectations
+  useEffect(() => {
+     // Transform API data to match ProjectGrid expectations
   const transformedProjects = projectsData?.data?.projects?.map((project) => ({
     id: project._id,
     title: project.title,
     description: project.description,
     image: project.image,
     technologies: project.skills || [],
-    liveUrl: project.liveLink as string,
-    githubUrl: project.githubLink as string,
-    status: project.status as string,
+    liveUrl: project.liveLink || "",
+    githubUrl: project.githubLink,
+    status: project.status || "In Progress",
     featured: project.featured || false,
-    views: project.views?.toString() as string,
+    views: project.views?.toString() || "0",
     createdAt: project.createdAt,
   })) || [];
+  setTransformedProjects(transformedProjects);
+  }, [projectsData]);
 
   const convertImageToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -115,27 +195,25 @@ export default function ProjectsPage() {
     isPending: isPosting,
     error: postError,
     data: postResponse,
-  } = usePost();
+  } = usePost(() => {
+    toast.success("Project created successfully!");
+    refetchProjects();
+    
+    // Reset form
+    setIsAddingProject(false);
+    setIsUpdatingProject(false);
+    setEditingProject(null);
+    setTitle("");
+    setDescription("");
+    setTechnologies([]);
+    setLiveUrl("");
+    setGithubUrl("");
+    setStatus("In Progress");
+    setProjectImage(null);
+    setFeatured(false);
+  });
 
-  // Handle success case
-  useEffect(() => {
-    if (postResponse) {
-      toast.success("Project created successfully!");
-      
-      // Reset form
-      setIsAddingProject(false);
-      setTitle("");
-      setDescription("");
-      setTechnologies([]);
-      setLiveUrl("");
-      setGithubUrl("");
-      setStatus("In Progress");
-      setProjectImage(null);
-      setFeatured(false);
-    }
-  }, [postResponse, toast]);
-
-  // Handle error case
+  // Handle error cases
   useEffect(() => {
     if (postError) {
       const errorMessage = (postError.response?.data as any)?.message || "Failed to create project. Please try again.";
@@ -143,26 +221,12 @@ export default function ProjectsPage() {
     }
   }, [postError]);
 
-  // Handle delete success and error
-  useEffect(() => {
-    if (deleteResponse) {
-      toast.success("Project deleted successfully!");
-    }
-  }, [deleteResponse]);
-
   useEffect(() => {
     if (deleteError) {
       const errorMessage = (deleteError.response?.data as any)?.message || "Failed to delete project. Please try again.";
       toast.error(errorMessage);
     }
   }, [deleteError]);
-
-  // Handle update success and error
-  useEffect(() => {
-    if (putResponse) {
-      toast.success("Project updated successfully!");
-    }
-  }, [putResponse]);
 
   useEffect(() => {
     if (putError) {
@@ -180,22 +244,30 @@ export default function ProjectsPage() {
         imageBase64 = await convertImageToBase64(project_image);
       }
 
-      postData({
-        endpoint: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/create`,
-        data: {
-          title: title,
-          description: description,
-          image: imageBase64,
-          skills: technologies,
-          liveLink: liveUrl,
-          githubLink: githubUrl,
-          status: status,
-          featured: featured,
-        },
-      });
+      const projectData = {
+        title: title,
+        description: description,
+        image: imageBase64,
+        skills: technologies,
+        liveLink: liveUrl,
+        githubLink: githubUrl,
+        status: status,
+        featured: featured,
+      };
+
+      if (isUpdatingProject && editingProject) {
+        // Update existing project
+        handlePut(editingProject.id, projectData);
+      } else {
+        // Create new project
+        postData({
+          endpoint: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/create`,
+          data: projectData,
+        });
+      }
     } catch (error) {
       console.error("Error converting image:", error);
-        toast.error("Failed to process image. Please try again.");
+      toast.error("Failed to process image. Please try again.");
     }
   };
 
@@ -249,7 +321,7 @@ export default function ProjectsPage() {
               
               <ProjectDialog
                 isAddingProject={isAddingProject}
-                setIsAddingProject={setIsAddingProject}
+                setIsAddingProject={handleCloseDialog}
                 handleSubmit={handleSubmit}
                 project_image={project_image}
                 setProjectImage={setProjectImage}
@@ -267,7 +339,9 @@ export default function ProjectsPage() {
                 setGithubUrl={setGithubUrl}
                 featured={featured}
                 setFeatured={setFeatured}
-                isPosting={isPosting}
+                isPosting={isPosting || isUpdating}
+                isUpdating={isUpdatingProject}
+                editingProject={editingProject}
               />
             </div>
           </div>
@@ -311,7 +385,7 @@ export default function ProjectsPage() {
             projects={transformedProjects} 
             getStatusColor={getStatusColor}
             onDelete={handleDelete}
-            onUpdate={handlePut}
+            onUpdate={handleEditProject}
           />
         </div>
       )}
