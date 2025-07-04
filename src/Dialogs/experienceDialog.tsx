@@ -9,6 +9,8 @@ import { Dispatch, SetStateAction } from "react"
 
 
 type ExperienceDialogProps = {
+  isEditing?: boolean;
+  onClose?: () => void;
     isAddingExperience: boolean,
     setIsAddingExperience: Dispatch<SetStateAction<boolean>>,
     handleSubmit: () => void,
@@ -30,11 +32,13 @@ type ExperienceDialogProps = {
     setPosition: Dispatch<SetStateAction<string>>,
     companyName: string,
     setCompanyName: Dispatch<SetStateAction<string>>,
+    isPosting: boolean
 }
 
 
 const ExperienceDialog: React.FC<ExperienceDialogProps> = ({
     isAddingExperience,
+    isPosting,
     setIsAddingExperience,
     handleSubmit,
     isCurrent,
@@ -60,12 +64,7 @@ const ExperienceDialog: React.FC<ExperienceDialogProps> = ({
 
     return (
         <Dialog open={isAddingExperience} onOpenChange={setIsAddingExperience}>
-            <DialogTrigger asChild>
-                <Button className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600">
-                    <Plus className="h-4 w-4" />
-                    Add Experience
-                </Button>
-            </DialogTrigger>
+            
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Add Work Experience</DialogTitle>
@@ -128,7 +127,7 @@ const ExperienceDialog: React.FC<ExperienceDialogProps> = ({
                         <Button variant="outline" onClick={() => setIsAddingExperience(false)}>
                             Cancel
                         </Button>
-                        <Button onClick={handleSubmit}>Add Experience</Button>
+                        <Button onClick={handleSubmit}>{`${isPosting ? "Adding Experience..." : "Add Experience"}`}</Button>
                     </div>
                 </div>
             </DialogContent>

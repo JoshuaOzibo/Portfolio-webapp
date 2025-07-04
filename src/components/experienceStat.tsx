@@ -7,7 +7,14 @@ import { Edit, Trash2, Building, Calendar, MapPin, Clock, ExternalLink } from "l
 import { Experience } from "@/types/types"
 import Image from "next/image"
 
-export default function ExperienceStat({ experiences }: { experiences: Experience[] }) {
+interface ExperienceStatProps {
+  experiences: Experience[];
+  onEdit?: (experience: Experience) => void;
+  onDelete?: (id: string) => void;
+  isDeleting?: boolean;
+}
+
+export default function ExperienceStat({ experiences, onEdit, onDelete, isDeleting }: ExperienceStatProps) {
 
     // Format date
     const formatDate = (dateString: string) => {
@@ -91,11 +98,11 @@ export default function ExperienceStat({ experiences }: { experiences: Experienc
                                 </div>
                             </div>
                             <div className="flex lg:block hidden gap-2">
-                                <Button variant="outline" size="sm" className="gap-2">
+                                <Button variant="outline" size="sm" className="gap-2" onClick={() => onEdit?.(exp)}>
                                     <Edit className="h-4 w-4" />
                                     Edit
                                 </Button>
-                                <Button variant="outline" size="sm" className="gap-2 text-red-600 hover:text-red-700">
+                                <Button variant="outline" size="sm" className="gap-2 text-red-600 hover:text-red-700" onClick={() => onDelete?.(exp._id)} disabled={isDeleting}>
                                     <Trash2 className="h-4 w-4" />
                                     Delete
                                 </Button>
@@ -124,11 +131,11 @@ export default function ExperienceStat({ experiences }: { experiences: Experienc
                             )}
 
                             <div className="flex gap-2 lg:hidden block">
-                                <Button variant="outline" size="sm" className="gap-2">
+                                <Button variant="outline" size="sm" className="gap-2" onClick={() => onEdit?.(exp)}>
                                     <Edit className="h-4 w-4" />
                                     Edit
                                 </Button>
-                                <Button variant="outline" size="sm" className="gap-2 text-red-600 hover:text-red-700">
+                                <Button variant="outline" size="sm" className="gap-2 text-red-600 hover:text-red-700" onClick={() => onDelete?.(exp._id)} disabled={isDeleting}>
                                     <Trash2 className="h-4 w-4" />
                                     Delete
                                 </Button>
