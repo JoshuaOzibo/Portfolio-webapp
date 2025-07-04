@@ -32,13 +32,15 @@ type ExperienceDialogProps = {
     setPosition: Dispatch<SetStateAction<string>>,
     companyName: string,
     setCompanyName: Dispatch<SetStateAction<string>>,
-    isPosting: boolean
+    isPosting: boolean,
+    isUpdating: boolean,
 }
 
 
 const ExperienceDialog: React.FC<ExperienceDialogProps> = ({
     isAddingExperience,
     isPosting,
+    isUpdating,
     setIsAddingExperience,
     handleSubmit,
     isCurrent,
@@ -127,7 +129,7 @@ const ExperienceDialog: React.FC<ExperienceDialogProps> = ({
                         <Button variant="outline" onClick={() => setIsAddingExperience(false)}>
                             Cancel
                         </Button>
-                        <Button onClick={handleSubmit}>{`${isPosting ? "Adding Experience..." : "Add Experience"}`}</Button>
+                        <Button onClick={handleSubmit}>{`${isPosting ? "Adding Experience..." : "Add Experience" } ${isUpdating ? "updating experience" : ""} `}</Button>
                     </div>
                 </div>
             </DialogContent>
