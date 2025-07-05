@@ -88,27 +88,11 @@ const Sidebar = () => {
       </nav>
 
       {/* Portfolio Status */}
-      {/* <div className="hidden md:block p-4 m-4 bg-blue-50 rounded-lg">
+      <div className="hidden md:block p-4 m-4 bg-blue-50 rounded-lg">
         <h3 className="font-medium">Portfolio Status</h3>
         <p className="text-sm text-gray-600">
           Your portfolio is live and looking great!
         </p>
-      </div> */}
-
-      {/* Logout Button */}
-      <div className="p-4 border-t border-gray-200">
-        <button 
-          // onClick={() => {
-          //   // Add logout logic here
-          //   console.log('Logout clicked');
-          // }}
-          className="w-full cursor-pointer flex items-center justify-center md:justify-start gap-3 p-3 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors duration-200 group"
-        >
-          <div className="p-2 rounded-lg bg-gray-100 group-hover:bg-red-100 transition-colors duration-200">
-            <LogOut className="h-5 w-5 group-hover:text-red-600" />
-          </div>
-          <span className="hidden md:block font-medium">Logout</span>
-        </button>
       </div>
     </div>
   );

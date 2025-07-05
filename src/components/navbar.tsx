@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button } from "./ui/button";
-import { ExternalLink, LogOut, User } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
 const Navbar = () => {
@@ -23,23 +23,14 @@ const Navbar = () => {
             Here's what's happening with your portfolio today.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <User className="h-4 w-4" />
-            <span className="hidden md:inline">{user?.email}</span>
-          </div>
-          <Button 
+        <div className="flex items-center gap-2">
+          <Button
             onClick={handleLogout}
-            variant="outline" 
-            className="gap-2 cursor-pointer"
+            variant="outline"
+            className="w-full cursor-pointer flex items-center justify-center md:justify-start gap-3 p-3 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors duration-200 group"
           >
-            <LogOut className="h-4 w-4" />
+            <LogOut className="h-5 w-5 group-hover:text-red-600" />
             <span className="hidden md:inline">Logout</span>
-          </Button>
-          <Button className="gap-2 cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600">
-            <ExternalLink className="md:h-4 g-2 md:w-4 w-2" />
-            <p className="md:flex text-xs hidden">View Portfolio</p>
-            <p className="md:hidden flex text-xs">View Live</p>
           </Button>
         </div>
       </div>

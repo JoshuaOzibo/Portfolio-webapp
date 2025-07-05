@@ -21,7 +21,16 @@ export default function AuthInput({ onSubmit, onGoogleSignIn, type }: AuthInputP
   };
 
   return (
-    <div className="md:w-1/2 w-full shadow-lg mt-20 max-w-md border border-gray-200 rounded-lg p-4 mx-auto space-y-8">
+    <div className="md:w-1/2 w-full shadow-lg md:mx-0 mt-20 max-w-md border border-gray-200 rounded-lg p-4 mx-auto space-y-8">
+      <main className='block text-center justify-center items-center gap-2'>
+        <div className="w-8 h-8 mx-auto bg-indigo-600 rounded-lg flex items-center justify-center">
+          <span className="text-white text-xl font-bold">P</span>
+        </div>
+        <div className="flex flex-col gap-2">
+          <h1 className="text-2xl font-bold">Welcome to Portfolio</h1>
+          <p className="text-sm text-gray-500">Please enter your details to continue</p>
+        </div>
+      </main>
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Email Input */}
         <div>
