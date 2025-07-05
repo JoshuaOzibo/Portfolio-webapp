@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Navbar from "../components/navbar";
-import Sidebar from "@/components/sidebar";
 import Providers from "../providers/providers";
 import { Toaster } from "@/components/ui/sonner"
-
+import ConditionalLayout from "@/components/conditional-layout";
 
 import "./globals.css";
 
@@ -32,15 +30,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Providers>
-          <div className="flex h-screen bg-gray-50">
-            <Sidebar />
-            <div className="flex-1 flex flex-col md:ml-64 ml-24">
-              <Navbar />
-              <main className="flex-1 overflow-y-auto p-5">
-                {children}
-              </main>
-            </div>
-          </div>
+          <ConditionalLayout>
+            {children}
+          </ConditionalLayout>
           <Toaster position="top-right" richColors/>
         </Providers>
       </body>
