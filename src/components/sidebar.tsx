@@ -1,6 +1,8 @@
+"use client"
+
 import React from "react";
 import Link from "next/link";
-import { Code2, Briefcase, FolderOpen, LayoutDashboard } from "lucide-react";
+import { Code2, Briefcase, FolderOpen, LayoutDashboard, Globe, LogOut } from "lucide-react";
 
 const Sidebar = () => {
   return (
@@ -68,8 +70,8 @@ const Sidebar = () => {
           href="/socials"
           className=" border border-gray-200  flex items-center gap-3 md:p-4 p-3 text-gray-700 hover:bg-gray-50 rounded-lg relative"
         >
-          <div className="p-3 rounded-xl bg-green-50">
-            <Code2 className="h-6 w-6 text-green-600" />
+          <div className="p-3 rounded-xl bg-pink-50">
+            <Globe className="h-6 w-6 text-pink-600" />
           </div>
           <span className="hidden md:block">Socials</span>
         </Link>
@@ -86,11 +88,27 @@ const Sidebar = () => {
       </nav>
 
       {/* Portfolio Status */}
-      <div className="hidden md:block p-4 m-4 bg-blue-50 rounded-lg">
+      {/* <div className="hidden md:block p-4 m-4 bg-blue-50 rounded-lg">
         <h3 className="font-medium">Portfolio Status</h3>
         <p className="text-sm text-gray-600">
           Your portfolio is live and looking great!
         </p>
+      </div> */}
+
+      {/* Logout Button */}
+      <div className="p-4 border-t border-gray-200">
+        <button 
+          // onClick={() => {
+          //   // Add logout logic here
+          //   console.log('Logout clicked');
+          // }}
+          className="w-full cursor-pointer flex items-center justify-center md:justify-start gap-3 p-3 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors duration-200 group"
+        >
+          <div className="p-2 rounded-lg bg-gray-100 group-hover:bg-red-100 transition-colors duration-200">
+            <LogOut className="h-5 w-5 group-hover:text-red-600" />
+          </div>
+          <span className="hidden md:block font-medium">Logout</span>
+        </button>
       </div>
     </div>
   );
