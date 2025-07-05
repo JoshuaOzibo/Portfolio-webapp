@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Plus } from "lucide-react"
 import { Dispatch, SetStateAction } from "react"
 
 
@@ -116,8 +115,29 @@ const ExperienceDialog: React.FC<ExperienceDialogProps> = ({
                     </div>
 
                     <div>
-                        <Label htmlFor="image">Company Logo URL</Label>
-                        <Input id="image" placeholder="https://example.com/logo.png" className="mt-2" value={image} onChange={(e) => setImage(e.target.value)} />
+                        <Label htmlFor="image">Work Image</Label>
+                        <Input 
+                            id="image" 
+                            type="file" 
+                            accept="image/*"
+                            className="mt-2" 
+                            onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                    // Convert file to base64 or handle upload
+                                    const reader = new FileReader();
+                                    reader.onload = (event) => {
+                                        setImage(event.target?.result as string);
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
+                            }} 
+                        />
+                        {image && (
+                            <div className="mt-2">
+                                <img src={image} alt="Preview" className="w-20 h-20 object-cover rounded" />
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex items-center space-x-2">

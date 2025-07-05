@@ -16,7 +16,7 @@ import { useQueryClient } from "@tanstack/react-query";
 export default function ExperiencePage() {
   const queryClient = useQueryClient();
   const experiencesEndpoint = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/experiences`;
-  
+
   const [companyName, setCompanyName] = useState('')
   const [position, setPosition] = useState('')
   const [startDate, setStartDate] = useState('')
@@ -28,13 +28,27 @@ export default function ExperiencePage() {
   const [isCurrent, setIsCurrent] = useState(false)
   const [editingExperience, setEditingExperience] = useState<Experience | null>(null)
   const [isEditing, setIsEditing] = useState(false)
+  const [experiences, setExperiences] = useState<Experience[]>([]);
 
   const refetchExperiences = () => {
     queryClient.invalidateQueries({ queryKey: [experiencesEndpoint] });
   };
 
-  const { data: experienceResponse, isLoading: isLoadingExperiences } = useGet<{ experiences: Experience[] }>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/experiences`);
-  
+  const { data: experienceResponse, isLoading: isLoadingExperiences } = useGet<{
+    data: { experiences: Experience[] },
+    message: string,
+    status: string
+  }>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/experiences`);
+
+  // Update local state when API data changes
+  useEffect(() => {
+    if (experienceResponse?.data?.experiences) {
+      setExperiences(experienceResponse.data.experiences);
+      // console.log('experience Data', experienceResponse);
+    }
+  }, [experienceResponse]);
+
+
   const {
     mutate: postData,
     isPending: isPosting,
@@ -70,7 +84,6 @@ export default function ExperiencePage() {
     refetchExperiences();
   });
 
-  const experiences = experienceResponse?.experiences || [];
   const [isAddingExperience, setIsAddingExperience] = useState(false)
 
   const resetForm = () => {
@@ -114,6 +127,7 @@ export default function ExperiencePage() {
         image,
         liveLink,
         isCurrent,
+
       }
     });
   };
@@ -163,10 +177,8 @@ export default function ExperiencePage() {
     const end = exp.endDate === "Present" ? new Date() : new Date(exp.endDate)
     const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth())
     return total + months
-  }, 0) || 0
+  }, 0) || 0;
 
-  const totalYears = Math.floor(totalExperience / 12)
-  const totalMonths = totalExperience % 12
 
   // Check if current position
   const isCurrentPosition = (endDate: string) => {
@@ -175,7 +187,7 @@ export default function ExperiencePage() {
 
   const handleSubmit = async () => {
     postData({
-      endpoint: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/experiences/`,
+      endpoint: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/experiences/create`,
       data: {
         companyName,
         position,
@@ -208,21 +220,7 @@ export default function ExperiencePage() {
         </div>
 
         {/* Experience Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Card className="border-0 shadow-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-slate-600">Total Experience</p>
-                  <p className="md:text-2xl text-xl font-bold text-slate-900">{totalYears}+ years</p>
-                </div>
-                <div className="p-3 hidden lg:block md:hidden sm:block bg-blue-50 rounded-xl">
-                  <Clock className="h-6 w-6 text-blue-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="border-0 shadow-sm">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -277,8 +275,8 @@ export default function ExperiencePage() {
         )}
 
         {experiences.length > 0 && (
-          <ExperienceStat 
-            experiences={experiences} 
+          <ExperienceStat
+            experiences={experiences}
             onEdit={handleEdit}
             onDelete={handleDelete}
             isDeleting={isDeleting}
