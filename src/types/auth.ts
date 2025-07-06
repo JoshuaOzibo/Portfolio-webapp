@@ -20,6 +20,7 @@ export interface AuthHookReturn {
   isAuthenticated: boolean
   isLoading: boolean
   login: (email: string, password: string) => Promise<LoginResult>
+  signUp: (name: string, email: string, password: string) => Promise<LoginResult>
   googleSignIn: () => Promise<LoginResult>
   logout: () => void
 } 

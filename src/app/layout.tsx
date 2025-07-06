@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Providers from "../providers/providers";
 import { Toaster } from "@/components/ui/sonner"
 import ConditionalLayout from "@/components/conditional-layout";
+import AuthInitializer from "@/components/auth-initializer";
 
 import "./globals.css";
 
@@ -30,6 +31,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Providers>
+          <AuthInitializer />
           <ConditionalLayout>
             {children}
           </ConditionalLayout>
