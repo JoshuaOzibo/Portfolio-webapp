@@ -20,8 +20,9 @@ const useAuthStore = create<AuthStore>()(
       isLoading: true,
       isHydrated: false,
       login: (user: User) => {
-        // console.log('Login called with user:', user)
+        console.log('Auth store login called with user:', user)
         set({ user, isAuthenticated: true, isLoading: false })
+        console.log('Auth state updated - user should be authenticated')
       },
       logout: () => set({ user: null, isAuthenticated: false, isLoading: false }),
       setLoading: (loading: boolean) => set({ isLoading: loading }),

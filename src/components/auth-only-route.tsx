@@ -14,7 +14,9 @@ export default function AuthOnlyRoute({ children }: AuthOnlyRouteProps) {
   const router = useRouter()
 
   useEffect(() => {
+    console.log('AuthOnlyRoute effect - isLoading:', isLoading, 'isAuthenticated:', isAuthenticated)
     if (!isLoading && isAuthenticated) {
+      console.log('Redirecting to home page...')
       router.push('/')
     }
   }, [isAuthenticated, isLoading, router])

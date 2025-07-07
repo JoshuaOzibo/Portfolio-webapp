@@ -31,11 +31,46 @@ const AuthPage = () => {
     }
 
     const handleGoogleSignIn = async () => {
-        const result = await googleSignIn()
-        if (result.success) {
-            toast.success('Successfully signed in with Google!')
-        } else {
-            toast.error(result.error || 'Google sign-in failed')
+        try {
+            // Load Google Identity Services if not already loaded
+            if (!window.google) {
+                await new Promise((resolve, reject) => {
+                    const script = document.createElement('script')
+                    script.src = 'https://accounts.google.com/gsi/client'
+                    script.onload = resolve
+                    script.onerror = reject
+                    document.head.appendChild(script)
+                })
+            }
+
+            // Initialize Google OAuth client
+            const client = window.google.accounts.oauth2.initTokenClient({
+                client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+                scope: 'openid email profile',
+                callback: async (response: { access_token: string; error?: string }) => {
+                    if (response.error) {
+                        toast.error('Google sign-in failed')
+                        return
+                    }
+
+                    // Get the ID token
+                    const idToken = response.access_token
+                    
+                    // Call our backend with the ID token
+                    const result = await googleSignIn(idToken)
+                    if (result.success) {
+                        toast.success('Successfully signed in with Google!')
+                    } else {
+                        toast.error(result.error || 'Google sign-in failed')
+                    }
+                }
+            })
+
+            // Request the token
+            client.requestAccessToken()
+        } catch (error) {
+            console.error('Google sign-in error:', error)
+            toast.error('Google sign-in failed')
         }
     }
 

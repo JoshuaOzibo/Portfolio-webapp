@@ -12,8 +12,8 @@ interface ApiResponse<T> {
 
 interface SignInData {
   token: string
-  userFromDb: {
-    id: string
+  user: {
+    _id: string
     email: string
     name?: string
   }
@@ -21,15 +21,25 @@ interface SignInData {
 
 interface SignUpData {
   token: string
-  userFromDb: {
-    id: string
+  user: {
+    _id: string
     email: string
     name: string
   }
 }
 
+interface GoogleSignInData {
+  token: string
+  user: {
+    _id: string
+    email: string
+    name?: string
+  }
+}
+
 type SignInResponse = ApiResponse<SignInData>
 type SignUpResponse = ApiResponse<SignUpData>
+type GoogleSignInResponse = ApiResponse<GoogleSignInData>
 
 export const useAuth = (): AuthHookReturn => {
   const { user, isAuthenticated, isLoading, login, logout, setLoading } = useAuthStore()
@@ -41,6 +51,11 @@ export const useAuth = (): AuthHookReturn => {
 
   // Sign-up mutation
   const signUpMutation = usePost<SignUpResponse, { name: string; email: string; password: string }>(() => {
+    // onSuccess callback
+  })
+
+  // Google sign-in mutation
+  const googleSignInMutation = usePost<GoogleSignInResponse, { idToken: string }>(() => {
     // onSuccess callback
   })
 
@@ -58,16 +73,24 @@ export const useAuth = (): AuthHookReturn => {
       localStorage.setItem('token', result.data.token)
       
       // Ensure we have valid user data
-      if (!result.data.userFromDb) {
-        console.error('No user data in login response')
+      if (!result.data.user) {
+        // console.error('No user data in login response')
         setLoading(false)
         return { success: false, error: 'Invalid response from server' }
       }
       
-      // Update auth store with user data
-      // console.log('Calling login with user:', result.data.userFromDb)
-      login(result.data.userFromDb)
+      // Transform backend user data to match frontend User interface
+      const transformedUser = {
+        id: result.data.user._id,
+        email: result.data.user.email,
+        name: result.data.user.name
+      }
       
+      // Update auth store with user data
+      // console.log('Calling login with user:', transformedUser)
+      login(transformedUser)
+      
+      // console.log('Login successful, user should be redirected')
       return { success: true }
     } catch (error: any) {
       setLoading(false)
@@ -101,15 +124,22 @@ export const useAuth = (): AuthHookReturn => {
       localStorage.setItem('token', result.data.token)
       
       // Ensure we have valid user data
-      if (!result.data.userFromDb) {
-        console.error('No user data in signup response')
+      if (!result.data.user) {
+        // console.error('No user data in signup response')
         setLoading(false)
         return { success: false, error: 'Invalid response from server' }
       }
       
+      // Transform backend user data to match frontend User interface
+      const transformedUser = {
+        id: result.data.user._id,
+        email: result.data.user.email,
+        name: result.data.user.name
+      }
+      
       // Update auth store with user data
-      // console.log('Calling login with user:', result.data.userFromDb)
-      login(result.data.userFromDb)
+      // console.log('Calling login with user:', transformedUser)
+      login(transformedUser)
       
       return { success: true }
     } catch (error: any) {
@@ -130,31 +160,55 @@ export const useAuth = (): AuthHookReturn => {
     }
   }, [login, setLoading, signUpMutation])
 
-  const handleGoogleSignIn = useCallback(async (): Promise<LoginResult> => {
+  const handleGoogleSignIn = useCallback(async (idToken: string): Promise<LoginResult> => {
     setLoading(true)
     try {
-      // Here you would implement Google OAuth
-      // For now, we'll simulate a successful Google sign-in
-      const mockUser = {
-        id: '2',
-        email: 'user@gmail.com',
-        name: 'Google User'
+      const result = await googleSignInMutation.mutateAsync({
+        endpoint: 'api/auth/google-login',
+        data: { idToken }
+      })
+
+      console.log('Google login API result:', result)
+
+      // Store JWT token in localStorage
+      localStorage.setItem('token', result.data.token)
+      
+      // Ensure we have valid user data
+      if (!result.data.user) {
+        console.error('No user data in Google login response')
+        setLoading(false)
+        return { success: false, error: 'Invalid response from server' }
       }
       
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      // Transform backend user data to match frontend User interface
+      const transformedUser = {
+        id: result.data.user._id,
+        email: result.data.user.email,
+        name: result.data.user.name
+      }
       
-      // Store a mock token for consistency
-      localStorage.setItem('token', 'mock-google-token-' + Date.now())
+      // Update auth store with user data
+      // console.log('Calling login with user:', transformedUser)
+      login(transformedUser)
       
-      // console.log('Calling login with mock user:', mockUser)
-      login(mockUser)
       return { success: true }
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false)
-      return { success: false, error: 'Google sign-in failed' }
+      let errorMessage = 'Google sign-in failed'
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message
+      } else if (error.response?.status === 401) {
+        errorMessage = 'Invalid Google token'
+      } else if (error.response?.status === 400) {
+        errorMessage = 'Invalid request data'
+      } else if (error.message) {
+        errorMessage = error.message
+      }
+      
+      return { success: false, error: errorMessage }
     }
-  }, [login, setLoading])
+  }, [login, setLoading, googleSignInMutation])
 
   const handleLogout = useCallback(() => {
     // Remove token from localStorage
@@ -165,7 +219,7 @@ export const useAuth = (): AuthHookReturn => {
   return {
     user,
     isAuthenticated,
-    isLoading: isLoading || signInMutation.isPending || signUpMutation.isPending,
+    isLoading: isLoading || signInMutation.isPending || signUpMutation.isPending || googleSignInMutation.isPending,
     login: handleLogin,
     signUp: handleSignUp,
     googleSignIn: handleGoogleSignIn,

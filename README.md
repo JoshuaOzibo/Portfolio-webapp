@@ -1,22 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Webapp
 
-## Getting Started
+A modern portfolio web application built with Next.js, TypeScript, and Tailwind CSS.
 
-First, run the development server:
+## Features
+
+- **Authentication**: Email/password and Google OAuth login
+- **Responsive Design**: Mobile-first approach with Tailwind CSS
+- **Modern UI**: Beautiful components with shadcn/ui
+- **Type Safety**: Full TypeScript support
+
+## Google OAuth Setup
+
+To enable Google login functionality:
+
+1. **Create a Google OAuth 2.0 Client**:
+   - Go to [Google Cloud Console](https://console.cloud.google.com/)
+   - Create a new project or select an existing one
+   - Enable the Google+ API
+   - Go to "Credentials" and create an OAuth 2.0 Client ID
+   - Add your domain to authorized origins
+   - Add your redirect URI (e.g., `http://localhost:3000` for development)
+
+2. **Environment Variables**:
+   Create a `.env.local` file in your project root:
+   ```env
+   NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id_here
+   NEXT_PUBLIC_API_URL=your_backend_api_url_here
+   ```
+
+3. **Backend API Endpoint**:
+   Your backend should have a `/api/auth/google-login` endpoint that:
+   - Accepts an `idToken` in the request body
+   - Verifies the token with Google
+   - Creates or fetches the user from your database
+   - Returns your own JWT token and user data
+
+   Expected request format:
+   ```json
+   {
+     "idToken": "google_id_token_here"
+   }
+   ```
+
+   Expected response format:
+   ```json
+   {
+     "success": true,
+     "message": "Login successful",
+     "data": {
+       "token": "your_jwt_token",
+       "userFromDb": {
+         "id": "user_id",
+         "email": "user@example.com",
+         "name": "User Name"
+       }
+     }
+   }
+   ```
+
+## Usage
+
+The Google login is automatically integrated into the auth page. Users can click the "Continue with Google" button to sign in using their Google account.
+
+## Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
