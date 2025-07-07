@@ -11,16 +11,18 @@ interface ProtectedLayoutProps {
 export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
   return (
     <ProtectedRoute>
-      <div className="flex h-screen bg-gray-50">
-        <main>
+      <div className="min-h-screen bg-gray-50">
+        {/* Sidebar */}
+        <div className="fixed top-0 left-0 h-full w-28 md:w-64 z-20">
           <Sidebar />
-          <div className="flex-1 flex flex-col md:ml-64 ml-24">
-            <Navbar />
-            <main className="flex-1 overflow-y-auto p-5">
-              {children}
-            </main>
-          </div>
-        </main>
+        </div>
+        {/* Main Content */}
+        <div className="ml-28 md:ml-64">
+          <Navbar />
+          <main className="p-5 min-h-screen bg-blue-50">
+            {children}
+          </main>
+        </div>
       </div>
     </ProtectedRoute>
   )

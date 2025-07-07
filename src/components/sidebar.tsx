@@ -6,7 +6,7 @@ import { Code2, Briefcase, FolderOpen, LayoutDashboard, Globe, LogOut } from "lu
 
 const Sidebar = () => {
   return (
-    <div className="w-28 md:w-64 z-20 h-screen fixed bg-white border-r border-gray-200 flex flex-col">
+    <div className=" bg-white h-screen border-r border-gray-200 flex flex-col">
       {/* Portfolio Header */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex w-full md:justify-start justify-center items-center gap-2">

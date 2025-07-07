@@ -202,7 +202,7 @@ const page = () => {
                     <SkillsSkeleton />
                 )}
 
-                {skills.length > 0 && (
+                {skills && (
                     <CardContent>
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                             {skills.map((skill) => (
@@ -237,7 +237,7 @@ const page = () => {
                     </CardContent>
                 )}
 
-                {skills.length === 0 && (
+                {skills.length === 0 && !isLoading && (
                     <EmptyState title="No skills found" description="Add a new skill to get started" />
                 )}
             </Card>

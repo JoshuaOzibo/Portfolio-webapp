@@ -274,7 +274,7 @@ export default function ExperiencePage() {
           <ExperienceSkeleton />
         )}
 
-        {experiences.length > 0 && (
+        {experiences && (
           <ExperienceStat
             experiences={experiences}
             onEdit={handleEdit}
@@ -283,7 +283,7 @@ export default function ExperiencePage() {
           />
         )}
 
-        {experiences.length === 0 && (
+        {experiences.length === 0 && !isLoadingExperiences && (
           <EmptyState title="No Experience found" description="You've processed all your projects" />
         )}
       </div>

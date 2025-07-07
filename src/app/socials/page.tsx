@@ -194,7 +194,7 @@ const page = () => {
           <SkillsSkeleton />
         )}
 
-        {socialLinks.length > 0 && (
+        {socialLinks && (
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {socialLinks.map((link) => (
@@ -232,7 +232,7 @@ const page = () => {
           </CardContent>
         )}
 
-        {socialLinks.length === 0 && (
+        {socialLinks.length === 0 && !isLoading && (
           <EmptyState title="No socials found" description="Add a new social to get started" />
         )}
       </Card>
