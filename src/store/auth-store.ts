@@ -7,6 +7,9 @@ interface AuthStore extends AuthState {
   logout: () => void
   setLoading: (loading: boolean) => void
   initialize: () => void
+  setInitialized: (initialized: boolean) => void
+  isHydrated: boolean
+  setHydrated: (hydrated: boolean) => void
 }
 
 const useAuthStore = create<AuthStore>()(
@@ -14,26 +17,76 @@ const useAuthStore = create<AuthStore>()(
     (set, get) => ({
       user: null,
       isAuthenticated: false,
-      isLoading: false,
-      login: (user: User) => set({ user, isAuthenticated: true, isLoading: false }),
+      isLoading: true,
+      isHydrated: false,
+      login: (user: User) => {
+        console.log('Login called with user:', user)
+        set({ user, isAuthenticated: true, isLoading: false })
+      },
       logout: () => set({ user: null, isAuthenticated: false, isLoading: false }),
       setLoading: (loading: boolean) => set({ isLoading: loading }),
+      setInitialized: (initialized: boolean) => set({ isLoading: !initialized }),
+      setHydrated: (hydrated: boolean) => set({ isHydrated: hydrated }),
       initialize: () => {
-        // Check if there's a token in localStorage
-        const token = localStorage.getItem('token')
-        if (token) {
-          // If there's a token, we assume the user is authenticated
-          // In a real app, you might want to validate the token with the server
+        try {
+          // Check if there's a token in localStorage
+          const token = localStorage.getItem('token')
           const currentUser = get().user
-          if (currentUser) {
-            set({ isAuthenticated: true })
+          const currentIsAuthenticated = get().isAuthenticated
+          
+          console.log('Auth initialization:', { 
+            token: !!token, 
+            user: !!currentUser, 
+            isAuthenticated: currentIsAuthenticated 
+          })
+          
+          // If we have user data and isAuthenticated is true, we're good
+          if (currentUser && currentIsAuthenticated) {
+            console.log('User already authenticated from persisted state')
+            set({ isLoading: false })
+            return
           }
+          
+          // If we have a token but no user data, clear the token
+          if (token && !currentUser) {
+            console.log('Token exists but no user data - clearing token')
+            localStorage.removeItem('token')
+            set({ isAuthenticated: false, user: null, isLoading: false })
+            return
+          }
+          
+          // If we have both token and user data, authenticate
+          if (token && currentUser) {
+            console.log('Token and user data present - authenticating')
+            set({ isAuthenticated: true, isLoading: false })
+            return
+          }
+          
+          // No token - not authenticated
+          console.log('No token found - not authenticated')
+          set({ isAuthenticated: false, user: null, isLoading: false })
+        } catch (error) {
+          console.error('Error initializing auth state:', error)
+          set({ isAuthenticated: false, user: null, isLoading: false })
         }
       }
     }),
     {
       name: 'auth-storage',
-      partialize: (state) => ({ user: state.user, isAuthenticated: state.isAuthenticated }),
+      partialize: (state) => {
+        console.log('Persisting state:', { user: state.user, isAuthenticated: state.isAuthenticated })
+        return { user: state.user, isAuthenticated: state.isAuthenticated }
+      },
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          console.log('Store rehydrated, user data:', state.user)
+          console.log('Store rehydrated, isAuthenticated:', state.isAuthenticated)
+          // Mark as hydrated first
+          state.setHydrated(true)
+          // Initialize immediately after rehydration
+          state.initialize()
+        }
+      },
     }
   )
 )

@@ -4,23 +4,32 @@ import { LoginResult, AuthHookReturn } from '@/types/auth'
 import { usePost } from './use-fetch'
 
 // API response types
-interface SignInResponse {
+interface ApiResponse<T> {
+  success: boolean
+  message: string
+  data: T
+}
+
+interface SignInData {
   token: string
-  user: {
+  userFromDb: {
     id: string
     email: string
     name?: string
   }
 }
 
-interface SignUpResponse {
+interface SignUpData {
   token: string
-  user: {
+  userFromDb: {
     id: string
     email: string
     name: string
   }
 }
+
+type SignInResponse = ApiResponse<SignInData>
+type SignUpResponse = ApiResponse<SignUpData>
 
 export const useAuth = (): AuthHookReturn => {
   const { user, isAuthenticated, isLoading, login, logout, setLoading } = useAuthStore()
@@ -43,11 +52,21 @@ export const useAuth = (): AuthHookReturn => {
         data: { email, password }
       })
 
+      console.log('Login API result:', result)
+
       // Store JWT token in localStorage
-      localStorage.setItem('token', result.token)
+      localStorage.setItem('token', result.data.token)
+      
+      // Ensure we have valid user data
+      if (!result.data.userFromDb) {
+        console.error('No user data in login response')
+        setLoading(false)
+        return { success: false, error: 'Invalid response from server' }
+      }
       
       // Update auth store with user data
-      login(result.user)
+      console.log('Calling login with user:', result.data.userFromDb)
+      login(result.data.userFromDb)
       
       return { success: true }
     } catch (error: any) {
@@ -76,11 +95,21 @@ export const useAuth = (): AuthHookReturn => {
         data: { name, email, password }
       })
 
+      console.log('Signup API result:', result)
+
       // Store JWT token in localStorage
-      localStorage.setItem('token', result.token)
+      localStorage.setItem('token', result.data.token)
+      
+      // Ensure we have valid user data
+      if (!result.data.userFromDb) {
+        console.error('No user data in signup response')
+        setLoading(false)
+        return { success: false, error: 'Invalid response from server' }
+      }
       
       // Update auth store with user data
-      login(result.user)
+      console.log('Calling login with user:', result.data.userFromDb)
+      login(result.data.userFromDb)
       
       return { success: true }
     } catch (error: any) {
@@ -115,6 +144,10 @@ export const useAuth = (): AuthHookReturn => {
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000))
       
+      // Store a mock token for consistency
+      localStorage.setItem('token', 'mock-google-token-' + Date.now())
+      
+      console.log('Calling login with mock user:', mockUser)
       login(mockUser)
       return { success: true }
     } catch (error) {

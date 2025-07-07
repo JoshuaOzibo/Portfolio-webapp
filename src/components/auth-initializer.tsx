@@ -1,14 +1,7 @@
 'use client'
 
-import { useEffect } from 'react'
-import useAuthStore from '@/store/auth-store'
-
+// This component is now redundant since initialization is handled in useAuth hook
+// Keeping it for backward compatibility but it doesn't need to do anything
 export default function AuthInitializer() {
-  const initialize = useAuthStore(state => state.initialize)
-
-  useEffect(() => {
-    initialize()
-  }, [initialize])
-
   return null
 } 
