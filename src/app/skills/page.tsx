@@ -148,14 +148,8 @@ const page = () => {
         isLoading,
         error,
     } = useGet<ApiResponse>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/skills`);
+    // console.log("skillsData", skillsData);
     
-    useEffect(() => {
-        if (skillsData) {
-            const fetchedData = skillsData.skills || [];
-            setSkills(fetchedData);
-        }
-    }, [skillsData]);
-
     const socialMapedData: SocialMapedData = {
         githubIcon: Github,
         linkedinIcon: Linkedin,
@@ -176,7 +170,21 @@ const page = () => {
 
     useEffect(() => {
         if (skillsData) {
-            const fetchedData = skillsData.skills || [];
+            // console.log("Full skillsData structure:", skillsData);
+            // console.log("skillsData.data:", skillsData.data);
+            
+            // Handle different possible data structures
+            let fetchedData = [];
+            if (Array.isArray(skillsData.skills)) {
+                fetchedData = skillsData.skills;
+            } else if (Array.isArray(skillsData.data)) {
+                fetchedData = skillsData.data;
+            } else if (skillsData.data && typeof skillsData.data === 'object' && 'skills' in skillsData.data && Array.isArray((skillsData.data as any).skills)) {
+                fetchedData = (skillsData.data as any).skills;
+            }
+            
+            // console.log("fetchedData:", fetchedData);
+            
             const data = fetchedData.map((skill: Skill) => {
                 const mapping = socialMapping[skill.skillName as keyof typeof socialMapping];
                 return {
@@ -188,6 +196,8 @@ const page = () => {
             setSkills(data);
         }
     }, [skillsData]);
+
+    // console.log("skills", skills);
 
     return (
         <>
@@ -202,7 +212,7 @@ const page = () => {
                     <SkillsSkeleton />
                 )}
 
-                {skills && (
+                {skills.length > 0 && !isLoading && (
                     <CardContent>
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                             {skills.map((skill) => (

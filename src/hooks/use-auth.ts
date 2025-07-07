@@ -52,7 +52,7 @@ export const useAuth = (): AuthHookReturn => {
         data: { email, password }
       })
 
-      console.log('Login API result:', result)
+      // console.log('Login API result:', result)
 
       // Store JWT token in localStorage
       localStorage.setItem('token', result.data.token)
@@ -65,7 +65,7 @@ export const useAuth = (): AuthHookReturn => {
       }
       
       // Update auth store with user data
-      console.log('Calling login with user:', result.data.userFromDb)
+      // console.log('Calling login with user:', result.data.userFromDb)
       login(result.data.userFromDb)
       
       return { success: true }
@@ -95,7 +95,7 @@ export const useAuth = (): AuthHookReturn => {
         data: { name, email, password }
       })
 
-      console.log('Signup API result:', result)
+      // console.log('Signup API result:', result)
 
       // Store JWT token in localStorage
       localStorage.setItem('token', result.data.token)
@@ -108,7 +108,7 @@ export const useAuth = (): AuthHookReturn => {
       }
       
       // Update auth store with user data
-      console.log('Calling login with user:', result.data.userFromDb)
+      // console.log('Calling login with user:', result.data.userFromDb)
       login(result.data.userFromDb)
       
       return { success: true }
@@ -147,7 +147,7 @@ export const useAuth = (): AuthHookReturn => {
       // Store a mock token for consistency
       localStorage.setItem('token', 'mock-google-token-' + Date.now())
       
-      console.log('Calling login with mock user:', mockUser)
+      // console.log('Calling login with mock user:', mockUser)
       login(mockUser)
       return { success: true }
     } catch (error) {

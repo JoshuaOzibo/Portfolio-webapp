@@ -17,7 +17,7 @@ const Navbar = () => {
       <div className="flex justify-between items-center gap-5">
         <div className="space-y-1">
           <h1 className="lg:text-3xl md:text-2xl sm:text-lg text-sm font-bold text-slate-900">
-            Welcome back, {user?.name || 'User'}!👋
+            Welcome back, {user?.name} 👋
           </h1>
           <p className="tet-slate-600 md:flex hidden lg:text-lg text-sm">
             Here's what's happening with your portfolio today.

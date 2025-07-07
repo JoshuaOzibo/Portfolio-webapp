@@ -19,7 +19,7 @@ export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
         {/* Main Content */}
         <div className="ml-28 md:ml-64">
           <Navbar />
-          <main className="p-5 min-h-screen bg-blue-50">
+          <main className="p-5 min-h-screen">
             {children}
           </main>
         </div>

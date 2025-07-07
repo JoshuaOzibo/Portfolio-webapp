@@ -22,7 +22,7 @@ const overview = () => {
 
   useEffect(() => {
     if (projectsData) {
-      console.log(`projectsData:`, projectsData);
+      // console.log(`projectsData:`, projectsData);
 
       const mapped: MappedData = {
         projects: {

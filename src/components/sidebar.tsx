@@ -3,8 +3,10 @@
 import React from "react";
 import Link from "next/link";
 import { Code2, Briefcase, FolderOpen, LayoutDashboard, Globe, LogOut } from "lucide-react";
+import useAuthStore from "@/store/auth-store";
 
 const Sidebar = () => {
+  const { user } = useAuthStore()
   return (
     <div className=" bg-white h-screen border-r border-gray-200 flex flex-col">
       {/* Portfolio Header */}
@@ -26,9 +28,9 @@ const Sidebar = () => {
           <div className="flex items-center gap-3">
             <div className="w-8 md:w-10 h-8 md:h-10 bg-gray-200 rounded-full"></div>
             <div className="hidden md:block">
-              <h2 className="font-medium">Ozibo Joshua</h2>
+              <h2 className="font-medium">{user?.name}</h2>
               <p className="text-xs text-gray-600">
-                joshuamichaelozibo@gmail.com
+                {user?.email}
               </p>
             </div>
           </div>

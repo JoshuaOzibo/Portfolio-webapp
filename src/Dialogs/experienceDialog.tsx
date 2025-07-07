@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle} from "@/components/ui/dialog"
 import { Dispatch, SetStateAction } from "react"
 
 
@@ -149,7 +149,12 @@ const ExperienceDialog: React.FC<ExperienceDialogProps> = ({
                         <Button variant="outline" onClick={() => setIsAddingExperience(false)}>
                             Cancel
                         </Button>
-                        <Button onClick={handleSubmit}>{`${isPosting ? "Adding Experience..." : "Add Experience" } ${isUpdating ? "updating experience" : ""} `}</Button>
+                        <Button onClick={handleSubmit}>
+                            {isUpdating 
+                                ? (isUpdating ? "Updating Experience..." : "Update Experience")
+                                : (isPosting ? "Adding Experience..." : "Add Experience")
+                            }
+                        </Button>
                     </div>
                 </div>
             </DialogContent>

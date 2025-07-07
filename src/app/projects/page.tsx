@@ -38,6 +38,7 @@ import {
 import { useGet, usePost,  usePut, useDelete} from "@/hooks/use-fetch";
 import { useQueryClient } from "@tanstack/react-query";
 import ProjectDialog from "@/Dialogs/projectDialog";
+import  EmptyState  from "@/components/re-usable_ui/empty_component";
 
 
 export default function ProjectsPage() {
@@ -266,16 +267,17 @@ export default function ProjectsPage() {
         });
       }
     } catch (error) {
-      console.error("Error converting image:", error);
+      // console.error("Error converting image:", error);
       toast.error("Failed to process image. Please try again.");
     }
   };
 
   return (
     <>
-      {isLoading ? (
+      {isLoading && (
         <ProjectSkeleton />
-      ) : error ? (
+      )}
+      {error && (
         <div className="space-y-8">
           <div className="text-center py-12">
             <h2 className="text-2xl font-bold text-red-600 mb-4">Error Loading Projects</h2>
@@ -290,7 +292,8 @@ export default function ProjectsPage() {
             </Button>
           </div>
         </div>
-      ) : (
+      )}
+      {!isLoading && (
         <div className="space-y-8">
           {/* Header */}
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -389,6 +392,10 @@ export default function ProjectsPage() {
               </CardContent>
             </Card>
           </div>
+
+          {transformedProjects.length === 0 && (
+            <EmptyState title="No projects found" description="Add a project to get started" />
+          )}
 
           {/* Projects Grid */}
           <ProjectGrid 

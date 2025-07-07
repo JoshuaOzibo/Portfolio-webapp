@@ -172,13 +172,6 @@ export default function ExperiencePage() {
     }
   }, [deleteError]);
 
-  const totalExperience = experiences.reduce((total: number, exp: Experience) => {
-    const start = new Date(exp.startDate)
-    const end = exp.endDate === "Present" ? new Date() : new Date(exp.endDate)
-    const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth())
-    return total + months
-  }, 0) || 0;
-
 
   // Check if current position
   const isCurrentPosition = (endDate: string) => {
@@ -206,6 +199,7 @@ export default function ExperiencePage() {
     <>
       <div className="space-y-8">
         {/* Header */}
+        { !isLoadingExperiences && (
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
             <h1 className="md:text-3xl text-xl font-bold text-slate-900">Work Experience</h1>
@@ -215,12 +209,13 @@ export default function ExperiencePage() {
             onClick={handleAddExperience}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Add Experience
-          </button>
-        </div>
+              Add Experience
+            </button>
+          </div>
+        )}
 
         {/* Experience Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {!isLoadingExperiences && <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="border-0 shadow-sm">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -266,7 +261,7 @@ export default function ExperiencePage() {
               </div>
             </CardContent>
           </Card>
-        </div>
+        </div>}
 
         {/* Experience Timeline */}
 
@@ -274,7 +269,7 @@ export default function ExperiencePage() {
           <ExperienceSkeleton />
         )}
 
-        {experiences && (
+        {experiences.length > 0 && (
           <ExperienceStat
             experiences={experiences}
             onEdit={handleEdit}
@@ -284,7 +279,7 @@ export default function ExperiencePage() {
         )}
 
         {experiences.length === 0 && !isLoadingExperiences && (
-          <EmptyState title="No Experience found" description="You've processed all your projects" />
+          <EmptyState title="No Experience found" description="Add a experience to get started" />
         )}
       </div>
 

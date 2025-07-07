@@ -1,10 +1,8 @@
 import { DialogHeader } from "@/components/ui/dialog";
 import { DialogTitle } from "@/components/ui/dialog";
-import { DialogTrigger } from "@/components/ui/dialog";
 import { DialogContent } from "@/components/ui/dialog";
 import { Dialog } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Plus} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 

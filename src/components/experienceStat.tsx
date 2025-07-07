@@ -3,7 +3,7 @@
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
 import { Card, CardContent } from "./ui/card"
-import { Edit, Trash2, Building, Calendar, MapPin, Clock, ExternalLink } from "lucide-react"
+import { Edit, Trash2, Building, Calendar, Clock, ExternalLink } from "lucide-react"
 import { Experience } from "@/types/types"
 import Image from "next/image"
 
@@ -97,7 +97,7 @@ export default function ExperienceStat({ experiences, onEdit, onDelete, isDeleti
                                     )}
                                 </div>
                             </div>
-                            <div className="flex lg:block hidden gap-2">
+                            <div className="flex lg:block space-x-2 hidden">
                                 <Button variant="outline" size="sm" className="gap-2" onClick={() => onEdit?.(exp)}>
                                     <Edit className="h-4 w-4" />
                                     Edit

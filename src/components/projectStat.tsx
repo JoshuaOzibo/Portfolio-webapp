@@ -5,7 +5,6 @@ import {
     ExternalLink,
     Github,
     Star,
-    Calendar,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -45,7 +44,7 @@ const isBase64 = (str: string): boolean => {
 };
 
 const projectStat = ({ projects, getStatusColor, onDelete, onUpdate }: projectTypes) => {
-    console.log(projects);
+    // console.log(projects);
     
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
