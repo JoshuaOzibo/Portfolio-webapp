@@ -43,6 +43,9 @@ export default function AuthInput({ onSubmit, type, isLoading = false, handleGoo
 
   return (
     <div className="md:w-full w-full shadow-lg mt-20 max-w-md border border-gray-200 rounded-lg p-4 mx-auto space-y-8">
+      <div className="w-8 h-8 m-auto bg-indigo-600 rounded-lg flex items-center justify-center">
+            <span className="text-white text-xl font-bold">P</span>
+          </div>
       <div className="text-center">
         <h2 className="text-2xl font-bold text-gray-900">
           {type === 'signin' ? 'Sign In' : 'Create Account'}
@@ -55,7 +58,7 @@ export default function AuthInput({ onSubmit, type, isLoading = false, handleGoo
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4">
         {/* Name Input - Only for signup */}
         {type === 'signup' && (
           <div>
