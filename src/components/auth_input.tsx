@@ -2,28 +2,30 @@
 
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
-import { googleSvg } from './svgs';
+import { GoogleLogin } from '@react-oauth/google';
 
 interface AuthInputProps {
   onSubmit: (email: string, password: string, name?: string) => void;
-  onGoogleSignIn: () => void;
   type: 'signin' | 'signup';
   isLoading?: boolean;
+  handleGoogleSuccess: (credentialResponse: any) => void;
+  handleGoogleError: () => void;
 }
 
-export default function AuthInput({ onSubmit, onGoogleSignIn, type, isLoading = false }: AuthInputProps) {
+export default function AuthInput({ onSubmit, type, isLoading = false, handleGoogleSuccess, handleGoogleError }: AuthInputProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (type === 'signup' && !name.trim()) {
       return; // Name is required for signup
     }
-    
+
     if (type === 'signup') {
       onSubmit(email, password, name);
     } else {
@@ -35,7 +37,7 @@ export default function AuthInput({ onSubmit, onGoogleSignIn, type, isLoading = 
     const emailValid = email.trim() && email.includes('@');
     const passwordValid = password.length >= 6;
     const nameValid = type === 'signin' || (type === 'signup' && name.trim().length >= 2);
-    
+
     return emailValid && passwordValid && nameValid;
   };
 
@@ -46,8 +48,8 @@ export default function AuthInput({ onSubmit, onGoogleSignIn, type, isLoading = 
           {type === 'signin' ? 'Sign In' : 'Create Account'}
         </h2>
         <p className="mt-2 text-sm text-gray-600">
-          {type === 'signin' 
-            ? 'Welcome back! Please sign in to your account.' 
+          {type === 'signin'
+            ? 'Welcome back! Please sign in to your account.'
             : 'Create a new account to get started.'
           }
         </p>
@@ -161,18 +163,16 @@ export default function AuthInput({ onSubmit, onGoogleSignIn, type, isLoading = 
       </div>
 
       {/* Google Sign In Button */}
-      <button
-        type="button"
-        onClick={onGoogleSignIn}
-        disabled={isLoading}
-        className="w-full flex cursor-pointer items-center justify-center gap-3 py-3 px-4 border border-gray-300 rounded-lg shadow-sm 
-                 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:bg-gray-100 disabled:cursor-not-allowed
-                 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 
-                 transition duration-150 ease-in-out"
-      >
-        {googleSvg()}
-        Continue with Google
-      </button>
+      <div className="mt-4 w-full rounded-lg flex justify-center">
+        <GoogleLogin
+          text="continue_with"
+          shape="rectangular"
+          size="large"
+          width="100%"
+          onSuccess={handleGoogleSuccess}
+          onError={handleGoogleError}
+        />
+      </div>
     </div>
   );
 }

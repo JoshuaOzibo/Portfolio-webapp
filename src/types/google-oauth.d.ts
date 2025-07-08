@@ -14,6 +14,16 @@ declare global {
             requestAccessToken: () => void
           }
         }
+        id: {
+          initialize: (config: {
+            client_id: string
+            callback: (response: {
+              credential: string
+              error?: string
+            }) => void
+          }) => void
+          prompt: () => void
+        }
       }
     }
   }

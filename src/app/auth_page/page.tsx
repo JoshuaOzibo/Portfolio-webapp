@@ -12,17 +12,17 @@ const AuthPage = () => {
 
     const handleSubmit = async (email: string, password: string, name?: string) => {
         let result
-        
+
         if (authMode === 'signup' && name) {
             result = await signUp(name, email, password)
         } else {
             result = await login(email, password)
         }
-        
+
         if (result.success) {
             toast.success(
-                authMode === 'signin' 
-                    ? 'Successfully signed in!' 
+                authMode === 'signin'
+                    ? 'Successfully signed in!'
                     : 'Account created successfully!'
             )
         } else {
@@ -30,48 +30,30 @@ const AuthPage = () => {
         }
     }
 
-    const handleGoogleSignIn = async () => {
+    const handleGoogleSuccess = async (credentialResponse: any) => {
         try {
-            // Load Google Identity Services if not already loaded
-            if (!window.google) {
-                await new Promise((resolve, reject) => {
-                    const script = document.createElement('script')
-                    script.src = 'https://accounts.google.com/gsi/client'
-                    script.onload = resolve
-                    script.onerror = reject
-                    document.head.appendChild(script)
-                })
+            // console.log('Google login successful, credential:', credentialResponse)
+
+            // The credential response contains the ID token, not access token
+            if (!credentialResponse.credential) {
+                throw new Error('No credential received from Google')
             }
 
-            // Initialize Google OAuth client
-            const client = window.google.accounts.oauth2.initTokenClient({
-                client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-                scope: 'openid email profile',
-                callback: async (response: { access_token: string; error?: string }) => {
-                    if (response.error) {
-                        toast.error('Google sign-in failed')
-                        return
-                    }
+            // Use the credential (ID token) for our backend
+            const result = await googleSignIn(credentialResponse.credential)
 
-                    // Get the ID token
-                    const idToken = response.access_token
-                    
-                    // Call our backend with the ID token
-                    const result = await googleSignIn(idToken)
-                    if (result.success) {
-                        toast.success('Successfully signed in with Google!')
-                    } else {
-                        toast.error(result.error || 'Google sign-in failed')
-                    }
-                }
-            })
-
-            // Request the token
-            client.requestAccessToken()
-        } catch (error) {
-            console.error('Google sign-in error:', error)
-            toast.error('Google sign-in failed')
+            if (result.success) {
+                toast.success('Successfully signed in with Google!')
+            } else {
+                toast.error(result.error || 'Google sign-in failed')
+            }
+        } catch (error: any) {
+            toast.error('Google sign-in failed. Please try again.')
         }
+    }
+
+    const handleGoogleError = () => {
+        toast.error('Google sign-in failed. Please try again.')
     }
 
     const toggleAuthMode = () => {
@@ -82,14 +64,14 @@ const AuthPage = () => {
         <AuthOnlyRoute>
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="w-full max-w-md">
-                    <AuthInput 
-                        onSubmit={handleSubmit} 
-                        onGoogleSignIn={handleGoogleSignIn} 
+                    <AuthInput
+                        onSubmit={handleSubmit}
                         type={authMode}
                         isLoading={isLoading}
+                        handleGoogleSuccess={handleGoogleSuccess}
+                        handleGoogleError={handleGoogleError}
                     />
-                    
-                    {/* Toggle between sign-in and sign-up */}
+
                     <div className="mt-6 text-center">
                         <p className="text-sm text-gray-600">
                             {authMode === 'signin' ? "Don't have an account?" : "Already have an account?"}

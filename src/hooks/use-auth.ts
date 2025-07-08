@@ -163,8 +163,10 @@ export const useAuth = (): AuthHookReturn => {
   const handleGoogleSignIn = useCallback(async (idToken: string): Promise<LoginResult> => {
     setLoading(true)
     try {
+      console.log('Sending Google ID token to backend:', idToken.substring(0, 50) + '...')
+      
       const result = await googleSignInMutation.mutateAsync({
-        endpoint: 'api/auth/google-login',
+        endpoint: 'api/v1/auth/google-login',
         data: { idToken }
       })
 

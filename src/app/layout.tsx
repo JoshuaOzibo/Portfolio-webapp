@@ -4,6 +4,7 @@ import Providers from "../providers/providers";
 import { Toaster } from "@/components/ui/sonner"
 import ConditionalLayout from "@/components/conditional-layout";
 import AuthInitializer from "@/components/auth-initializer";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import "./globals.css";
 
@@ -30,13 +31,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Providers>
-          <AuthInitializer />
-          <ConditionalLayout>
-            {children}
-          </ConditionalLayout>
-          <Toaster position="top-right" richColors/>
-        </Providers>
+        <GoogleOAuthProvider clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}>
+          <Providers>
+            <AuthInitializer />
+            <ConditionalLayout>
+              {children}
+            </ConditionalLayout>
+            <Toaster position="top-right" richColors />
+          </Providers>
+        </GoogleOAuthProvider>
       </body>
     </html>
   );
