@@ -16,7 +16,7 @@ const RecentProjectWidget = ({
   return (
     <div className="lg:col-span-2">
       <Card className="border-0 shadow-sm">
-        <CardHeader className="flex flex-row items-center justify-between">
+        <CardHeader className="flex gap-2 flex-row items-center justify-between">
           <CardTitle className="text-lg font-semibold">
             Recent Projects
           </CardTitle>
@@ -42,24 +42,24 @@ const RecentProjectWidget = ({
                 <h3 className="font-medium text-slate-900 truncate">
                   {project.title}
                 </h3>
-                <div className="flex items-center gap-2 mt-1">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 mt-1">
                   <Badge
                     variant={project.liveLink ? "default" : "secondary"}
-                    className="text-xs"
+                    className="text-xs w-fit"
                   >
                     {project.liveLink ? "Live" : "Draft"}
                   </Badge>
-                  <div className="flex gap-1">
+                  <div className="flex flex-wrap gap-1 max-w-full overflow-hidden">
                     {project.skills.slice(0, 2).map((tech, i) => (
                       <span
                         key={i}
-                        className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded"
+                        className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded whitespace-nowrap"
                       >
                         {tech}
                       </span>
                     ))}
                     {project.skills.length > 2 && (
-                      <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">
+                      <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded whitespace-nowrap">
                         +{project.skills.length - 2}
                       </span>
                     )}
